@@ -1,0 +1,74 @@
+name: Deploy Laravel Fast
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Setup PHP
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          extensions: mbstring, xml, ctype, json, bcmath, pdo, mysql, zip, gd
+
+      # 3. Install Composer Dependencies
+      - name: Install Composer Dependencies
+        run: composer install --no-dev --optimize-autoloader --no-interaction
+
+      # 4. Create deployment zip (exclude không cần thiết)
+      - name: Create deployment zip
+        run: zip -r deploy.zip . \
+          -x ".git/*" "node_modules/*" "tests/*" ".github/*" ".env" "storage/*" \
+          "phpunit.xml" "README.md" ".editorconfig"
+
+      # 5. Upload package via SCP
+      - name: Upload package to hosting
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          source: "deploy.zip"
+          target: "/home/tduyhungio/"
+          timeout: 300s            # thời gian chờ kết nối (giây)
+          command_timeout: 600s    # thời gian chờ lệnh chạy (giây)
+
+      # 6. Run post-deploy commands
+      - name: Deploy and run artisan commands
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          timeout: 300s            # thời gian chờ kết nối (giây)
+          command_timeout: 600s    # thời gian chờ lệnh chạy (giây)
+          script: |
+            cd /home/tduyhungio/stu.duyhung.io.vn
+            unzip -o ../deploy.zip
+            rm ../deploy.zip
+
+            # Storage giữ nguyên
+            mkdir -p storage/framework/{sessions,views,cache}
+            mkdir -p storage/logs
+            chmod -R 775 storage bootstrap/cache
+
+            # Nếu chưa có .env thì copy từ example
+            [ ! -f .env ] && cp .env.example .env
+
+            # Laravel optimize
+            php artisan storage:link || true
+            php artisan config:clear
+            php artisan config:cache
+            php artisan route:cache
+            php artisan view:cache
