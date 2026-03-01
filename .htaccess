@@ -1,0 +1,26 @@
+# Kiểm tra và chuyển hướng sang HTTPS
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Kiểm tra xem HTTPS có sẵn không
+    RewriteCond %{HTTPS} != on
+
+    # Kiểm tra xem server có hỗ trợ SSL không thông qua biến môi trường
+    RewriteCond %{SERVER_PORT} != 443
+
+    # Nếu không phải HTTPS và server hỗ trợ SSL, chuyển hướng sang HTTPS
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>
+
+# Chuyển hướng tất cả các yêu cầu đến thư mục public
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Thêm /public vào đường dẫn và chuyển hướng
+    RewriteRule ^(.*)$ /public/$1 [L]
+
+    # Đảm bảo trang chủ được chuyển hướng đúng
+    RewriteCond %{REQUEST_URI} ^/$
+    RewriteRule ^ /public/index.php [L]
+</IfModule>
+
