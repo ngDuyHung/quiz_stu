@@ -40,8 +40,8 @@ jobs:
           port: 22
           source: "deploy.zip"
           target: "/home/tduyhungio/"
-          timeout: 300s            # thời gian chờ kết nối (giây)
-          command_timeout: 600s    # thời gian chờ lệnh chạy (giây)
+          timeout: 3000s            # thời gian chờ kết nối (giây)
+          command_timeout: 1000s    # thời gian chờ lệnh chạy (giây)
 
       # 6. Run post-deploy commands
       - name: Deploy and run artisan commands
