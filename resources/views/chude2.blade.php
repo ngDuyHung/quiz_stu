@@ -10,7 +10,7 @@
 <body>
     </h1>Chủ đề 2</h1>
     <p>Danh sách users</p>
-    <table>
+    <table border="1">
     <thead>
         <tr>
             <th>ID</th>
@@ -19,7 +19,7 @@
             <th>Thao tác</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody >
         <!-- Add user rows here -->
         @foreach($users as $user)
         <tr>
@@ -27,8 +27,8 @@
             <td>{{ $user->name }}</td>
             <td>{{ $user->email }}</td>
             <td>
-                <a href="{{ route('chude2.edit', $user->id) }}">Edit</a>
-                <form action="{{ route('chude2.destroy', $user->id) }}" method="POST" style="display:inline;">
+                <a href="#">Edit</a>
+                <form action="#" method="POST" style="display:inline;">
                     @csrf
                     @method('DELETE')
                     <button type="submit">Delete</button>
