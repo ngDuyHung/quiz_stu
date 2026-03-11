@@ -68,6 +68,8 @@ jobs:
 
             # Laravel optimize
             php artisan storage:link || true
+            # Run migrations (tạo hoặc cập nhật DB)
+            php artisan migrate --force
             php artisan config:clear
             php artisan config:cache
             php artisan route:cache
