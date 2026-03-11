@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Hash;
 class Chude2Controller extends Controller
 {
     /**
@@ -25,6 +25,7 @@ class Chude2Controller extends Controller
     public function create()
     {
         //
+        return view('create_user');
     }
 
     /**
@@ -34,6 +35,13 @@ class Chude2Controller extends Controller
     public function store(Request $request)
     {
         //
+        user::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
+        return redirect('/');
+
     }
 
     /**
