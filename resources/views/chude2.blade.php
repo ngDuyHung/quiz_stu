@@ -27,13 +27,14 @@
             <td>{{ $user->name }}</td>
             <td>{{ $user->email }}</td>
             <td>
-                <a href="#">Edit</a>
-                <form action="#" method="POST" style="display:inline;">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit">Delete</button>
-                </form>
-            </td>
+    <a href="/chude2/{{$user->id}}/edit">Edit</a>
+
+    <form action="/chude2/{{$user->id}}" method="POST" style="display:inline;">
+        @csrf
+        @method('DELETE')
+        <button type="submit">Delete</button>
+    </form>
+</td>
         </tr>
         @endforeach
     </tbody>
