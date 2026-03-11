@@ -13,6 +13,7 @@ class Chude2Controller extends Controller
      */
     public function index()
     {
+        
         $users =User::all();
         return view('chude2', compact('users'));
     }
@@ -58,7 +59,8 @@ class Chude2Controller extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $user = User::find($id);
+        return view('chude2edit', compact('user'));
     }
 
     /**
@@ -66,16 +68,31 @@ class Chude2Controller extends Controller
      * cái này là nơi ham update sẽ nhận dữ liệu từ form chỉnh sửa người dùng, sau đó cập nhật dữ liệu đó vào bảng users trong cơ sở dữ liệu
      */
     public function update(Request $request, string $id)
-    {
-        //
+{
+    $user = User::find($id);
+
+    if ($user) {
+        $user->name = $request->name;
+        $user->email = $request->email;
+
+        $user->save();
     }
+
+    return redirect('/chude2');
+}
 
     /**
      * Remove the specified resource from storage.
      * cái này là nơi ham destroy sẽ nhận một id của người dùng, sau đó xóa dữ liệu của người dùng đó khỏi bảng users trong cơ sở dữ liệu
      */
-    public function destroy(string $id)
-    {
-        //
+   public function destroy(string $id)
+{
+    $user = User::find($id);
+
+    if ($user) {
+        $user->delete();
     }
+
+    return redirect('/chude2');
+}
 }
