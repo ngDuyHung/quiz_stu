@@ -10,6 +10,7 @@
 <body>
     </h1>Chủ đề 2</h1>
     <p>Danh sách users</p>
+    <a href="{{ route('user.create') }}">Thêm người dùng</a>
     <table border="1">
     <thead>
         <tr>
