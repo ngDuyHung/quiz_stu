@@ -21,10 +21,3 @@ Route::resource('chude2', Chude2Controller::class);
 
 
 
-// tương tự ae tập điền luôn tui demo tên hàm route thôi
-
-// /users -> lấy tât cả users
-
-// /users/1 -> lấy users có id=1
-
-// làm thêm cho cả sửa, xóa nữa nhé

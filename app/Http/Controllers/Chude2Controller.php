@@ -5,17 +5,33 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+
 class Chude2Controller extends Controller
 {
     /**
      * Display a listing of the resource.
      * đây là nơi ham index sẽ lấy tất cả dữ liệu từ bảng users và trả về view chude2.index với dữ liệu đó
      */
-    public function index()
+    public function index(Request $request)
     {
-        
-        $users =User::all();
-        return view('chude2', compact('users'));
+
+        // 1. Lấy từ khóa tìm kiếm từ thanh địa chỉ (nếu có)
+        $search = $request->input('search');
+
+        // 2. Bắt đầu câu truy vấn
+        $query = User::query();
+
+        // 3. Nếu có từ khóa, áp dụng điều kiện lọc (tìm theo tên hoặc email)
+        if ($search) {
+            $query->where('name', 'LIKE', "%{$search}%")
+                ->orWhere('email', 'LIKE', "%{$search}%");
+        }
+
+        // 4. Lấy kết quả
+        $users = $query->get();
+
+        // 5. Trả về view, mang theo cả từ khóa $search để giữ lại chữ trên ô input
+        return view('chude2', compact('users', 'search'));
     }
 
     /**
@@ -41,7 +57,6 @@ class Chude2Controller extends Controller
             'password' => Hash::make($request->password),
         ]);
         return redirect('/');
-
     }
 
     /**
@@ -68,31 +83,31 @@ class Chude2Controller extends Controller
      * cái này là nơi ham update sẽ nhận dữ liệu từ form chỉnh sửa người dùng, sau đó cập nhật dữ liệu đó vào bảng users trong cơ sở dữ liệu
      */
     public function update(Request $request, string $id)
-{
-    $user = User::find($id);
+    {
+        $user = User::find($id);
 
-    if ($user) {
-        $user->name = $request->name;
-        $user->email = $request->email;
+        if ($user) {
+            $user->name = $request->name;
+            $user->email = $request->email;
 
-        $user->save();
+            $user->save();
+        }
+
+        return redirect('/chude2');
     }
-
-    return redirect('/chude2');
-}
 
     /**
      * Remove the specified resource from storage.
      * cái này là nơi ham destroy sẽ nhận một id của người dùng, sau đó xóa dữ liệu của người dùng đó khỏi bảng users trong cơ sở dữ liệu
      */
-   public function destroy(string $id)
-{
-    $user = User::find($id);
+    public function destroy(string $id)
+    {
+        $user = User::find($id);
 
-    if ($user) {
-        $user->delete();
+        if ($user) {
+            $user->delete();
+        }
+
+        return redirect('/chude2');
     }
-
-    return redirect('/chude2');
-}
 }
