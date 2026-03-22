@@ -20,6 +20,8 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout')->
 // Admin Routes
 Route::middleware(['auth', 'admin.only'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+
+    Route::resource('faculties', \App\Http\Controllers\Admin\FacultyController::class);
 });
 
 // Client Routes
