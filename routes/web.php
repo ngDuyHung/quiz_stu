@@ -5,6 +5,8 @@ use App\Http\Controllers\Chude2Controller;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Client\DashboardController as ClientDashboardController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\QuestionController;
+use App\Http\Controllers\Admin\UsersController;
 
 // Auth Routes
 Route::middleware('guest')->group(function () {
@@ -20,6 +22,11 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout')->
 // Admin Routes
 Route::middleware(['auth', 'admin.only'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+
+    // User management routes
+    Route::resource('users', \App\Http\Controllers\Admin\UsersController::class);
+    Route::post('users/{user}/toggle-status', [\App\Http\Controllers\Admin\UsersController::class, 'toggleStatus'])->name('users.toggle-status');
+    Route::post('users/{user}/reset-password', [\App\Http\Controllers\Admin\UsersController::class, 'resetPassword'])->name('users.reset-password');
 });
 
 // Client Routes
@@ -43,5 +50,12 @@ Route::post('/users/store', [Chude2Controller::class, 'store'])->name('user.stor
 
 Route::resource('chude2', Chude2Controller::class);
 
+Route::prefix('admin')->group(function () {
+    Route::get('/questions/index', [QuestionController::class, 'stats'])
+        ->name('admin.questions.index');
+});
 
+Route::get('/admin/users/index/{id}', 
+    [UsersController::class, 'index']
+)->name('admin.users.index');
 
