@@ -39,10 +39,25 @@
         <nav>
             <a href="#" class="active">🏠 Trang chủ Dashboard</a>
 
+            
             <span class="module-label">Module 1: Hệ thống</span>
-            <a href="#">🏢 Quản lý Khoa</a>
-            <a href="#">🏫 Quản lý Lớp học</a>
-            <a href="#">📅 Năm học & Học kỳ</a>
+
+            <a href="{{ route('admin.faculties.index') }}" 
+            class="{{ request()->routeIs('admin.faculties.*') ? 'active' : '' }}">
+            🏢 Quản lý Khoa
+            </a>
+
+            <a href="{{ route('admin.classes.index') }}"
+            class="{{ request()->routeIs('admin.classes.*') ? 'active' : '' }}">
+            🏫 Quản lý Lớp học
+            </a>
+
+            <a href="{{ route('admin.years.index') }}"
+            class="{{ request()->routeIs('admin.years.*') ? 'active' : '' }}">
+            📅 Năm học & Học kỳ
+            </a>
+
+            <!-- Moudle He Thong  -->
 
             <span class="module-label">Module 2: Nhân sự</span>
             <a href="#">👤 Danh sách Sinh viên</a>
