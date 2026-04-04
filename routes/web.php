@@ -59,3 +59,8 @@ Route::get('/admin/users/index/{id}',
     [UsersController::class, 'index']
 )->name('admin.users.index');
 
+use App\Http\Controllers\Admin\UserGroupController;
+
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::resource('user-groups', UserGroupController::class)->except(['create', 'show', 'edit']);
+});
