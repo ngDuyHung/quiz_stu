@@ -53,6 +53,9 @@ if ($request->filled('faculty_id')) {
         $classes = SchoolClass::all();
         $groups = UserGroup::all();
 
+        if ($request->ajax()) {
+        return view('admin.users.partials.table');
+    }
         return view('admin.users.index', compact('users', 'faculties', 'classes', 'groups'));
     }
 
@@ -187,4 +190,5 @@ public function store(Request $request)
 
         return response()->json($classes);
     }
+    
 }

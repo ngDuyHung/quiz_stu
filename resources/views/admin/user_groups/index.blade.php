@@ -1,4 +1,4 @@
-@extends('admin.dashboard') {{-- Sử dụng trực tiếp file dashboard làm layout --}}
+@extends('layouts.admin') {{-- Sử dụng trực tiếp file dashboard làm layout --}}
 
 @section('title', 'Quản lý Nhóm người dùng')
 
