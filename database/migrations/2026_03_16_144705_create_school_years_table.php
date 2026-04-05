@@ -12,12 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('school_years', function (Blueprint $table) {
-            $table->string('year', 9)->comment('Năm học. VD: 2024-2025');
-            $table->tinyInteger('semester')->comment('Học kỳ: 1 hoặc 2');
-            $table->boolean('is_active')->default(0)->comment('0: Không hoạt động, 1: Đang hoạt động');
+            $table->id(); // Khóa chính đơn (Laravel cực thích cái này)
+            $table->string('year', 9)->comment('VD: 2024-2025');
+            $table->tinyInteger('semester')->comment('1 hoặc 2');
+            $table->boolean('is_active')->default(0);
+            $table->timestamps();
 
-            // Khóa chính kết hợp (Composite Primary Key)
-            $table->primary(['year', 'semester']);
+            // Ràng buộc để không bao giờ có 2 dòng trùng cả Năm và Kỳ
+            $table->unique(['year', 'semester']); 
         });
     }
 

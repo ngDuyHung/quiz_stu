@@ -54,7 +54,27 @@
                 <i class="fas fa-home"></i> Trang chủ Dashboard
             </a>
 
+            
             <span class="module-label">Module 1: Hệ thống</span>
+<<<<<<< HEAD
+
+            <a href="{{ route('admin.faculties.index') }}" 
+            class="{{ request()->routeIs('admin.faculties.*') ? 'active' : '' }}">
+            🏢 Quản lý Khoa
+            </a>
+
+            <a href="{{ route('admin.classes.index') }}"
+            class="{{ request()->routeIs('admin.classes.*') ? 'active' : '' }}">
+            🏫 Quản lý Lớp học
+            </a>
+
+            <a href="{{ route('admin.years.index') }}"
+            class="{{ request()->routeIs('admin.years.*') ? 'active' : '' }}">
+            📅 Năm học & Học kỳ
+            </a>
+
+            <!-- Moudle He Thong  -->
+=======
             <a href="{{ route('admin.faculties.index') }}" class="{{ Request::is('admin/faculties*') ? 'active' : '' }}">
                 <i class="fas fa-university"></i> Quản lý Khoa
             </a>
@@ -62,6 +82,7 @@
                 <i class="fas fa-school"></i> Quản lý Lớp học
             </a>
             <a href="#"><i class="fas fa-calendar-alt"></i> Năm học & Học kỳ</a>
+>>>>>>> b87d2df6076e3f60e1d227967b848754b06c76b2
 
             <span class="module-label">Module 2: Nhân sự</span>
             <a href="#"><i class="fas fa-users"></i> Danh sách Sinh viên</a>

@@ -6,11 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class SchoolYear extends Model
 {
-    public $timestamps = false;
-    protected $primaryKey = ['year', 'semester'];
-    public $incrementing = false;
-    protected $keyType = 'string';
-
+    // Mặc định Laravel tự hiểu Primary Key là 'id' và tự tăng
     protected $fillable = [
         'year',
         'semester',
