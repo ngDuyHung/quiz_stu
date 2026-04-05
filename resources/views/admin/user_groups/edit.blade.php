@@ -1,4 +1,4 @@
-@extends('admin.dashboard')
+@extends('layouts.admin')
 
 @section('title', 'Chỉnh sửa Nhóm người dùng')
 

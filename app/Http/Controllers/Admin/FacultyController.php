@@ -12,6 +12,7 @@ class FacultyController extends Controller
     {
         // Sắp xếp theo ID hoặc Name để Admin dễ nhìn hơn
         $faculties = Faculty::orderBy('id', 'asc')->get();
+        
         return view('admin.faculties.index', compact('faculties'));
     }
 
