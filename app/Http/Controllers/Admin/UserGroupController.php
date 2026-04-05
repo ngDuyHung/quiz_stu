@@ -16,6 +16,11 @@ class UserGroupController extends Controller
         return view('admin.user_groups.index', compact('groups'));
     }
 
+    public function create()
+    {
+        //
+    }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -25,6 +30,12 @@ class UserGroupController extends Controller
 
         UserGroup::create($request->all());
         return redirect()->back()->with('success', 'Thêm nhóm thành công!');
+    }
+
+    public function edit($id)
+    {
+        $group = UserGroup::findOrFail($id);
+        return view('admin.user_groups.edit', compact('group'));
     }
 
     public function update(Request $request, $id)
