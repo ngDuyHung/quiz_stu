@@ -7,8 +7,10 @@ use App\Http\Controllers\Client\DashboardController as ClientDashboardController
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\QuestionController;
 use App\Http\Controllers\Admin\UsersController;
+
 use App\Http\Controllers\Admin\UserGroupController;
 use App\Http\Controllers\Admin\QuestionCategoryController;
+
 
 // Auth Routes
 Route::middleware('guest')->group(function () {
@@ -29,12 +31,21 @@ Route::middleware(['auth', 'admin.only'])->prefix('admin')->name('admin.')->grou
 // Question Category management routes
     Route::resource('question-categories', QuestionCategoryController::class);
 
+    Route::resource('faculties', \App\Http\Controllers\FacultyController::class);
+    Route::resource('classes', \App\Http\Controllers\SchoolClassController::class);
+
+    // PHẦN QUẢN LÝ NĂM HỌC
+    Route::post('years/{id}/activate', [\App\Http\Controllers\SchoolYearController::class, 'activate'])->name('years.activate');
+    
+    Route::resource('years', \App\Http\Controllers\SchoolYearController::class);
+
     // User management routes
     Route::resource('users', \App\Http\Controllers\Admin\UsersController::class);
     Route::post('users/{user}/toggle-status', [\App\Http\Controllers\Admin\UsersController::class, 'toggleStatus'])->name('users.toggle-status');
     Route::post('users/{user}/reset-password', [\App\Http\Controllers\Admin\UsersController::class, 'resetPassword'])->name('users.reset-password');
 
     // Faculty management routes
+
     Route::resource('faculties', \App\Http\Controllers\Admin\FacultyController::class);
 
 // User Group management routes
@@ -67,7 +78,8 @@ Route::prefix('admin')->group(function () {
         ->name('admin.questions.index');
 });
 
-Route::get(
-    '/admin/users/index/{id}',
+Route::get('/admin/users/index/{id}', 
     [UsersController::class, 'index']
 )->name('admin.users.index');
+
+
