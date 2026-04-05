@@ -8,11 +8,16 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\QuestionController;
 use App\Http\Controllers\Admin\UsersController;
 
+use App\Http\Controllers\Admin\UserGroupController;
+use App\Http\Controllers\Admin\QuestionCategoryController;
+
+
 // Auth Routes
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('auth.login');
     Route::post('/login', [AuthController::class, 'login']);
-    
+
+    // Đăng ký tài khoản (nếu cần)
     Route::get('/register', [AuthController::class, 'showRegister'])->name('auth.register');
     Route::post('/register', [AuthController::class, 'register']);
 });
@@ -22,6 +27,9 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout')->
 // Admin Routes
 Route::middleware(['auth', 'admin.only'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+
+// Question Category management routes
+    Route::resource('question-categories', QuestionCategoryController::class);
 
     Route::resource('faculties', \App\Http\Controllers\FacultyController::class);
     Route::resource('classes', \App\Http\Controllers\SchoolClassController::class);
@@ -35,7 +43,13 @@ Route::middleware(['auth', 'admin.only'])->prefix('admin')->name('admin.')->grou
     Route::resource('users', \App\Http\Controllers\Admin\UsersController::class);
     Route::post('users/{user}/toggle-status', [\App\Http\Controllers\Admin\UsersController::class, 'toggleStatus'])->name('users.toggle-status');
     Route::post('users/{user}/reset-password', [\App\Http\Controllers\Admin\UsersController::class, 'resetPassword'])->name('users.reset-password');
+
+    // Faculty management routes
+
     Route::resource('faculties', \App\Http\Controllers\Admin\FacultyController::class);
+
+// User Group management routes
+    Route::resource('user-groups', UserGroupController::class)->except(['create', 'show']);
 });
 
 // Client Routes
@@ -49,7 +63,7 @@ Route::get('/', function () {
 })->name('home');
 
 // Route trang chủ (cũ)
-Route::get('/chude2', [Chude2Controller::class, 'index'])->name('user.index'); 
+Route::get('/chude2', [Chude2Controller::class, 'index'])->name('user.index');
 
 // Route hiển thị form thêm
 Route::get('/users/create', [Chude2Controller::class, 'create'])->name('user.create');
@@ -67,4 +81,5 @@ Route::prefix('admin')->group(function () {
 Route::get('/admin/users/index/{id}', 
     [UsersController::class, 'index']
 )->name('admin.users.index');
+
 

@@ -86,10 +86,13 @@
 
             <span class="module-label">Module 2: Nhân sự</span>
             <a href="#"><i class="fas fa-users"></i> Danh sách Sinh viên</a>
-            <a href="#"><i class="fas fa-user-shield"></i> Nhóm người dùng</a>
+            <a href="{{ route('admin.user-groups.index') }}" class="{{ Request::is('admin/user-groups*') ? 'active' : '' }}">
+                <i class="fas fa-user-shield"></i> Nhóm người dùng
+            </a>
 
             <span class="module-label">Module 3: Ngân hàng đề</span>
-            <a href="#"><i class="fas fa-folder-open"></i> Danh mục câu hỏi</a>
+            <a href="{{ route('admin.question-categories.index') }}" class="{{ Request::is('admin/question-categories*') ? 'active' : '' }}">
+    <i class="fas fa-folder-open"></i> Danh mục câu hỏi </a>
             <a href="#"><i class="fas fa-signal"></i> Mức độ khó</a>
             <a href="#"><i class="fas fa-question-circle"></i> Câu hỏi & Đáp án</a>
 
