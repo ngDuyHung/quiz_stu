@@ -7,7 +7,7 @@ use App\Http\Controllers\Client\DashboardController as ClientDashboardController
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\QuestionController;
 use App\Http\Controllers\Admin\UsersController;
-
+use App\Http\Controllers\Client\CourseController;
 use App\Http\Controllers\Admin\UserGroupController;
 use App\Http\Controllers\Admin\QuestionCategoryController;
 
@@ -28,14 +28,14 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout')->
 Route::middleware(['auth', 'admin.only'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
-// Question Category management routes
+    // Question Category management routes
     Route::resource('question-categories', QuestionCategoryController::class);
 
     Route::resource('classes', \App\Http\Controllers\SchoolClassController::class);
 
     // PHẦN QUẢN LÝ NĂM HỌC
     Route::post('years/{id}/activate', [\App\Http\Controllers\SchoolYearController::class, 'activate'])->name('years.activate');
-    
+
     Route::resource('years', \App\Http\Controllers\SchoolYearController::class);
 
     // User management routes
@@ -47,13 +47,21 @@ Route::middleware(['auth', 'admin.only'])->prefix('admin')->name('admin.')->grou
 
     Route::resource('faculties', \App\Http\Controllers\Admin\FacultyController::class);
 
-// User Group management routes
+    // User Group management routes
     Route::resource('user-groups', UserGroupController::class)->except(['create', 'show']);
 });
 
 // Client Routes
 Route::middleware(['auth', 'client.only'])->prefix('client')->name('client.')->group(function () {
     Route::get('/dashboard', [ClientDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/course', [CourseController::class, 'index'])->name('course');
+    Route::get('/answer&question', function () {
+        return view('client.answer&question');
+    })->name('answer&question');
+
+    Route::get('/result-detail', function () {
+        return view('client.result-detail');
+    })->name('result-detail');
 });
 
 // Redirect home to login
@@ -77,8 +85,7 @@ Route::prefix('admin')->group(function () {
         ->name('admin.questions.index');
 });
 
-Route::get('/admin/users/index/{id}', 
+Route::get(
+    '/admin/users/index/{id}',
     [UsersController::class, 'index']
 )->name('admin.users.index');
-
-
