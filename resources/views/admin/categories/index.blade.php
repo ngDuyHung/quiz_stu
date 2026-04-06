@@ -3,6 +3,8 @@
 @section('title', 'Danh mục câu hỏi')
 
 @section('content')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <div class="card-custom">
     <h2 class="mb-4 text-primary"><i class="fas fa-folder-open"></i> Quản lý danh mục câu hỏi</h2>
 
@@ -20,7 +22,7 @@
         </form>
     </div>
 
-    @if(session('success')) <div class="alert alert-success shadow-sm">{{ session('success') }}</div> @endif
+    @if(session('success')) <div id="session-success" data-msg="{{ session('success') }}"></div> @endif
 
     <div class="table-responsive">
         <table class="table table-hover align-middle bg-white border">
@@ -47,13 +49,13 @@
                             <i class="fas fa-edit"></i> Sửa
                         </button>
 
-                        <form action="{{ route('admin.question-categories.destroy', $cat->id) }}" method="POST" style="display:inline;"
-                              onsubmit="return confirm('CẢNH BÁO: Xóa danh mục này sẽ XÓA TẤT CẢ câu hỏi bên trong!')">
+                        <form id="delete-cat-{{ $cat->id }}" action="{{ route('admin.question-categories.destroy', $cat->id) }}" method="POST" class="d-none">
                             @csrf @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-outline-danger">
-                                <i class="fas fa-trash-alt"></i> Xóa
-                            </button>
                         </form>
+                        <button type="button" class="btn btn-sm btn-outline-danger"
+                                onclick="confirmDeleteCat('{{ $cat->id }}', '{{ addslashes($cat->name) }}')">
+                            <i class="fas fa-trash-alt"></i> Xóa
+                        </button>
                     </td>
                 </tr>
 
@@ -86,4 +88,28 @@
         </table>
     </div>
 </div>
+
+<script>
+function confirmDeleteCat(id, name) {
+    Swal.fire({
+        title: 'CẢnh báo!',
+        html: 'Xóa danh mục <strong>"' + name + '"</strong> sẽ xóa toàn bộ câu hỏi bên trong!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        confirmButtonText: 'Đồng ý xóa',
+        cancelButtonText: 'Hủy'
+    }).then((result) => {
+        if (result.isConfirmed) document.getElementById('delete-cat-' + id).submit();
+    });
+}
+
+const successEl = document.getElementById('session-success');
+if (successEl) {
+    Swal.fire({ icon: 'success', title: 'Thành công', text: successEl.dataset.msg, timer: 2000, showConfirmButton: false });
+}
+@if(session('error'))
+    Swal.fire({ icon: 'error', title: 'Thất bại', text: "{{ session('error') }}" });
+@endif
+</script>
 @endsection

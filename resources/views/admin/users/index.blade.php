@@ -1,65 +1,160 @@
-<form method="GET" class="row mb-3">
-    <input type="text" name="keyword" placeholder="Tìm kiếm..." class="form-control col-md-3">
+@extends('admin.dashboard')
 
-    <select name="faculty_id" class="form-control col-md-2">
-        <option value="">Khoa</option>
-        @foreach($faculties as $f)
-            <option value="{{ $f->id }}">{{ $f->name }}</option>
-        @endforeach
-    </select>
+@section('title', 'Quản lý Sinh viên')
 
-    <button class="btn btn-primary">Lọc</button>
-</form>
+@section('content')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<table class="table table-bordered">
-    <tr>
-        <th>MSSV</th>
-        <th>Họ tên</th>
-        <th>Email</th>
-        <th>Lớp</th>
-        <th>Khoa</th>
-        <th>Nhóm</th>
-        <th>Trạng thái</th>
-        <th>Action</th>
-    </tr>
+<div class="container-fluid mt-4">
+    {{-- Bộ lọc --}}
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body py-3">
+            <form method="GET" action="{{ route('admin.users.index') }}" class="row g-2 align-items-end">
+                <div class="col-md-3">
+                    <input type="text" name="search" class="form-control"
+                           placeholder="Tìm MSSV, tên, email..."
+                           value="{{ request('search') }}">
+                </div>
+                <div class="col-md-2">
+                    <select name="faculty_id" class="form-select">
+                        <option value="">-- Khoa --</option>
+                        @foreach($faculties as $f)
+                            <option value="{{ $f->id }}" {{ request('faculty_id') == $f->id ? 'selected' : '' }}>
+                                {{ $f->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <select name="class_id" class="form-select">
+                        <option value="">-- Lớp --</option>
+                        @foreach($classes as $c)
+                            <option value="{{ $c->id }}" {{ request('class_id') == $c->id ? 'selected' : '' }}>
+                                {{ $c->id }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <select name="group_id" class="form-select">
+                        <option value="">-- Nhóm --</option>
+                        @foreach($groups as $g)
+                            <option value="{{ $g->id }}" {{ request('group_id') == $g->id ? 'selected' : '' }}>
+                                {{ $g->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <select name="status" class="form-select">
+                        <option value="">-- Trạng thái --</option>
+                        <option value="1" {{ request('status') === '1' ? 'selected' : '' }}>Hoạt động</option>
+                        <option value="0" {{ request('status') === '0' ? 'selected' : '' }}>Bị khoá</option>
+                    </select>
+                </div>
+                <div class="col-md-1">
+                    <button class="btn btn-primary w-100"><i class="fas fa-search"></i></button>
+                </div>
+            </form>
+        </div>
+    </div>
 
-    @foreach($users as $u)
-    <tr>
-        <td>{{ $u->student_code }}</td>
-        <td>{{ $u->first_name }} {{ $u->last_name }}</td>
-        <td>{{ $u->email }}</td>
-        <td>{{ $u->class_name }}</td>
-        <td>{{ $u->faculty_name }}</td>
-        <td>{{ $u->group_name }}</td>
+    {{-- Danh sách --}}
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+            <span><i class="fas fa-users me-2"></i>Danh sách Sinh viên</span>
+            <span class="badge bg-secondary">Tổng: {{ $users->total() }}</span>
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-hover mb-0 align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>MSSV</th>
+                        <th>Họ tên</th>
+                        <th>Email</th>
+                        <th>Lớp</th>
+                        <th>Khoa</th>
+                        <th>Nhóm</th>
+                        <th class="text-center">Trạng thái</th>
+                        <th class="text-center">Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($users as $u)
+                    <tr>
+                        <td class="fw-bold">{{ $u->student_code }}</td>
+                        <td>{{ $u->first_name }} {{ $u->last_name }}</td>
+                        <td class="text-muted small">{{ $u->email }}</td>
+                        <td><span class="badge bg-light text-dark border">{{ $u->schoolClass->id ?? 'N/A' }}</span></td>
+                        <td><span class="badge bg-info text-dark">{{ $u->faculty->name ?? 'N/A' }}</span></td>
+                        <td>{{ $u->userGroup->name ?? 'N/A' }}</td>
+                        <td class="text-center">
+                            <button class="btn btn-sm {{ $u->status ? 'btn-success' : 'btn-secondary' }} toggle-status"
+                                    data-id="{{ $u->id }}"
+                                    data-status="{{ $u->status }}">
+                                {{ $u->status ? 'Hoạt động' : 'Bị khoá' }}
+                            </button>
+                        </td>
+                        <td class="text-center">
+                            <a href="{{ route('admin.users.show', $u->id) }}" class="btn btn-sm btn-info">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            <a href="{{ route('admin.users.edit', $u->id) }}" class="btn btn-sm btn-warning">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr><td colspan="8" class="text-center py-4 text-muted">Không có sinh viên nào.</td></tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+        @if($users->hasPages())
+        <div class="card-footer d-flex justify-content-center">
+            {{ $users->withQueryString()->links() }}
+        </div>
+        @endif
+    </div>
+</div>
 
-        <td>
-            <button class="btn toggle-status"
-                    data-id="{{ $u->id }}">
-                {{ $u->status ? 'Active' : 'Inactive' }}
-            </button>
-        </td>
-
-        <td>
-            <a href="{{ route('admin.users.edit', $u->id) }}">Sửa</a>
-        </td>
-    </tr>
-    @endforeach
-</table>
 <script>
 document.querySelectorAll('.toggle-status').forEach(btn => {
-    btn.onclick = function() {
-        fetch('/admin/users/toggle-status', {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ id: this.dataset.id })
-        })
-        .then(res => res.json())
-        .then(data => {
-            this.innerText = data.status ? 'Active' : 'Inactive';
+    btn.addEventListener('click', function() {
+        const id = this.dataset.id;
+        const name = this.closest('tr').querySelector('td:nth-child(2)').innerText;
+        Swal.fire({
+            title: 'Thay đổi trạng thái?',
+            text: 'Sinh viên: ' + name,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Đồng ý',
+            cancelButtonText: 'Hủy'
+        }).then((result) => {
+            if (!result.isConfirmed) return;
+            fetch(`/admin/users/${id}/toggle-status`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                this.dataset.status = data.status ? '1' : '0';
+                this.className = 'btn btn-sm ' + (data.status ? 'btn-success' : 'btn-secondary') + ' toggle-status';
+                this.innerText = data.status ? 'Hoạt động' : 'Bị khoá';
+                Swal.fire({ icon: 'success', title: 'Đã cập nhật', timer: 1500, showConfirmButton: false });
+            });
         });
-    }
+    });
 });
+
+@if(session('success'))
+    Swal.fire({ icon: 'success', title: 'Thành công', text: "{{ session('success') }}", timer: 2000, showConfirmButton: false });
+@endif
+@if(session('error'))
+    Swal.fire({ icon: 'error', title: 'Thất bại', text: "{{ session('error') }}" });
+@endif
 </script>
+@endsection

@@ -1,8 +1,10 @@
-@extends('admin.dashboard') {{-- Sử dụng trực tiếp file dashboard làm layout --}}
+@extends('admin.dashboard')
 
 @section('title', 'Quản lý Nhóm người dùng')
 
 @section('content')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <div class="card-custom">
     <h2 class="mb-4"><i class="fas fa-user-shield"></i> Quản lý Nhóm người dùng</h2>
     
@@ -23,12 +25,7 @@
         </form>
     </div>
 
-    @if(session('error')) 
-        <div class="alert alert-danger shadow-sm">{{ session('error') }}</div> 
-    @endif
-    @if(session('success')) 
-        <div class="alert alert-success shadow-sm">{{ session('success') }}</div> 
-    @endif
+
 
     <div class="table-responsive">
         <table class="table table-bordered table-hover bg-white">
@@ -54,13 +51,13 @@
                         <a href="{{ route('admin.user-groups.edit', $group->id) }}" class="btn btn-sm btn-warning">
                             <i class="fas fa-edit"></i> Sửa
                         </a>
-                        <form action="{{ route('admin.user-groups.destroy', $group->id) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa nhóm này?')" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-danger">
-                                <i class="fas fa-trash"></i> Xóa
-                            </button>
+                        <form id="delete-group-{{ $group->id }}" action="{{ route('admin.user-groups.destroy', $group->id) }}" method="POST" class="d-none">
+                            @csrf @method('DELETE')
                         </form>
+                        <button type="button" class="btn btn-sm btn-danger"
+                                onclick="confirmDeleteGroup('{{ $group->id }}', '{{ addslashes($group->name) }}')">
+                            <i class="fas fa-trash"></i> Xóa
+                        </button>
                     </td>
                 </tr>
                 @empty
@@ -72,4 +69,27 @@
         </table>
     </div>
 </div>
+
+<script>
+function confirmDeleteGroup(id, name) {
+    Swal.fire({
+        title: 'Xác nhận xóa?',
+        text: 'Nhóm "' + name + '" sẽ bị xóa vĩnh viễn!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        confirmButtonText: 'Đồng ý xóa',
+        cancelButtonText: 'Hủy'
+    }).then((result) => {
+        if (result.isConfirmed) document.getElementById('delete-group-' + id).submit();
+    });
+}
+
+@if(session('success'))
+    Swal.fire({ icon: 'success', title: 'Thành công', text: "{{ session('success') }}", timer: 2000, showConfirmButton: false });
+@endif
+@if(session('error'))
+    Swal.fire({ icon: 'error', title: 'Thất bại', text: "{{ session('error') }}" });
+@endif
+</script>
 @endsection
