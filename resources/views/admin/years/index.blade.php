@@ -1,4 +1,6 @@
-@extends('layouts.admin')
+@extends('admin.dashboard')
+
+@section('title', 'Quản lý Năm học & Học kỳ')
 
 @section('content')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
