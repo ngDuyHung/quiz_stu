@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+
 
 @section('title', 'Chi tiết sinh viên')
 
