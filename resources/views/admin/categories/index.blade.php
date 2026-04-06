@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('admin.dashboard')
 
 @section('title', 'Danh mục câu hỏi')
 
