@@ -31,7 +31,6 @@ Route::middleware(['auth', 'admin.only'])->prefix('admin')->name('admin.')->grou
 // Question Category management routes
     Route::resource('question-categories', QuestionCategoryController::class);
 
-    Route::resource('faculties', \App\Http\Controllers\FacultyController::class);
     Route::resource('classes', \App\Http\Controllers\SchoolClassController::class);
 
     // PHẦN QUẢN LÝ NĂM HỌC

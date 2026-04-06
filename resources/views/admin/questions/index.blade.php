@@ -1,94 +1,89 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Thống kê câu hỏi</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
+@extends('admin.dashboard')
 
-<div class="container mt-4">
+@section('title', 'Thống kê câu hỏi')
 
-    <h2 class="mb-4">📊 Thống kê câu hỏi sai nhiều nhất</h2>
+@section('content')
 
-    {{-- FILTER --}}
-    <form method="GET" class="row mb-4">
-        <div class="col-md-4">
-            <select name="category_id" class="form-control">
-                <option value="">-- Danh mục --</option>
-                @foreach($categories as $c)
-                    <option value="{{ $c->id }}"
-                        {{ request('category_id') == $c->id ? 'selected' : '' }}>
-                        {{ $c->name }}
-                    </option>
-                @endforeach
-            </select>
+<div class="container-fluid mt-4">
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-dark text-white fw-bold">
+            <i class="fas fa-chart-bar me-2"></i>Thống kê câu hỏi sai nhiều nhất
         </div>
+        <div class="card-body">
+            {{-- Bộ lọc --}}
+            <form method="GET" class="row g-2 mb-4">
+                <div class="col-md-4">
+                    <select name="category_id" class="form-select">
+                        <option value="">-- Danh mục --</option>
+                        @foreach($categories as $c)
+                            <option value="{{ $c->id }}"
+                                {{ request('category_id') == $c->id ? 'selected' : '' }}>
+                                {{ $c->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <select name="level_id" class="form-select">
+                        <option value="">-- Mức độ --</option>
+                        @foreach($levels as $l)
+                            <option value="{{ $l->id }}"
+                                {{ request('level_id') == $l->id ? 'selected' : '' }}>
+                                {{ $l->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-primary w-100">
+                        <i class="fas fa-search me-1"></i>Lọc
+                    </button>
+                </div>
+            </form>
 
-        <div class="col-md-4">
-            <select name="level_id" class="form-control">
-                <option value="">-- Mức độ --</option>
-                @foreach($levels as $l)
-                    <option value="{{ $l->id }}"
-                        {{ request('level_id') == $l->id ? 'selected' : '' }}>
-                        {{ $l->name }}
-                    </option>
-                @endforeach
-            </select>
+            {{-- Bảng dữ liệu --}}
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Nội dung câu hỏi</th>
+                            <th>Danh mục</th>
+                            <th>Mức độ</th>
+                            <th class="text-center">Lần xuất hiện</th>
+                            <th class="text-center">% Đúng</th>
+                            <th class="text-center">% Sai</th>
+                            <th class="text-center">Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($questions as $q)
+                        <tr>
+                            <td>{{ $q->content }}</td>
+                            <td><span class="badge bg-secondary">{{ $q->category }}</span></td>
+                            <td><span class="badge bg-info text-dark">{{ $q->level }}</span></td>
+                            <td class="text-center">{{ $q->times_served }}</td>
+                            <td class="text-center">
+                                <span class="badge bg-success">{{ number_format($q->percent_correct, 2) }}%</span>
+                            </td>
+                            <td class="text-center">
+                                <span class="badge bg-danger">{{ number_format($q->percent_incorrect, 2) }}%</span>
+                            </td>
+                            <td class="text-center">
+                                <a href="{{ route('admin.questions.edit', $q->id) }}"
+                                   class="btn btn-sm btn-warning">
+                                    <i class="fas fa-edit"></i> Sửa
+                                </a>
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="7" class="text-center py-4 text-muted">Không có dữ liệu.</td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
         </div>
-
-        <div class="col-md-4">
-            <button class="btn btn-primary">Lọc</button>
-        </div>
-    </form>
-
-    {{-- TABLE --}}
-    <table class="table table-bordered table-hover">
-        <thead class="table-dark">
-            <tr>
-                <th>Nội dung</th>
-                <th>Danh mục</th>
-                <th>Mức độ</th>
-                <th>Lần xuất hiện</th>
-                <th>% đúng</th>
-                <th>% sai</th>
-                <th>Hành động</th>
-            </tr>
-        </thead>
-
-        <tbody>
-            @forelse($questions as $q)
-            <tr>
-                <td>{{ $q->content }}</td>
-                <td>{{ $q->category }}</td>
-                <td>{{ $q->level }}</td>
-                <td>{{ $q->times_served }}</td>
-                <td class="text-success">
-                    {{ number_format($q->percent_correct, 2) }}%
-                </td>
-                <td class="text-danger">
-                    {{ number_format($q->percent_incorrect, 2) }}%
-                </td>
-                <td>
-                    <a href="{{ route('admin.questions.edit', $q->id) }}"
-                       class="btn btn-sm btn-warning">
-                        Sửa
-                    </a>
-                </td>
-            </tr>
-            @empty
-            <tr>
-                <td colspan="7" class="text-center">
-                    Không có dữ liệu
-                </td>
-            </tr>
-            @endforelse
-        </tbody>
-    </table>
-
+    </div>
 </div>
-<a href="{{ route('admin.users.resetPassword', $u->id) }}" 
-   class="btn btn-sm btn-danger">
-   Reset mật khẩu
-</a>
-</body>
-</html>
+@endsection
