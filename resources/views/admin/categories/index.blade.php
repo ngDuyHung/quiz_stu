@@ -22,7 +22,6 @@
         </form>
     </div>
 
-    @if(session('success')) <div id="session-success" data-msg="{{ session('success') }}"></div> @endif
 
     <div class="table-responsive">
         <table class="table table-hover align-middle bg-white border">
@@ -104,12 +103,5 @@ function confirmDeleteCat(id, name) {
     });
 }
 
-const successEl = document.getElementById('session-success');
-if (successEl) {
-    Swal.fire({ icon: 'success', title: 'Thành công', text: successEl.dataset.msg, timer: 2000, showConfirmButton: false });
-}
-@if(session('error'))
-    Swal.fire({ icon: 'error', title: 'Thất bại', text: "{{ session('error') }}" });
-@endif
 </script>
 @endsection

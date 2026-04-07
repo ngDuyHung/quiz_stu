@@ -144,17 +144,28 @@ document.querySelectorAll('.toggle-status').forEach(btn => {
                 this.dataset.status = data.status ? '1' : '0';
                 this.className = 'btn btn-sm ' + (data.status ? 'btn-success' : 'btn-secondary') + ' toggle-status';
                 this.innerText = data.status ? 'Hoạt động' : 'Bị khoá';
-                Swal.fire({ icon: 'success', title: 'Đã cập nhật', timer: 1500, showConfirmButton: false });
+                showFlashAlert('success', 'Đã cập nhật trạng thái thành công!');
             });
         });
     });
 });
 
-@if(session('success'))
-    Swal.fire({ icon: 'success', title: 'Thành công', text: "{{ session('success') }}", timer: 2000, showConfirmButton: false });
-@endif
-@if(session('error'))
-    Swal.fire({ icon: 'error', title: 'Thất bại', text: "{{ session('error') }}" });
-@endif
+function showFlashAlert(type, message) {
+    var container = document.getElementById('flash-alert-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'flash-alert-container';
+        container.style.cssText = 'position:fixed;top:20px;right:20px;z-index:9999;min-width:320px;max-width:460px;';
+        document.body.appendChild(container);
+    }
+    var icons = { success: 'fa-check-circle', danger: 'fa-times-circle', warning: 'fa-exclamation-triangle', info: 'fa-info-circle' };
+    var labels = { success: 'Thành công!', danger: 'Thất bại!', warning: 'Cảnh báo!', info: 'Thông báo!' };
+    var div = document.createElement('div');
+    div.className = 'alert alert-' + type + ' alert-dismissible fade show shadow-sm';
+    div.role = 'alert';
+    div.innerHTML = '<i class="fas ' + (icons[type] || 'fa-info-circle') + ' me-2"></i><strong>' + (labels[type] || '') + '</strong> ' + message + '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
+    container.appendChild(div);
+    setTimeout(function () { bootstrap.Alert.getOrCreateInstance(div).close(); }, 4000);
+}
 </script>
 @endsection

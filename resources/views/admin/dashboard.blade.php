@@ -108,6 +108,8 @@
             </div>
         </header>
 
+        @include('partials.alert')
+
         <div class="container-fluid-custom">
             @if(Request::is('admin/dashboard'))
                 <div class="card-custom border-start border-primary border-5">
