@@ -135,12 +135,5 @@
         })
     }
 
-    @if(session('success'))
-        Swal.fire({ icon: 'success', title: 'Thành công', text: "{{ session('success') }}", timer: 2000, showConfirmButton: false });
-    @endif
-
-    @if(session('error'))
-        Swal.fire({ icon: 'error', title: 'Thất bại', text: "{{ session('error') }}" });
-    @endif
 </script>
 @endsection

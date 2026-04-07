@@ -3,7 +3,6 @@
 @section('title', 'Chỉnh sửa Nhóm người dùng')
 
 @section('content')
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <div class="card-custom">
     <h2 class="mb-4"><i class="fas fa-user-shield"></i> Chỉnh sửa Nhóm người dùng</h2>
@@ -56,12 +55,4 @@
     </div>
 </div>
 
-<script>
-@if(session('success'))
-    Swal.fire({ icon: 'success', title: 'Thành công', text: "{{ session('success') }}", timer: 2000, showConfirmButton: false });
-@endif
-@if(session('error'))
-    Swal.fire({ icon: 'error', title: 'Thất bại', text: "{{ session('error') }}" });
-@endif
-</script>
 @endsection
