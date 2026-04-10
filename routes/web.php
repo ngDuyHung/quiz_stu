@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\Client\CourseController;
 use App\Http\Controllers\Admin\UserGroupController;
 use App\Http\Controllers\Admin\QuestionCategoryController;
+use App\Http\Controllers\Admin\QuestionLevelController;
 
 
 // Auth Routes
@@ -31,6 +32,14 @@ Route::middleware(['auth', 'admin.only'])->prefix('admin')->name('admin.')->grou
     // Question Category management routes
     Route::resource('question-categories', QuestionCategoryController::class);
 
+    // Question Level management routes
+    Route::resource('question-levels', QuestionLevelController::class);
+
+    // Questions and Answers management routes
+    Route::resource('questions', \App\Http\Controllers\Admin\QuestionsandAnswersController::class);
+    Route::get('questions/{question}/options-count', [\App\Http\Controllers\Admin\QuestionsandAnswersController::class, 'getOptionsCount'])->name('questions.options-count');
+    Route::get('questions/{question}/stats', [\App\Http\Controllers\Admin\QuestionsandAnswersController::class, 'getStats'])->name('questions.stats');
+
     Route::resource('classes', \App\Http\Controllers\SchoolClassController::class);
 
     // PHẦN QUẢN LÝ NĂM HỌC
@@ -49,19 +58,34 @@ Route::middleware(['auth', 'admin.only'])->prefix('admin')->name('admin.')->grou
 
     // User Group management routes
     Route::resource('user-groups', UserGroupController::class)->except(['create', 'show']);
+
+    // Student management routes - custom routes first to take precedence
+    Route::get('students/classes-by-faculty', [\App\Http\Controllers\Admin\StudentListController::class, 'getClassesByFaculty'])->name('students.classes-by-faculty');
+    Route::post('students/{student}/toggle-status', [\App\Http\Controllers\Admin\StudentListController::class, 'toggleStatus'])->name('students.toggle-status');
+    Route::post('students/{student}/reset-password', [\App\Http\Controllers\Admin\StudentListController::class, 'resetPassword'])->name('students.reset-password');
+    
+    Route::resource('students', \App\Http\Controllers\Admin\StudentListController::class);
 });
 
 // Client Routes
 Route::middleware(['auth', 'client.only'])->prefix('client')->name('client.')->group(function () {
     Route::get('/dashboard', [ClientDashboardController::class, 'index'])->name('dashboard');
-    Route::get('/course', [CourseController::class, 'index'])->name('course');
+    Route::get('/courses', [CourseController::class, 'index'])->name('courses');
+    Route::get('/results', function () {
+        return view('client.result-detail');
+    })->name('results');
+    Route::get('/ranking', function () {
+        return view('client.ranking');
+    })->name('ranking');
     Route::get('/answer&question', function () {
         return view('client.answer&question');
     })->name('answer&question');
-
     Route::get('/result-detail', function () {
         return view('client.result-detail');
     })->name('result-detail');
+    Route::get('/exams', function () {
+        return view('client.exams');
+    })->name('exams');
 });
 
 // Redirect home to login
