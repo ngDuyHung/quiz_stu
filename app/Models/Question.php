@@ -42,4 +42,19 @@ class Question extends Model
     {
         return $this->hasMany(ResultAnswer::class, 'question_id', 'id');
     }
+    public function scopeAdvancedFilter($query, $filters)
+    {
+        return $query->when($filters['search'] ?? null, function ($q, $search) {
+                $q->where('content', 'LIKE', '%' . $search . '%');
+            })
+            ->when($filters['category_id'] ?? null, function ($q, $catId) {
+                $q->where('category_id', $catId);
+            })
+            ->when($filters['level_id'] ?? null, function ($q, $levelId) {
+                $q->where('level_id', $levelId);
+            })
+            ->when($filters['type'] ?? null, function ($q, $type) {
+                $q->where('type', $type);
+            });
+    }
 }
