@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\QuestionCategory;
 use App\Models\QuestionLevel;
+use App\Models\Question;
 
 class QuestionController extends Controller
 {
@@ -45,5 +46,40 @@ class QuestionController extends Controller
     $levels = QuestionLevel::all();
 
     return view('admin.questions.index', compact('questions', 'categories', 'levels'));
+    }
+    public function index(Request $request)
+    {
+        // 1. Khởi tạo query với JOIN các bảng liên quan (AC: JOIN categories, levels)
+        $query = \App\Models\Question::with(['category', 'level']);
+
+        // 2. Search full-text theo content (AC: LIKE %keyword%)
+        if ($request->has('search') && $request->search != '') {
+            $query->where('content', 'LIKE', '%' . $request->search . '%');
+        }
+
+        // 3. Filter đa điều kiện: category + level + type (AC: kết hợp được)
+        if ($request->filled('category_id')) {
+            $query->where('category_id', $request->category_id);
+        }
+        if ($request->filled('level_id')) {
+            $query->where('level_id', $request->level_id);
+        }
+        if ($request->filled('type')) {
+            $query->where('type', $request->type);
+        }
+
+        // 4. Pagination 20 câu/trang (AC: 10–20 câu/trang)
+        $questions = $query->latest()->paginate(20);
+
+        // 5. Xử lý Preview nội dung (AC: truncate 100 chars, strip HTML tags)
+        $questions->getCollection()->transform(function ($question) {
+            $question->preview = str(strip_tags($question->content))->limit(100);
+            return $question;
+        });
+
+        $categories = \App\Models\QuestionCategory::all();
+        $levels = \App\Models\QuestionLevel::all();
+
+        return view('admin.questions.index', compact('questions', 'categories', 'levels'));
     }
 }
