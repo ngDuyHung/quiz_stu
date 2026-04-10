@@ -1,28 +1,54 @@
 @extends('admin.dashboard')
 
-@section('title', 'Sửa Khoa')
+@section('title', 'Chỉnh sửa Khoa')
 
 @section('content')
-<div style="background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); max-width: 500px;">
-    <h2>✏️ Chỉnh sửa Khoa</h2>
-    <hr style="margin: 15px 0; border: 0; border-top: 1px solid #eee;">
 
-    <form action="{{ route('admin.faculties.update', $faculty->id) }}" method="POST">
-        @csrf
-        @method('PUT')
-        
-        <div style="margin-bottom: 15px;">
-            <label style="display: block; margin-bottom: 5px; font-weight: bold;">Mã Khoa:</label>
-            <input type="text" value="{{ $faculty->id }}" disabled style="width: 100%; padding: 10px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 4px;">
+<div class="container-fluid mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-warning fw-bold">
+                    <i class="fas fa-edit me-2"></i>Chỉnh sửa Khoa
+                </div>
+                <div class="card-body">
+                    @if($errors->any())
+                        <div class="alert alert-danger shadow-sm">
+                            <ul class="mb-0">
+                                @foreach($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                    <form action="{{ route('admin.faculties.update', $faculty->id) }}" method="POST">
+                        @csrf @method('PUT')
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Mã Khoa (Không thể sửa)</label>
+                            <input type="text" class="form-control bg-light" value="{{ $faculty->id }}" disabled>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Tên Khoa <span class="text-danger">*</span></label>
+                            <input type="text" name="name"
+                                   class="form-control @error('name') is-invalid @enderror"
+                                   value="{{ old('name', $faculty->name) }}" required>
+                            @error('name')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-1"></i>Lưu thay đổi
+                            </button>
+                            <a href="{{ route('admin.faculties.index') }}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-1"></i>Quay lại
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-
-        <div style="margin-bottom: 20px;">
-            <label style="display: block; margin-bottom: 5px; font-weight: bold;">Tên Khoa mới:</label>
-            <input type="text" name="name" value="{{ $faculty->name }}" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
-        </div>
-
-        <button type="submit" style="padding: 10px 20px; background: #27ae60; color: white; border: none; border-radius: 4px; cursor: pointer;">Cập nhật</button>
-        <a href="{{ route('admin.faculties.index') }}" style="margin-left: 10px; text-decoration: none; color: #666;">Hủy bỏ</a>
-    </form>
+    </div>
 </div>
+
 @endsection

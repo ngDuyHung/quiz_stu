@@ -1,8 +1,8 @@
-@extends('layouts.admin')
+@extends('admin.dashboard')
+
+@section('title', 'Quản lý Lớp học')
 
 @section('content')
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <div class="container-fluid mt-4">
@@ -163,13 +163,5 @@
         })
     }
 
-    // Xử lý Toast Message từ Controller (Acceptance Criteria 5)
-    @if(session('success'))
-        Swal.fire({ icon: 'success', title: 'Thành công', text: "{{ session('success') }}", timer: 2000, showConfirmButton: false });
-    @endif
-
-    @if(session('error'))
-        Swal.fire({ icon: 'error', title: 'Thất bại', text: "{{ session('error') }}" });
-    @endif
 </script>
 @endsection

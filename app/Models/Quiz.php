@@ -24,7 +24,6 @@ class Quiz extends Model
     ];
 
     protected $casts = [
-        'created_at' => 'datetime',
         'start_date' => 'datetime',
         'end_date' => 'datetime',
         'show_answer' => 'boolean',
@@ -33,6 +32,18 @@ class Quiz extends Model
         'require_login' => 'boolean',
         'is_demo' => 'boolean',
     ];
+
+    public function getStatusBadgeAttribute()
+    {
+        $now = now();
+        if ($this->start_date && $now->lt($this->start_date)) {
+            return '<span class="badge bg-secondary">Chưa mở</span>';
+        }
+        if ($this->end_date && $now->gt($this->end_date)) {
+            return '<span class="badge bg-danger">Đã kết thúc</span>';
+        }
+        return '<span class="badge bg-success">Đang diễn ra</span>';
+    }
 
     public function userGroups(): BelongsToMany
     {

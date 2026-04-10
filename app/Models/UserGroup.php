@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class UserGroup extends Model
 {
+    // FIX LỖI Ở ĐÂY: Tắt timestamps nếu bảng DB không có created_at/updated_at
+    public $timestamps = false;
+
     protected $fillable = [
         'name',
         'description',

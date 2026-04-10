@@ -57,42 +57,47 @@
             
             <span class="module-label">Module 1: Hệ thống</span>
 
-            <a href="{{ route('admin.faculties.index') }}" 
-            class="{{ request()->routeIs('admin.faculties.*') ? 'active' : '' }}">
-            🏢 Quản lý Khoa
-            </a>
-
-            <a href="{{ route('admin.classes.index') }}"
-            class="{{ request()->routeIs('admin.classes.*') ? 'active' : '' }}">
-            🏫 Quản lý Lớp học
-            </a>
-
-            <a href="{{ route('admin.years.index') }}"
-            class="{{ request()->routeIs('admin.years.*') ? 'active' : '' }}">
-            📅 Năm học & Học kỳ
-            </a>
-
-            <!-- Moudle He Thong  -->
             <a href="{{ route('admin.faculties.index') }}" class="{{ Request::is('admin/faculties*') ? 'active' : '' }}">
                 <i class="fas fa-university"></i> Quản lý Khoa
             </a>
-            <a href="#" class="{{ Request::is('admin/classes*') ? 'active' : '' }}">
+            <a href="{{ route('admin.classes.index') }}" class="{{ Request::is('admin/classes*') ? 'active' : '' }}">
                 <i class="fas fa-school"></i> Quản lý Lớp học
             </a>
-            <a href="#"><i class="fas fa-calendar-alt"></i> Năm học & Học kỳ</a>
+            <a href="{{ route('admin.years.index') }}" class="{{ Request::is('admin/years*') ? 'active' : '' }}">
+                <i class="fas fa-calendar-alt"></i> Năm học & Học kỳ
+            </a>
 
             <span class="module-label">Module 2: Nhân sự</span>
-            <a href="#"><i class="fas fa-users"></i> Danh sách Sinh viên</a>
-            <a href="#"><i class="fas fa-user-shield"></i> Nhóm người dùng</a>
+
+            <a href="{{ route('admin.users.index') }}" 
+            class="{{ Request::is('admin/users*') ? 'active' : '' }}">
+                <i class="fas fa-users"></i> Danh sách Sinh viên
+            </a>
+
+            <a href="{{ route('admin.user-groups.index') }}" 
+            class="{{ Request::is('admin/user-groups*') ? 'active' : '' }}">
+                <i class="fas fa-user-shield"></i> Nhóm người dùng
+            </a>
 
             <span class="module-label">Module 3: Ngân hàng đề</span>
-            <a href="#"><i class="fas fa-folder-open"></i> Danh mục câu hỏi</a>
-            <a href="#"><i class="fas fa-signal"></i> Mức độ khó</a>
-            <a href="#"><i class="fas fa-question-circle"></i> Câu hỏi & Đáp án</a>
+            <a href="{{ route('admin.question-categories.index') }}" class="{{ Request::is('admin/question-categories*') ? 'active' : '' }}">
+                <i class="fas fa-folder-open"></i> Danh mục câu hỏi
+            </a>
+            <a href="#" class="{{ Request::is('admin/question-levels*') ? 'active' : '' }}">
+                <i class="fas fa-signal"></i> Mức độ khó
+            </a>
+            <a href="{{ route('admin.questions.index') }}" class="{{ Request::is('admin/questions*') ? 'active' : '' }}">
+                <i class="fas fa-question-circle"></i> Câu hỏi & Đáp án
+            </a>
+            
 
             <span class="module-label">Module 4: Kỳ thi</span>
-            <a href="#"><i class="fas fa-file-alt"></i> Thiết lập bài thi</a>
-            <a href="#"><i class="fas fa-clock"></i> Lịch trình thi</a>
+            <a href="{{ route('admin.quizzes.index') }}" class="{{ Request::is('admin/quizzes*') ? 'active' : '' }}">
+                <i class="fas fa-file-alt"></i> Thiết lập bài thi
+            </a>
+            <a href="#" class="{{ Request::is('admin/quiz-schedules*') ? 'active' : '' }}">
+                <i class="fas fa-clock"></i> Lịch trình thi
+            </a>
         </nav>
         
         <div class="logout-section">
@@ -119,6 +124,8 @@
             </div>
         </header>
 
+        @include('partials.alert')
+
         <div class="container-fluid-custom">
             @if(Request::is('admin/dashboard'))
                 <div class="card-custom border-start border-primary border-5">
@@ -137,5 +144,6 @@
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    @yield('scripts')
 </body>
 </html>

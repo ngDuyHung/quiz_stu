@@ -1,8 +1,10 @@
 
+@extends('admin.dashboard')
 
 @section('title', 'Chi tiết sinh viên')
 
 @section('content')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
@@ -123,7 +125,7 @@
                                     <div class="form-group">
                                         <label>Trạng thái:</label>
                                         <p class="form-control-plaintext">
-                                            <span class="badge badge-{{ $user->status ? 'success' : 'danger' }}">
+                                            <span class="badge bg-{{ $user->status ? 'success' : 'danger' }}">
                                                 {{ $user->status ? 'Hoạt động' : 'Không hoạt động' }}
                                             </span>
                                         </p>

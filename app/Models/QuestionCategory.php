@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class QuestionCategory extends Model
 {
-    protected $fillable = [
-        'name',
-    ];
+    public $timestamps = false; // Tắt nếu DB không có created_at/updated_at
+
+    protected $fillable = ['name'];
 
     public function questions(): HasMany
     {

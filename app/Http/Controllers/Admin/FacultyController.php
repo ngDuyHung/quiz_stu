@@ -28,8 +28,8 @@ class FacultyController extends Controller
         ]);
 
         Faculty::create([
-            'id' => strtoupper(trim($request->id)), // trim để xóa khoảng trắng thừa
-            'name' => trim($request->name),
+            'id' => strtoupper(trim($request->id)), 
+            'name' => trim($request->name),// trim để xóa khoảng trắng thừa
         ]);
 
         return redirect()->route('admin.faculties.index')->with('success', 'Thêm khoa mới thành công!');
