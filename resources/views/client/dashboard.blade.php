@@ -1,15 +1,13 @@
 <!DOCTYPE html>
-
 <html class="light" lang="en">
 
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>Quiz - STU</title>
+    <title>Dashboard - Quiz STU</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Manrope:wght@500;600;700;800&amp;display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
     <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -83,119 +81,186 @@
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
-
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-
-        h1,
-        h2,
-        h3 {
-            font-family: 'Manrope', sans-serif;
-        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, h4 { font-family: 'Manrope', sans-serif; }
+        
+        /* Custom scrollbar for better UI */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #e0e3e5; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #c3c6d1; }
     </style>
 </head>
 
 <body class="bg-surface text-on-background min-h-screen">
-    <!-- SideNavBar (Execution from JSON) -->
-    <nav class="flex flex-col fixed left-0 top-0 h-full overflow-y-auto h-screen w-64 border-r-0 bg-slate-50 dark:bg-slate-900 z-50">
-        <div class="p-8 pb-10">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-white shadow-lg">
-                    <span class="material-symbols-outlined" data-icon="school">school</span>
-                </div>
-                <div>
-                    <h1 class="text-xl font-bold text-[#003466] dark:text-white leading-tight">Quiz - STU</h1>
-                    <p class="text-[10px] uppercase tracking-widest text-slate-500 font-bold">Web thi trắc nghiệm</p>
-                </div>
-            </div>
-        </div>
-        <div class="flex-1 px-4 space-y-1">
-            <!-- Active: Home -->
-            <a class="flex items-center gap-4 px-4 py-3 rounded-xl text-[#003466] dark:text-[#88C3FF] font-bold border-r-4 border-[#003466] dark:border-[#88C3FF] bg-slate-200/50 dark:bg-slate-800/50 translate-x-1 transition-transform" href="#">
-                <span class="material-symbols-outlined" data-icon="home" style="font-variation-settings: 'FILL' 1;">home</span>
-                <span class="font-['Manrope'] text-sm font-medium tracking-wide">Home</span>
-            </a>
-            <a class="flex items-center gap-4 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:text-[#1A4B84] hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors duration-200"
-                href="{{ route('client.course') }}">
-                <span class="material-symbols-outlined">school</span>
-                <span class="font-['Manrope'] text-sm font-medium tracking-wide">Courses</span>
-            </a>
-            <a class="flex items-center gap-4 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:text-[#1A4B84] hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors duration-200" href="#">
-                <span class="material-symbols-outlined" data-icon="assignment_turned_in">assignment_turned_in</span>
-                <span class="font-['Manrope'] text-sm font-medium tracking-wide">Tasks</span>
-            </a>
-            <a class="flex items-center gap-4 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:text-[#1A4B84] hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors duration-200" href="#">
-                <span class="material-symbols-outlined" data-icon="account_circle">account_circle</span><span class="font-['Manrope'] text-sm font-medium tracking-wide">Profile</span>
-            </a>
-        </div>
-        <div class="p-6 mt-auto">
-    <div class="bg-primary-container rounded-2xl p-5 text-white/90 relative overflow-hidden group">
-        <div class="logout-section relative z-10">
-            <form action="{{ route('auth.logout') }}" method="POST">
-                @csrf
-                <button type="submit" class="flex items-center w-full gap-3 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-xl border border-white/20 transition-all duration-200">
-                    <span class="material-symbols-outlined text-white">logout</span>
-                    <span class="font-['Manrope'] text-sm font-bold text-white tracking-wide">Đăng xuất</span>
-                </button>
-            </form>
-        </div>
-        <div class="absolute -right-4 -bottom-4 opacity-10 group-hover:opacity-20 transition-opacity">
-            <span class="material-symbols-outlined text-6xl">auto_stories</span>
-        </div>
-    </div>
-</div>
-    </nav>
-    <!-- TopAppBar (Execution from JSON) -->
-    <header class="fixed top-0 right-0 left-64 h-16 flex justify-between items-center px-8 z-40 bg-white/80 dark:bg-slate-950/80 backdrop-blur-xl shadow-sm border-b border-slate-200/15 dark:border-slate-800/15">
-        <div class="flex items-center flex-1 max-w-xl">
-            <div class="relative w-full">
-                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xl" data-icon="search">search</span>
-                <input class="w-full bg-surface-container-low border-none rounded-full py-2 pl-11 pr-4 text-sm focus:ring-2 focus:ring-[#1A4B84]/20 transition-all" placeholder="Search curriculum, faculty, or archives..." type="text" />
-            </div>
-        </div>
-        <div class="flex items-center gap-6">
-            <div class="flex items-center gap-4">
-                <button class="w-10 h-10 flex items-center justify-center rounded-full text-slate-500 hover:text-[#003466] hover:bg-slate-100 transition-all">
-                    <span class="material-symbols-outlined" data-icon="notifications">notifications</span>
-                </button>
-                <button class="w-10 h-10 flex items-center justify-center rounded-full text-slate-500 hover:text-[#003466] hover:bg-slate-100 transition-all">
-                    <span class="material-symbols-outlined" data-icon="settings">settings</span>
-                </button>
-            </div>
-            <div class="h-8 w-[1px] bg-slate-200"></div>
-            <div class="flex items-center gap-3">
-                <span class="text-sm font-semibold text-primary">USER</span>
-                <img alt="User Portrait" class="w-10 h-10 rounded-full object-cover border-2 border-primary/10" data-alt="Close-up portrait of a young male student with glasses in a library setting, soft natural lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-mybWv1RiZfCiKD5lSbSxn0mJOBi4dtI4mdhexukcLMJPsMmA03bpzV6i-t9JLSJkmR2Mx5vd5EcuTeHtCdg63UEChJgJDekklgieKZfdJ2y6nkVKyl11SipOh9d6Qp7-_Q2bMyHSD9XXQmAP43OIRp2NbaTd4JHTJPIQL88kspJ1sMhOg2B8UJjnx1PZTG9gfM8zHaOcYan4FsV_YyK5h1e5nQySpFB5y7S_t5lMS3YyZdmLHhSTgX1cTmrstYDPT9DqBcifkBpA" />
-            </div>
-        </div>
-    </header>
-    <!-- Main Content Canvas -->
+    @include('client.partials.sidebar')
+    @include('client.partials.header')
+
     <main class="ml-64 pt-24 px-8 pb-12">
         <div class="max-w-7xl mx-auto space-y-8">
-            <!-- Hero Announcement Section -->
+            
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
                 <div class="lg:col-span-8">
                     <span class="text-[11px] font-bold tracking-[0.2em] text-secondary uppercase mb-3 block">Dashboard Overview</span>
-                    <h1 class="text-5xl font-extrabold text-primary tracking-tight mb-4">Hello Alex,</h1>
+                    <h1 class="text-5xl font-extrabold text-primary tracking-tight mb-4">Chào Alex,</h1>
                     <p class="text-lg text-on-surface-variant max-w-2xl leading-relaxed">
-                        Your academic journey is <span class="text-primary font-bold">85% complete</span>. You are maintaining an exceptional trajectory in the Theoretical Sciences track.
+                        Tiến độ học tập của bạn đang ở mức <span class="text-primary font-bold">85%</span>. Bạn có <span class="text-error font-bold">1 bài kiểm tra</span> sắp diễn ra trong hôm nay.
                     </p>
                 </div>
                 <div class="lg:col-span-4">
-                    <div class="bg-surface-container-low p-4 rounded-2xl flex items-center gap-4">
-                        <div class="w-12 h-12 rounded-xl bg-tertiary/10 flex items-center justify-center text-tertiary">
-                            <span class="material-symbols-outlined" data-icon="campaign">campaign</span>
+                    <div class="bg-tertiary-fixed p-5 rounded-[2rem] flex items-center gap-4 border border-tertiary/10 shadow-sm">
+                        <div class="w-12 h-12 rounded-2xl bg-white flex items-center justify-center text-tertiary shadow-sm">
+                            <span class="material-symbols-outlined">event_upcoming</span>
                         </div>
                         <div>
-                            <p class="text-[10px] font-bold text-tertiary uppercase tracking-wider">System Announcement</p>
-                            <p class="text-sm font-semibold text-on-surface">Advanced Theoretical Physics exam schedule updated</p>
+                            <p class="text-[10px] font-bold text-on-tertiary-fixed-variant uppercase tracking-wider">Sự kiện sắp tới</p>
+                            <p class="text-sm font-bold text-on-tertiary-fixed">Thi Cuối Kỳ: Lập trình Mobile</p>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- Bento Grid Content -->
+
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                <!-- Progress Circular Section -->
-                <div class="lg:col-span-4 bg-surface-container-lowest rounded-[2rem] p-8 shadow-sm relative overflow-hidden group">
-                    <div class="relative z-10 h-ful
+                
+                <div class="lg:col-span-8 bg-white border border-slate-200/60 rounded-[2.5rem] p-10 shadow-sm flex flex-col md:flex-row gap-8 items-center relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-secondary/5 rounded-bl-full transition-all group-hover:scale-110"></div>
+                    
+                    <div class="flex-1 relative z-10">
+                        <div class="flex items-center gap-3 mb-6">
+                            <span class="px-4 py-1 bg-error/10 text-error rounded-full text-xs font-bold uppercase tracking-widest">Đang mở</span>
+                            <span class="text-xs font-bold text-slate-400">Kết thúc lúc: 23:59 Hôm nay</span>
+                        </div>
+                        <h2 class="text-3xl font-black text-primary mb-2">Kiểm tra Giữa kỳ: <br/>Lập trình Web Nâng cao</h2>
+                        <p class="text-slate-500 mb-8 font-medium italic">"Bao gồm nội dung về ReactJS, Tailwind CSS và REST API."</p>
+                        
+                        <div class="flex flex-wrap gap-6 mb-8">
+                            <div class="flex items-center gap-2">
+                                <span class="material-symbols-outlined text-secondary">timer</span>
+                                <span class="text-sm font-bold text-on-surface">60 phút</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="material-symbols-outlined text-secondary">quiz</span>
+                                <span class="text-sm font-bold text-on-surface">40 câu hỏi</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="material-symbols-outlined text-secondary">star</span>
+                                <span class="text-sm font-bold text-on-surface">Hệ số 0.3</span>
+                            </div>
+                        </div>
+
+                        <button onclick="window.location.href='{{ route('client.answer&question') }}'" class="bg-primary text-white px-10 py-4 rounded-2xl font-bold flex items-center gap-3 hover:shadow-2xl hover:shadow-primary/30 transition-all hover:-translate-y-1">
+                            Làm bài ngay
+                            <span class="material-symbols-outlined">arrow_forward_ios</span>
+                        </button>
+                    </div>
+
+                    <div class="w-full md:w-48 aspect-square bg-slate-50 rounded-3xl flex items-center justify-center border border-slate-100">
+                        <span class="material-symbols-outlined text-primary/20 text-8xl">code</span>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-4 bg-secondary text-white rounded-[2.5rem] p-10 flex flex-col justify-between shadow-xl shadow-secondary/20 relative overflow-hidden">
+                    <div class="relative z-10">
+                        <div class="flex justify-between items-start mb-10">
+                            <div>
+                                <h3 class="text-xs font-bold opacity-70 uppercase tracking-[0.2em] mb-1">Điểm trung bình</h3>
+                                <p class="text-6xl font-black italic">8.82</p>
+                            </div>
+                            <div class="bg-white/20 p-3 rounded-2xl backdrop-blur-md">
+                                <span class="material-symbols-outlined text-3xl">analytics</span>
+                            </div>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="flex justify-between text-sm font-bold">
+                                <span>Hoàn thành mục tiêu</span>
+                                <span>92%</span>
+                            </div>
+                            <div class="w-full h-3 bg-white/20 rounded-full overflow-hidden">
+                                <div class="bg-white h-full w-[92%] shadow-[0_0_15px_rgba(255,255,255,0.5)]"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="material-symbols-outlined absolute -left-10 -bottom-10 text-[15rem] opacity-10">auto_awesome</span>
+                </div>
+
+                <div class="lg:col-span-12">
+                    <div class="flex items-center justify-between mb-8">
+                        <div>
+                            <h3 class="text-2xl font-black text-primary">Các kỳ thi sắp diễn ra</h3>
+                            <p class="text-sm text-slate-500 font-medium">Bạn có 3 môn học cần hoàn thành nội dung ôn tập.</p>
+                        </div>
+                        <button class="flex items-center gap-2 text-primary font-bold text-sm hover:underline">
+                            Xem tất cả danh sách
+                            <span class="material-symbols-outlined text-sm">open_in_new</span>
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="bg-white border border-slate-200/50 p-6 rounded-[2rem] hover:shadow-xl hover:shadow-slate-200/50 transition-all group">
+                            <div class="flex items-center justify-between mb-6">
+                                <div class="w-14 h-14 rounded-2xl bg-secondary-fixed flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                                    <span class="material-symbols-outlined text-3xl">database</span>
+                                </div>
+                                <span class="text-[10px] font-black text-slate-400 uppercase tracking-tighter">Ngày 20/04</span>
+                            </div>
+                            <h4 class="text-lg font-bold text-primary mb-1">Cơ sở dữ liệu NoSQL</h4>
+                            <p class="text-xs text-slate-500 mb-6 flex items-center gap-1">
+                                <span class="material-symbols-outlined text-xs">person</span>
+                                GV. Nguyễn Văn A
+                            </p>
+                            <div class="flex items-center justify-between pt-4 border-t border-slate-50">
+                                <span class="text-xs font-bold text-secondary">45 Phút • 30 Câu</span>
+                                <button class="p-2 bg-slate-100 rounded-xl text-primary hover:bg-primary hover:text-white transition-colors">
+                                    <span class="material-symbols-outlined text-sm">bookmark</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="bg-white border border-slate-200/50 p-6 rounded-[2rem] hover:shadow-xl hover:shadow-slate-200/50 transition-all group">
+                            <div class="flex items-center justify-between mb-6">
+                                <div class="w-14 h-14 rounded-2xl bg-tertiary-fixed flex items-center justify-center text-tertiary group-hover:scale-110 transition-transform">
+                                    <span class="material-symbols-outlined text-3xl">security</span>
+                                </div>
+                                <span class="text-[10px] font-black text-slate-400 uppercase tracking-tighter">Ngày 22/04</span>
+                            </div>
+                            <h4 class="text-lg font-bold text-primary mb-1">An toàn Bảo mật TT</h4>
+                            <p class="text-xs text-slate-500 mb-6 flex items-center gap-1">
+                                <span class="material-symbols-outlined text-xs">person</span>
+                                GV. Trần Thị B
+                            </p>
+                            <div class="flex items-center justify-between pt-4 border-t border-slate-50">
+                                <span class="text-xs font-bold text-secondary">60 Phút • 50 Câu</span>
+                                <button class="p-2 bg-slate-100 rounded-xl text-primary hover:bg-primary hover:text-white transition-colors">
+                                    <span class="material-symbols-outlined text-sm">bookmark</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="bg-white border border-slate-200/50 p-6 rounded-[2rem] hover:shadow-xl hover:shadow-slate-200/50 transition-all group">
+                            <div class="flex items-center justify-between mb-6">
+                                <div class="w-14 h-14 rounded-2xl bg-primary-fixed flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                                    <span class="material-symbols-outlined text-3xl">cloud_queue</span>
+                                </div>
+                                <span class="text-[10px] font-black text-slate-400 uppercase tracking-tighter">Ngày 25/04</span>
+                            </div>
+                            <h4 class="text-lg font-bold text-primary mb-1">Điện toán Đám mây</h4>
+                            <p class="text-xs text-slate-500 mb-6 flex items-center gap-1">
+                                <span class="material-symbols-outlined text-xs">person</span>
+                                GV. Lê Văn C
+                            </p>
+                            <div class="flex items-center justify-between pt-4 border-t border-slate-50">
+                                <span class="text-xs font-bold text-secondary">40 Phút • 20 Câu</span>
+                                <button class="p-2 bg-slate-100 rounded-xl text-primary hover:bg-primary hover:text-white transition-colors">
+                                    <span class="material-symbols-outlined text-sm">bookmark</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>
