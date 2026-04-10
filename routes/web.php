@@ -13,12 +13,15 @@ use App\Http\Controllers\Admin\QuestionCategoryController;
 use App\Http\Controllers\Admin\QuestionLevelController;
 
 
-// Auth Routes
+// 1. Redirect home to login
+Route::get('/', function () {
+    return redirect()->route('auth.login');
+})->name('home');
+
+// 2. Auth Routes
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('auth.login');
     Route::post('/login', [AuthController::class, 'login']);
-
-    // Đăng ký tài khoản (nếu cần)
     Route::get('/register', [AuthController::class, 'showRegister'])->name('auth.register');
     Route::post('/register', [AuthController::class, 'register']);
 });
@@ -29,7 +32,19 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout')->
 Route::middleware(['auth', 'admin.only'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
-    // Question Category management routes
+    // Quản lý Users
+    Route::prefix('users')->name('users.')->group(function() {
+        Route::get('/download-template', [UsersController::class, 'downloadTemplate'])->name('import-template');
+        Route::post('/import', [UsersController::class, 'import'])->name('import');
+        Route::post('/{user}/toggle-status', [UsersController::class, 'toggleStatus'])->name('toggle-status');
+        Route::post('/{user}/reset-password', [UsersController::class, 'resetPassword'])->name('reset-password');
+    });
+    Route::resource('users', UsersController::class);
+
+    Route::resource('quizzes', QuizController::class);
+
+    Route::resource('questions', QuestionController::class); 
+
     Route::resource('question-categories', QuestionCategoryController::class);
 
     // Question Level management routes
@@ -41,10 +56,8 @@ Route::middleware(['auth', 'admin.only'])->prefix('admin')->name('admin.')->grou
     Route::get('questions/{question}/stats', [\App\Http\Controllers\Admin\QuestionsandAnswersController::class, 'getStats'])->name('questions.stats');
 
     Route::resource('classes', \App\Http\Controllers\SchoolClassController::class);
-
-    // PHẦN QUẢN LÝ NĂM HỌC
-    Route::post('years/{id}/activate', [\App\Http\Controllers\SchoolYearController::class, 'activate'])->name('years.activate');
-
+    Route::resource('user-groups', UserGroupController::class);
+    Route::resource('faculties', \App\Http\Controllers\Admin\FacultyController::class);
     Route::resource('years', \App\Http\Controllers\SchoolYearController::class);
 
     // User management routes
@@ -67,7 +80,7 @@ Route::middleware(['auth', 'admin.only'])->prefix('admin')->name('admin.')->grou
     Route::resource('students', \App\Http\Controllers\Admin\StudentListController::class);
 });
 
-// Client Routes
+// 4. Client Routes
 Route::middleware(['auth', 'client.only'])->prefix('client')->name('client.')->group(function () {
     Route::get('/dashboard', [ClientDashboardController::class, 'index'])->name('dashboard');
     Route::get('/courses', [CourseController::class, 'index'])->name('courses');
@@ -88,28 +101,5 @@ Route::middleware(['auth', 'client.only'])->prefix('client')->name('client.')->g
     })->name('exams');
 });
 
-// Redirect home to login
-Route::get('/', function () {
-    return redirect()->route('auth.login');
-})->name('home');
-
-// Route trang chủ (cũ)
-Route::get('/chude2', [Chude2Controller::class, 'index'])->name('user.index');
-
-// Route hiển thị form thêm
-Route::get('/users/create', [Chude2Controller::class, 'create'])->name('user.create');
-
-// Route xử lý lưu
-Route::post('/users/store', [Chude2Controller::class, 'store'])->name('user.store');
-
+// 5. Các Route cũ/phụ (Nếu Duy còn dùng)
 Route::resource('chude2', Chude2Controller::class);
-
-Route::prefix('admin')->group(function () {
-    Route::get('/questions/index', [QuestionController::class, 'stats'])
-        ->name('admin.questions.index');
-});
-
-Route::get(
-    '/admin/users/index/{id}',
-    [UsersController::class, 'index']
-)->name('admin.users.index');

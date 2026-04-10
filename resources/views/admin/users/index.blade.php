@@ -63,8 +63,14 @@
     <div class="card shadow-sm border-0">
         <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
             <span><i class="fas fa-users me-2"></i>Danh sách Sinh viên</span>
-            <span class="badge bg-secondary">Tổng: {{ $users->total() }}</span>
+            <div class="d-flex align-items-center">
+                <button type="button" class="btn btn-sm btn-success me-3" data-bs-toggle="modal" data-bs-target="#importModal">
+                    <i class="fas fa-file-import me-1"></i> Import CSV
+                </button>
+                <span class="badge bg-secondary">Tổng: {{ $users->total() }}</span>
+            </div>
         </div>
+        
         <div class="card-body p-0">
             <table class="table table-hover mb-0 align-middle">
                 <thead class="table-light">
@@ -81,41 +87,41 @@
                 </thead>
                 <tbody>
                     @forelse($users as $u)
-                    <tr>
-                        <td class="fw-bold">{{ $u->student_code }}</td>
-                        <td>{{ $u->first_name }} {{ $u->last_name }}</td>
-                        <td class="text-muted small">{{ $u->email }}</td>
-                        <td><span class="badge bg-light text-dark border">{{ $u->schoolClass->id ?? 'N/A' }}</span></td>
-                        <td><span class="badge bg-info text-dark">{{ $u->faculty->name ?? 'N/A' }}</span></td>
-                        <td>{{ $u->userGroup->name ?? 'N/A' }}</td>
-                        <td class="text-center">
-                            <button class="btn btn-sm {{ $u->status ? 'btn-success' : 'btn-secondary' }} toggle-status"
-                                    data-id="{{ $u->id }}"
-                                    data-status="{{ $u->status }}">
-                                {{ $u->status ? 'Hoạt động' : 'Bị khoá' }}
-                            </button>
-                        </td>
-                        <td class="text-center">
-                            <a href="{{ route('admin.users.show', $u->id) }}" class="btn btn-sm btn-info">
-                                <i class="fas fa-eye"></i>
-                            </a>
-                            <a href="{{ route('admin.users.edit', $u->id) }}" class="btn btn-sm btn-warning">
-                                <i class="fas fa-edit"></i>
-                            </a>
-                        </td>
-                    </tr>
+                        <tr>
+                            <td>{{ $u->student_code }}</td>
+                            <td>{{ $u->first_name }} {{ $u->last_name }}</td>
+                            <td>{{ $u->email }}</td>
+                            <td>{{ $u->class_id }}</td>
+                            <td>{{ $u->faculty->name ?? 'N/A' }}</td>
+                            <td>{{ $u->group->name ?? 'N/A' }}</td>
+                            <td class="text-center">
+                                <button class="btn btn-sm {{ $u->status ? 'btn-success' : 'btn-secondary' }} toggle-status" 
+                                        data-id="{{ $u->id }}" 
+                                        data-status="{{ $u->status }}">
+                                    {{ $u->status ? 'Hoạt động' : 'Bị khoá' }}
+                                </button>
+                            </td>
+                            <td class="text-center">
+                                <a href="{{ route('admin.users.edit', $u->id) }}" class="btn btn-sm btn-info text-white"><i class="fas fa-edit"></i></a>
+                                <form action="{{ route('admin.users.destroy', $u->id) }}" method="POST" class="d-inline">
+                                    @csrf @method('DELETE')
+                                    <button class="btn btn-sm btn-danger" onclick="return confirm('Xác nhận xóa?')"><i class="fas fa-trash"></i></button>
+                                </form>
+                            </td>
+                        </tr>
                     @empty
-                    <tr><td colspan="8" class="text-center py-4 text-muted">Không có sinh viên nào.</td></tr>
+                        <tr><td colspan="8" class="text-center py-4 text-muted">Không có sinh viên nào.</td></tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
+
         @if($users->hasPages())
-        <div class="card-footer d-flex justify-content-center">
-            {{ $users->withQueryString()->links() }}
-        </div>
+            <div class="card-footer d-flex justify-content-center">
+                {{ $users->withQueryString()->links() }}
+            </div>
         @endif
-    </div>
+    </div> 
 </div>
 
 <script>
@@ -168,4 +174,6 @@ function showFlashAlert(type, message) {
     setTimeout(function () { bootstrap.Alert.getOrCreateInstance(div).close(); }, 4000);
 }
 </script>
+
+@include('partials.import_modal')
 @endsection

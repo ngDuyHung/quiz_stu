@@ -1,5 +1,18 @@
-@if(session('success') || session('error') || session('warning') || session('info'))
+@if(session('success') || session('error') || session('warning') || session('info') || $errors->any())
 <div id="flash-alert-container" style="position:fixed;top:20px;right:20px;z-index:9999;min-width:320px;max-width:460px;">
+
+    @if($errors->any())
+    <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+        <i class="fas fa-exclamation-circle me-2"></i>
+        <strong>Lỗi dữ liệu:</strong>
+        <ul class="mb-0 mt-1 small">
+            @foreach($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    @endif
 
     @if(session('success'))
     <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">

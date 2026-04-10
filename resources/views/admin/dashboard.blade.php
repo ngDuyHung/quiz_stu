@@ -238,8 +238,12 @@
             </a>
 
             <span class="module-label">Module 4: Kỳ thi</span>
-            <a href="#"><i class="fas fa-file-alt"></i> Thiết lập bài thi</a>
-            <a href="#"><i class="fas fa-clock"></i> Lịch trình thi</a>
+            <a href="{{ route('admin.quizzes.index') }}" class="{{ Request::is('admin/quizzes*') ? 'active' : '' }}">
+                <i class="fas fa-file-alt"></i> Thiết lập bài thi
+            </a>
+            <a href="#" class="{{ Request::is('admin/quiz-schedules*') ? 'active' : '' }}">
+                <i class="fas fa-clock"></i> Lịch trình thi
+            </a>
         </nav>
 
         <div class="logout-section">
