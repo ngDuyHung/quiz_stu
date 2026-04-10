@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ResultAnswer extends Model
 {
+    // Bảng result_answers không có cột timestamps
+    public $timestamps = false;
+
     protected $fillable = [
         'result_id',
         'question_id',

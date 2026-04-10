@@ -11,7 +11,9 @@ use App\Http\Controllers\Client\CourseController;
 use App\Http\Controllers\Admin\UserGroupController;
 use App\Http\Controllers\Admin\QuestionCategoryController;
 use App\Http\Controllers\Admin\QuestionLevelController;
-
+use App\Http\Controllers\Admin\QuizController;
+use App\Http\Controllers\Client\StudentQuizController;
+use App\Http\Controllers\Client\ProfileController;
 
 // 1. Redirect home to login
 Route::get('/', function () {
@@ -96,9 +98,27 @@ Route::middleware(['auth', 'client.only'])->prefix('client')->name('client.')->g
     Route::get('/result-detail', function () {
         return view('client.result-detail');
     })->name('result-detail');
-    Route::get('/exams', function () {
-        return view('client.exams');
-    })->name('exams');
+
+    // Kỳ thi – danh sách
+    Route::get('/exams', [StudentQuizController::class, 'index'])->name('exams');
+
+    // Lịch sử thi
+    Route::get('/history', [StudentQuizController::class, 'history'])->name('history');
+
+    // Hồ sơ cá nhân
+    Route::get('/profile',            [ProfileController::class, 'show'])->name('profile');
+    Route::patch('/profile',          [ProfileController::class, 'update'])->name('profile.update');
+    Route::patch('/profile/password', [ProfileController::class, 'changePassword'])->name('profile.password');
+
+    // Kỳ thi – làm bài
+    Route::prefix('quiz')->name('quiz.')->group(function () {
+        Route::get('/{quiz}/start',          [StudentQuizController::class, 'start'])->name('start');
+        Route::get('/{quiz}/take/{result}',  [StudentQuizController::class, 'take'])->name('take');
+        Route::post('/{result}/answer',      [StudentQuizController::class, 'saveAnswer'])->name('save-answer');
+        Route::post('/{result}/submit',      [StudentQuizController::class, 'submit'])->name('submit');
+        Route::get('/{result}/result',       [StudentQuizController::class, 'showResult'])->name('result');
+        Route::post('/{result}/feedback',    [StudentQuizController::class, 'storeFeedback'])->name('feedback');
+    });
 });
 
 // 5. Các Route cũ/phụ (Nếu Duy còn dùng)

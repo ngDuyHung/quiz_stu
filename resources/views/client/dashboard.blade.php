@@ -1,266 +1,223 @@
-<!DOCTYPE html>
-<html class="light" lang="en">
+@extends('client.quizzes.index')
 
-<head>
-    <meta charset="utf-8" />
-    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>Dashboard - Quiz STU</title>
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
-    <script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    "colors": {
-                        "on-secondary": "#ffffff",
-                        "surface-container-lowest": "#ffffff",
-                        "secondary-container": "#88c3ff",
-                        "on-error": "#ffffff",
-                        "surface-tint": "#335f99",
-                        "primary-fixed": "#d5e3ff",
-                        "outline-variant": "#c3c6d1",
-                        "surface-container-low": "#f2f4f6",
-                        "on-tertiary-container": "#f7a967",
-                        "on-secondary-fixed-variant": "#004a79",
-                        "primary-fixed-dim": "#a6c8ff",
-                        "primary-container": "#1a4b84",
-                        "on-primary": "#ffffff",
-                        "error": "#ba1a1a",
-                        "primary": "#003466",
-                        "tertiary-container": "#733c00",
-                        "background": "#f7f9fb",
-                        "on-primary-fixed-variant": "#144780",
-                        "secondary": "#1a6299",
-                        "on-surface-variant": "#424750",
-                        "on-primary-fixed": "#001c3b",
-                        "surface-variant": "#e0e3e5",
-                        "on-background": "#191c1e",
-                        "error-container": "#ffdad6",
-                        "on-tertiary-fixed": "#2f1500",
-                        "on-secondary-fixed": "#001d34",
-                        "on-error-container": "#93000a",
-                        "tertiary-fixed": "#ffdcc3",
-                        "surface": "#f7f9fb",
-                        "inverse-primary": "#a6c8ff",
-                        "surface-bright": "#f7f9fb",
-                        "tertiary": "#522900",
-                        "tertiary-fixed-dim": "#ffb77d",
-                        "surface-container-highest": "#e0e3e5",
-                        "secondary-fixed": "#cfe5ff",
-                        "on-secondary-container": "#005082",
-                        "on-tertiary-fixed-variant": "#6e3900",
-                        "on-surface": "#191c1e",
-                        "inverse-on-surface": "#eff1f3",
-                        "surface-dim": "#d8dadc",
-                        "inverse-surface": "#2d3133",
-                        "outline": "#737781",
-                        "surface-container-high": "#e6e8ea",
-                        "secondary-fixed-dim": "#9acbff",
-                        "on-primary-container": "#93bcfc",
-                        "surface-container": "#eceef0",
-                        "on-tertiary": "#ffffff"
-                    },
-                    "borderRadius": {
-                        "DEFAULT": "0.25rem",
-                        "lg": "0.5rem",
-                        "xl": "0.75rem",
-                        "full": "9999px"
-                    },
-                    "fontFamily": {
-                        "headline": ["Manrope"],
-                        "body": ["Inter"],
-                        "label": ["Inter"]
-                    }
-                },
-            },
-        }
-    </script>
-    <style>
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
-        body { font-family: 'Inter', sans-serif; }
-        h1, h2, h3, h4 { font-family: 'Manrope', sans-serif; }
-        
-        /* Custom scrollbar for better UI */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #e0e3e5; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #c3c6d1; }
-    </style>
-</head>
+@section('title', 'Dashboard - Quiz STU')
 
-<body class="bg-surface text-on-background min-h-screen">
-    @include('client.partials.sidebar')
-    @include('client.partials.header')
+@section('content')
+<div class="space-y-10 page-fade">
 
-    <main class="ml-64 pt-24 px-8 pb-12">
-        <div class="max-w-7xl mx-auto space-y-8">
-            
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
-                <div class="lg:col-span-8">
-                    <span class="text-[11px] font-bold tracking-[0.2em] text-secondary uppercase mb-3 block">Dashboard Overview</span>
-                    <h1 class="text-5xl font-extrabold text-primary tracking-tight mb-4">Chào Alex,</h1>
-                    <p class="text-lg text-on-surface-variant max-w-2xl leading-relaxed">
-                        Tiến độ học tập của bạn đang ở mức <span class="text-primary font-bold">85%</span>. Bạn có <span class="text-error font-bold">1 bài kiểm tra</span> sắp diễn ra trong hôm nay.
-                    </p>
-                </div>
-                <div class="lg:col-span-4">
-                    <div class="bg-tertiary-fixed p-5 rounded-[2rem] flex items-center gap-4 border border-tertiary/10 shadow-sm">
-                        <div class="w-12 h-12 rounded-2xl bg-white flex items-center justify-center text-tertiary shadow-sm">
-                            <span class="material-symbols-outlined">event_upcoming</span>
-                        </div>
-                        <div>
-                            <p class="text-[10px] font-bold text-on-tertiary-fixed-variant uppercase tracking-wider">Sự kiện sắp tới</p>
-                            <p class="text-sm font-bold text-on-tertiary-fixed">Thi Cuối Kỳ: Lập trình Mobile</p>
-                        </div>
-                    </div>
-                </div>
+    {{-- ─── Welcome Banner ─── --}}
+    <div class="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6">
+        <div>
+            <span class="text-[11px] font-bold tracking-[0.2em] text-secondary uppercase mb-3 block">Dashboard Overview</span>
+            <h1 class="text-4xl font-extrabold text-primary tracking-tight mb-3">
+                Chào, {{ $user->first_name }} {{ $user->last_name }}!
+            </h1>
+            <p class="text-slate-500 max-w-xl leading-relaxed">
+                @if($stats['active'] > 0)
+                    Bạn có <span class="text-primary font-bold">{{ $stats['active'] }} bài thi đang mở</span>.
+                    @if($stats['completed'] > 0)
+                        Đã hoàn thành <span class="font-bold text-green-600">{{ $stats['completed'] }}</span> lần thi với tỉ lệ trung bình <span class="font-bold text-primary">{{ number_format($stats['avg_score'], 1) }}%</span>.
+                    @endif
+                @else
+                    Hiện không có bài thi nào đang mở.
+                    @if($stats['completed'] > 0) Đã hoàn thành {{ $stats['completed'] }} lần thi. @endif
+                @endif
+            </p>
+        </div>
+        <a href="{{ route('client.exams') }}"
+           class="flex-shrink-0 flex items-center gap-2 px-5 py-2.5 rounded-xl border border-primary text-primary text-sm font-bold hover:bg-primary hover:text-white transition-all">
+            <span class="material-symbols-outlined text-base">assignment</span>
+            Tất cả bài thi
+        </a>
+    </div>
+
+    {{-- ─── Stats cards ─── --}}
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-4">
+            <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center flex-shrink-0">
+                <span class="material-symbols-outlined">play_circle</span>
             </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                
-                <div class="lg:col-span-8 bg-white border border-slate-200/60 rounded-[2.5rem] p-10 shadow-sm flex flex-col md:flex-row gap-8 items-center relative overflow-hidden group">
-                    <div class="absolute top-0 right-0 w-32 h-32 bg-secondary/5 rounded-bl-full transition-all group-hover:scale-110"></div>
-                    
-                    <div class="flex-1 relative z-10">
-                        <div class="flex items-center gap-3 mb-6">
-                            <span class="px-4 py-1 bg-error/10 text-error rounded-full text-xs font-bold uppercase tracking-widest">Đang mở</span>
-                            <span class="text-xs font-bold text-slate-400">Kết thúc lúc: 23:59 Hôm nay</span>
-                        </div>
-                        <h2 class="text-3xl font-black text-primary mb-2">Kiểm tra Giữa kỳ: <br/>Lập trình Web Nâng cao</h2>
-                        <p class="text-slate-500 mb-8 font-medium italic">"Bao gồm nội dung về ReactJS, Tailwind CSS và REST API."</p>
-                        
-                        <div class="flex flex-wrap gap-6 mb-8">
-                            <div class="flex items-center gap-2">
-                                <span class="material-symbols-outlined text-secondary">timer</span>
-                                <span class="text-sm font-bold text-on-surface">60 phút</span>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <span class="material-symbols-outlined text-secondary">quiz</span>
-                                <span class="text-sm font-bold text-on-surface">40 câu hỏi</span>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <span class="material-symbols-outlined text-secondary">star</span>
-                                <span class="text-sm font-bold text-on-surface">Hệ số 0.3</span>
-                            </div>
-                        </div>
-
-                        <button onclick="window.location.href='{{ route('client.answer&question') }}'" class="bg-primary text-white px-10 py-4 rounded-2xl font-bold flex items-center gap-3 hover:shadow-2xl hover:shadow-primary/30 transition-all hover:-translate-y-1">
-                            Làm bài ngay
-                            <span class="material-symbols-outlined">arrow_forward_ios</span>
-                        </button>
-                    </div>
-
-                    <div class="w-full md:w-48 aspect-square bg-slate-50 rounded-3xl flex items-center justify-center border border-slate-100">
-                        <span class="material-symbols-outlined text-primary/20 text-8xl">code</span>
-                    </div>
-                </div>
-
-                <div class="lg:col-span-4 bg-secondary text-white rounded-[2.5rem] p-10 flex flex-col justify-between shadow-xl shadow-secondary/20 relative overflow-hidden">
-                    <div class="relative z-10">
-                        <div class="flex justify-between items-start mb-10">
-                            <div>
-                                <h3 class="text-xs font-bold opacity-70 uppercase tracking-[0.2em] mb-1">Điểm trung bình</h3>
-                                <p class="text-6xl font-black italic">8.82</p>
-                            </div>
-                            <div class="bg-white/20 p-3 rounded-2xl backdrop-blur-md">
-                                <span class="material-symbols-outlined text-3xl">analytics</span>
-                            </div>
-                        </div>
-                        <div class="space-y-4">
-                            <div class="flex justify-between text-sm font-bold">
-                                <span>Hoàn thành mục tiêu</span>
-                                <span>92%</span>
-                            </div>
-                            <div class="w-full h-3 bg-white/20 rounded-full overflow-hidden">
-                                <div class="bg-white h-full w-[92%] shadow-[0_0_15px_rgba(255,255,255,0.5)]"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <span class="material-symbols-outlined absolute -left-10 -bottom-10 text-[15rem] opacity-10">auto_awesome</span>
-                </div>
-
-                <div class="lg:col-span-12">
-                    <div class="flex items-center justify-between mb-8">
-                        <div>
-                            <h3 class="text-2xl font-black text-primary">Các kỳ thi sắp diễn ra</h3>
-                            <p class="text-sm text-slate-500 font-medium">Bạn có 3 môn học cần hoàn thành nội dung ôn tập.</p>
-                        </div>
-                        <button class="flex items-center gap-2 text-primary font-bold text-sm hover:underline">
-                            Xem tất cả danh sách
-                            <span class="material-symbols-outlined text-sm">open_in_new</span>
-                        </button>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div class="bg-white border border-slate-200/50 p-6 rounded-[2rem] hover:shadow-xl hover:shadow-slate-200/50 transition-all group">
-                            <div class="flex items-center justify-between mb-6">
-                                <div class="w-14 h-14 rounded-2xl bg-secondary-fixed flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
-                                    <span class="material-symbols-outlined text-3xl">database</span>
-                                </div>
-                                <span class="text-[10px] font-black text-slate-400 uppercase tracking-tighter">Ngày 20/04</span>
-                            </div>
-                            <h4 class="text-lg font-bold text-primary mb-1">Cơ sở dữ liệu NoSQL</h4>
-                            <p class="text-xs text-slate-500 mb-6 flex items-center gap-1">
-                                <span class="material-symbols-outlined text-xs">person</span>
-                                GV. Nguyễn Văn A
-                            </p>
-                            <div class="flex items-center justify-between pt-4 border-t border-slate-50">
-                                <span class="text-xs font-bold text-secondary">45 Phút • 30 Câu</span>
-                                <button class="p-2 bg-slate-100 rounded-xl text-primary hover:bg-primary hover:text-white transition-colors">
-                                    <span class="material-symbols-outlined text-sm">bookmark</span>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="bg-white border border-slate-200/50 p-6 rounded-[2rem] hover:shadow-xl hover:shadow-slate-200/50 transition-all group">
-                            <div class="flex items-center justify-between mb-6">
-                                <div class="w-14 h-14 rounded-2xl bg-tertiary-fixed flex items-center justify-center text-tertiary group-hover:scale-110 transition-transform">
-                                    <span class="material-symbols-outlined text-3xl">security</span>
-                                </div>
-                                <span class="text-[10px] font-black text-slate-400 uppercase tracking-tighter">Ngày 22/04</span>
-                            </div>
-                            <h4 class="text-lg font-bold text-primary mb-1">An toàn Bảo mật TT</h4>
-                            <p class="text-xs text-slate-500 mb-6 flex items-center gap-1">
-                                <span class="material-symbols-outlined text-xs">person</span>
-                                GV. Trần Thị B
-                            </p>
-                            <div class="flex items-center justify-between pt-4 border-t border-slate-50">
-                                <span class="text-xs font-bold text-secondary">60 Phút • 50 Câu</span>
-                                <button class="p-2 bg-slate-100 rounded-xl text-primary hover:bg-primary hover:text-white transition-colors">
-                                    <span class="material-symbols-outlined text-sm">bookmark</span>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="bg-white border border-slate-200/50 p-6 rounded-[2rem] hover:shadow-xl hover:shadow-slate-200/50 transition-all group">
-                            <div class="flex items-center justify-between mb-6">
-                                <div class="w-14 h-14 rounded-2xl bg-primary-fixed flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
-                                    <span class="material-symbols-outlined text-3xl">cloud_queue</span>
-                                </div>
-                                <span class="text-[10px] font-black text-slate-400 uppercase tracking-tighter">Ngày 25/04</span>
-                            </div>
-                            <h4 class="text-lg font-bold text-primary mb-1">Điện toán Đám mây</h4>
-                            <p class="text-xs text-slate-500 mb-6 flex items-center gap-1">
-                                <span class="material-symbols-outlined text-xs">person</span>
-                                GV. Lê Văn C
-                            </p>
-                            <div class="flex items-center justify-between pt-4 border-t border-slate-50">
-                                <span class="text-xs font-bold text-secondary">40 Phút • 20 Câu</span>
-                                <button class="p-2 bg-slate-100 rounded-xl text-primary hover:bg-primary hover:text-white transition-colors">
-                                    <span class="material-symbols-outlined text-sm">bookmark</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+            <div>
+                <p class="text-sm text-slate-500 font-medium">Bài thi đang mở</p>
+                <h3 class="text-2xl font-bold text-slate-800">{{ $stats['active'] }}</h3>
             </div>
         </div>
-    </main>
-</body>
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-4">
+            <div class="w-12 h-12 rounded-xl bg-green-50 text-green-600 flex items-center justify-center flex-shrink-0">
+                <span class="material-symbols-outlined">check_circle</span>
+            </div>
+            <div>
+                <p class="text-sm text-slate-500 font-medium">Lần thi hoàn thành</p>
+                <h3 class="text-2xl font-bold text-slate-800">{{ $stats['completed'] }}</h3>
+            </div>
+        </div>
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-4">
+            <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center flex-shrink-0">
+                <span class="material-symbols-outlined">percent</span>
+            </div>
+            <div>
+                <p class="text-sm text-slate-500 font-medium">Tỉ lệ đúng TB</p>
+                <h3 class="text-2xl font-bold text-slate-800">{{ number_format($stats['avg_score'], 1) }}%</h3>
+            </div>
+        </div>
+    </div>
 
-</html>
+    {{-- ─── Active Quizzes with Countdown ─── --}}
+    @if($activeQuizzes->isNotEmpty())
+    <div>
+        <div class="flex items-center justify-between mb-5">
+            <h2 class="text-2xl font-black text-primary">Bài thi đang mở</h2>
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">{{ $activeQuizzes->count() }} bài</span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            @foreach($activeQuizzes as $quiz)
+                @php
+                    $attemptCount = $quiz->attempt_count;
+                    $maxAttempts  = $quiz->max_attempts;
+                    $remaining    = $maxAttempts ? max(0, $maxAttempts - $attemptCount) : null;
+                    $exhausted    = $maxAttempts && $attemptCount >= $maxAttempts;
+                    $inProgress   = (bool) $quiz->open_result;
+                @endphp
+                <div class="bg-white border border-slate-200/60 rounded-[2rem] p-7 hover:shadow-xl hover:shadow-slate-200/50 transition-all relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-bl-full transition-all group-hover:scale-110"></div>
+
+                    {{-- Header --}}
+                    <div class="flex items-start justify-between mb-4 relative z-10">
+                        <div>
+                            @if($inProgress)
+                                <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-[10px] font-bold uppercase tracking-widest">Đang làm dở</span>
+                            @elseif($exhausted)
+                                <span class="px-3 py-1 bg-slate-100 text-slate-500 rounded-full text-[10px] font-bold uppercase tracking-widest">Đã làm hết lượt</span>
+                            @elseif($maxAttempts)
+                                <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-[10px] font-bold uppercase tracking-widest">Còn {{ $remaining }} lần</span>
+                            @else
+                                <span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-[10px] font-bold uppercase tracking-widest">Đang mở</span>
+                            @endif
+                        </div>
+                        @if($quiz->end_date)
+                            <div class="text-right">
+                                <p class="text-[10px] text-slate-400 font-bold uppercase">Kết thúc sau</p>
+                                <p class="text-sm font-black text-error countdown-timer font-mono"
+                                   data-end="{{ $quiz->end_date->toIso8601String() }}">--:--:--</p>
+                            </div>
+                        @endif
+                    </div>
+
+                    {{-- Title --}}
+                    <h3 class="text-xl font-black text-primary mb-2 relative z-10 leading-snug">{{ $quiz->title }}</h3>
+
+                    {{-- Meta --}}
+                    <div class="flex flex-wrap gap-4 mb-6 relative z-10">
+                        <div class="flex items-center gap-1.5 text-slate-500 text-xs font-medium">
+                            <span class="material-symbols-outlined text-sm text-secondary">timer</span>
+                            {{ $quiz->duration_minutes }} phút
+                        </div>
+                        <div class="flex items-center gap-1.5 text-slate-500 text-xs font-medium">
+                            <span class="material-symbols-outlined text-sm text-secondary">quiz</span>
+                            {{ $quiz->total_questions }} câu
+                        </div>
+                        @if($quiz->pass_percent)
+                        <div class="flex items-center gap-1.5 text-slate-500 text-xs font-medium">
+                            <span class="material-symbols-outlined text-sm text-secondary">grade</span>
+                            Đạt {{ $quiz->pass_percent }}%
+                        </div>
+                        @endif
+                        @if($quiz->require_camera)
+                        <div class="flex items-center gap-1.5 text-slate-500 text-xs font-medium">
+                            <span class="material-symbols-outlined text-sm text-amber-500">videocam</span>
+                            Yêu cầu camera
+                        </div>
+                        @endif
+                    </div>
+
+                    {{-- Action --}}
+                    <div class="relative z-10">
+                        @if($inProgress)
+                            <a href="{{ route('client.quiz.take', [$quiz->id, $quiz->open_result->id]) }}"
+                               class="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-2xl font-bold text-sm hover:shadow-lg hover:-translate-y-0.5 transition-all">
+                                <span class="material-symbols-outlined text-base">play_arrow</span>
+                                Tiếp tục làm
+                            </a>
+                        @elseif(! $exhausted)
+                            <a href="{{ route('client.quiz.start', $quiz->id) }}"
+                               class="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-2xl font-bold text-sm hover:shadow-lg hover:shadow-primary/30 hover:-translate-y-0.5 transition-all">
+                                <span class="material-symbols-outlined text-base">arrow_forward</span>
+                                {{ $attemptCount > 0 ? 'Làm lại' : 'Làm bài ngay' }}
+                            </a>
+                        @else
+                            <span class="text-slate-400 text-sm">Không còn lượt làm.</span>
+                        @endif
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </div>
+    @endif
+
+    {{-- ─── Upcoming Quizzes ─── --}}
+    @if($upcomingQuizzes->isNotEmpty())
+    <div>
+        <h2 class="text-2xl font-black text-primary mb-5">Sắp diễn ra</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            @foreach($upcomingQuizzes as $quiz)
+            <div class="bg-white border border-dashed border-slate-200 rounded-[2rem] p-6 opacity-80">
+                <div class="flex items-center gap-2 mb-3">
+                    <span class="material-symbols-outlined text-amber-500 text-base">schedule</span>
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-amber-600">Chưa mở</span>
+                </div>
+                <h4 class="font-bold text-slate-700 mb-2 leading-snug">{{ $quiz->title }}</h4>
+                <p class="text-xs text-slate-400">
+                    Mở lúc: <span class="font-semibold text-slate-600">{{ $quiz->start_date->format('H:i · d/m/Y') }}</span>
+                </p>
+                @if($quiz->end_date)
+                <p class="text-xs text-slate-400 mt-0.5">
+                    Đến: <span class="font-semibold text-slate-600">{{ $quiz->end_date->format('H:i · d/m/Y') }}</span>
+                </p>
+                @endif
+                <div class="flex items-center gap-3 mt-4 text-xs text-slate-500 font-medium">
+                    <span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">timer</span>{{ $quiz->duration_minutes }}p</span>
+                    <span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">quiz</span>{{ $quiz->total_questions }} câu</span>
+                </div>
+            </div>
+            @endforeach
+        </div>
+    </div>
+    @endif
+
+    {{-- Empty state when no quizzes at all --}}
+    @if($activeQuizzes->isEmpty() && $upcomingQuizzes->isEmpty())
+    <div class="bg-white rounded-3xl border border-slate-200 p-16 text-center">
+        <span class="material-symbols-outlined text-6xl text-slate-300 block mb-4">assignment</span>
+        <h3 class="text-xl font-bold text-slate-600 mb-2">Chưa có bài thi nào</h3>
+        <p class="text-slate-400 text-sm">Bạn chưa được thêm vào nhóm thi nào hoặc chưa có bài thi nào được mở.</p>
+    </div>
+    @endif
+
+</div>
+@endsection
+
+@push('scripts')
+<script>
+// Countdown timers
+function tickCountdowns() {
+    document.querySelectorAll('.countdown-timer').forEach(el => {
+        const end = new Date(el.dataset.end).getTime();
+        const diff = end - Date.now();
+        if (diff <= 0) {
+            el.textContent = 'Đã hết hạn';
+            el.classList.remove('text-error');
+            el.classList.add('text-slate-400');
+            return;
+        }
+        const h = Math.floor(diff / 3600000);
+        const m = Math.floor((diff % 3600000) / 60000);
+        const s = Math.floor((diff % 60000) / 1000);
+        el.textContent = (h > 0 ? String(h).padStart(2,'0') + ':' : '') +
+            String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+    });
+}
+tickCountdowns();
+setInterval(tickCountdowns, 1000);
+</script>
+@endpush

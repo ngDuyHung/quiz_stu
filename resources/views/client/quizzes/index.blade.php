@@ -105,11 +105,12 @@
 
     <script src="resource/js/app.js"></script>
     <script>
-        // Xử lý nút đăng xuất thống nhất
         document.getElementById('logout-trigger').addEventListener('click', () => {
-            if(confirm("Bạn có chắc chắn muốn đăng xuất không?")) {
-                alert("Đã kết thúc phiên làm việc!");
-                // window.location.href = 'login.html';
+            if (confirm('Bạn có chắc chắn muốn đăng xuất không?')) {
+                fetch('{{ route('auth.logout') }}', {
+                    method: 'POST',
+                    headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+                }).then(() => window.location.href = '{{ route('auth.login') }}');
             }
         });
     </script>
