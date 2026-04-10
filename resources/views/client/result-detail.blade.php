@@ -231,7 +231,7 @@
 
             {{-- Feedback form (only for completed, not expired) --}}
             @if($result->status === 'completed')
-            <div class="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm">
+            <div id="feedback" class="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm">
                 <h4 class="font-bold text-primary mb-1 text-sm uppercase tracking-wider">Phản hồi bài thi</h4>
                 @if($hasFeedback)
                     <div class="flex items-center gap-2 mt-3 text-green-600 text-sm">

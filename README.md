@@ -1,59 +1,144 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Quiz STU – Hệ thống thi trực tuyến
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Ứng dụng thi trắc nghiệm trực tuyến dành cho sinh viên Trường Đại học Công nghệ TP.HCM (STU). Được xây dựng trên **Laravel 12**, hỗ trợ đầy đủ luồng từ quản trị đề thi đến sinh viên làm bài và xem kết quả.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Tech Stack
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+| Layer | Công nghệ |
+|---|---|
+| Backend | PHP 8.2+, Laravel 12 |
+| Frontend | Blade, Tailwind CSS (CDN), Vanilla JS |
+| Database | MySQL |
+| Auth | Laravel Session Auth (middleware theo role) |
+| Storage | Laravel Storage (disk `public`) |
+| Export/Import | Maatwebsite Excel 3.1 |
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## Tài khoản mặc định (Seeder)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+| Vai trò | Email | Mật khẩu |
+|---|---|---|
+| Admin / Giảng viên | `admin@stu.edu.vn` | `admin123` |
+| Sinh viên (Nhóm A+B) | `student@stu.edu.vn` | `student123` |
+| Sinh viên (Nhóm A) | `nguyen.van.a@stu.edu.vn` | `student123` |
+| Sinh viên (Nhóm B) | `pham.thi.d@stu.edu.vn` | `student123` |
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-## Laravel Sponsors
+## Cài đặt
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```bash
+# 1. Clone & cài dependencies
+git clone <repo-url>
+cd quiz_stu
+composer install
 
-### Premium Partners
+# 2. Cấu hình môi trường
+cp .env.example .env
+php artisan key:generate
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+# 3. Cấu hình DB trong .env
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=quiz_stu
+DB_USERNAME=root
+DB_PASSWORD=
 
-## Contributing
+# 4. Migrate & seed dữ liệu test
+php artisan migrate
+php artisan db:seed --class=QuizTestSeeder
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+# 5. Tạo symlink storage
+php artisan storage:link
 
-## Code of Conduct
+# 6. Chạy server
+php artisan serve
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+## Cấu trúc chính
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```
+app/
+├── Http/
+│   ├── Controllers/
+│   │   ├── Admin/          # Quản trị: dashboard, quiz, câu hỏi, users, nhóm
+│   │   └── Client/         # Sinh viên: dashboard, làm bài, kết quả, hồ sơ
+│   └── Middleware/         # admin.only / client.only
+├── Models/                 # Eloquent models
+├── Console/Commands/       # ExpireQuizzes (cron)
+└── Services/
+
+database/
+├── migrations/             # 22 bảng
+└── seeders/                # QuizTestSeeder (60 câu hỏi, 4 đề thi)
+
+resources/views/
+├── admin/                  # Giao diện quản trị
+└── client/                 # Giao diện sinh viên
+    ├── partials/           # sidebar.blade.php, header.blade.php
+    └── quizzes/            # take.blade.php (trang làm bài)
+```
+
+---
+
+## Tính năng
+
+### Admin / Giảng viên (`/admin/*`)
+- Quản lý người dùng, lớp học, khoa, nhóm thi
+- Tạo đề thi: cấu hình thời gian, số lượt, camera, xáo trộn câu hỏi
+- Quản lý câu hỏi & đáp án theo danh mục và mức độ
+- Import sinh viên từ file CSV/Excel
+
+### Sinh viên (`/client/*`)
+
+| Route | Tính năng |
+|---|---|
+| `/client/dashboard` | Danh sách bài thi đang mở, countdown, badge trạng thái |
+| `/client/exams` | Tất cả bài thi được phép, lọc theo trạng thái |
+| `/client/quiz/{id}/start` | Bắt đầu bài thi, random câu hỏi theo cấu hình |
+| `/client/quiz/{id}/take/{result}` | Giao diện làm bài: sidebar, đồng hồ đếm ngược, camera |
+| `/client/quiz/{result}/result` | Kết quả: điểm, %, xem lại đáp án, biểu đồ danh mục |
+| `/client/history` | Lịch sử thi, badge "Chưa phản hồi" |
+| `/client/profile` | Thông tin cá nhân, đổi ảnh, đổi mật khẩu |
+
+### Engine làm bài
+- Đồng hồ đếm ngược server-side + client-side, auto-submit khi hết giờ
+- Lưu đáp án AJAX theo thời gian thực (chỉ UPDATE, không INSERT)
+- Hỗ trợ xáo trộn câu hỏi & đáp án (deterministic theo `result_id`)
+- Chụp ảnh webcam khi nộp bài (`require_camera`)
+- Tính điểm theo `score_correct / score_incorrect` từng danh mục–mức độ
+
+### Cron Job
+```bash
+# Tự động expire bài thi hết giờ
+* * * * * php artisan quiz:expire
+
+# Kiểm tra không ghi DB
+php artisan quiz:expire --dry-run
+```
+
+---
+
+## Database (các bảng chính)
+
+| Bảng | Mô tả |
+|---|---|
+| `users` | Sinh viên & admin, có `role`, `group_id`, `photo` |
+| `quizzes` | Đề thi: thời gian, số lượt, camera, xáo trộn |
+| `questions` / `question_options` | Câu hỏi & đáp án (có `is_correct`) |
+| `quiz_category_levels` | Cấu hình điểm theo danh mục × mức độ |
+| `quiz_results` | Kết quả mỗi lần thi: điểm, %, trạng thái |
+| `result_answers` | Đáp án từng câu của sinh viên |
+| `quiz_feedbacks` | Đánh giá 4 tiêu chí (1–5 sao) sau khi thi |
+
+---
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+MIT
+

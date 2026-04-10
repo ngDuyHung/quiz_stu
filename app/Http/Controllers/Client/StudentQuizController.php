@@ -335,8 +335,8 @@ class StudentQuizController extends Controller
         $quiz = $result->quiz;
         $this->doSubmit($result, $quiz);
 
-        return redirect()->route('client.quiz.result', $result->id)
-            ->with('success', 'Nộp bài thành công!');
+        return redirect()->to(route('client.quiz.result', $result->id) . '#feedback')
+            ->with('success', 'Nộp bài thành công! Hãy để lại phản hồi bên dưới.');
     }
 
     // ─────────────────────────────────────────────
@@ -533,7 +533,7 @@ class StudentQuizController extends Controller
 
         // Chỉ cho phép gửi 1 lần
         if (QuizFeedback::where('result_id', $result->id)->where('user_id', $user->id)->exists()) {
-            return redirect()->route('client.quiz.result', $result->id)
+            return redirect()->to(route('client.quiz.result', $result->id) . '#feedback')
                 ->with('info', 'Bạn đã gửi phản hồi cho bài thi này rồi.');
         }
 
@@ -555,7 +555,7 @@ class StudentQuizController extends Controller
             'suggestion'      => $validated['suggestion'] ?? null,
         ]);
 
-        return redirect()->route('client.quiz.result', $result->id)
+        return redirect()->to(route('client.quiz.result', $result->id) . '#feedback')
             ->with('success', 'Cảm ơn bạn đã gửi phản hồi!');
     }
 }
