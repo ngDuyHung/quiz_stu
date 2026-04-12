@@ -66,5 +66,4 @@ Route::middleware(['auth', 'client.only'])->prefix('client')->name('client.')->g
     })->name('result-detail');
 });
 
-// 5. Các Route cũ/phụ (Nếu Duy còn dùng)
 Route::resource('chude2', Chude2Controller::class);
