@@ -11,9 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('question_levels', function (Blueprint $table) {
-            $table->id();
-            $table->string('name', 200)->comment('Độ khó. VD: Dễ / Khó');
+        Schema::table('question_levels', function (Blueprint $table) {
             $table->timestamps();
         });
     }
@@ -23,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('question_levels');
+        Schema::table('question_levels', function (Blueprint $table) {
+            $table->dropTimestamps();
+        });
     }
 };
