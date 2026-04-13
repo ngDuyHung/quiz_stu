@@ -25,8 +25,10 @@ class QuizResult extends Model
     ];
 
     protected $casts = [
+        'quiz_id'    => 'integer',
+        'user_id'    => 'integer',
         'started_at' => 'datetime',
-        'ended_at' => 'datetime',
+        'ended_at'   => 'datetime',
         'created_at' => 'datetime',
     ];
 
