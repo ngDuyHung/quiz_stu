@@ -35,7 +35,7 @@ Route::middleware(['auth', 'admin.only'])->prefix('admin')->name('admin.')->grou
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
     // Quản lý Users
-    Route::prefix('users')->name('users.')->group(function() {
+    Route::prefix('users')->name('users.')->group(function () {
         Route::get('/download-template', [UsersController::class, 'downloadTemplate'])->name('import-template');
         Route::post('/import', [UsersController::class, 'import'])->name('import');
         Route::post('/{user}/toggle-status', [UsersController::class, 'toggleStatus'])->name('toggle-status');
@@ -45,7 +45,7 @@ Route::middleware(['auth', 'admin.only'])->prefix('admin')->name('admin.')->grou
 
     Route::resource('quizzes', QuizController::class);
 
-    Route::resource('questions', QuestionController::class); 
+    Route::resource('questions', QuestionController::class);
 
     Route::resource('question-categories', QuestionCategoryController::class);
 
@@ -78,7 +78,7 @@ Route::middleware(['auth', 'admin.only'])->prefix('admin')->name('admin.')->grou
     Route::get('students/classes-by-faculty', [\App\Http\Controllers\Admin\StudentListController::class, 'getClassesByFaculty'])->name('students.classes-by-faculty');
     Route::post('students/{student}/toggle-status', [\App\Http\Controllers\Admin\StudentListController::class, 'toggleStatus'])->name('students.toggle-status');
     Route::post('students/{student}/reset-password', [\App\Http\Controllers\Admin\StudentListController::class, 'resetPassword'])->name('students.reset-password');
-    
+
     Route::resource('students', \App\Http\Controllers\Admin\StudentListController::class);
 });
 
