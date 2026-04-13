@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class QuizFeedback extends Model
 {
+    // Bảng quiz_feedbacks chỉ có cột created_at, không có updated_at
+    const UPDATED_AT = null;
+
+    protected $table = 'quiz_feedbacks';
+
     protected $fillable = [
         'user_id',
         'result_id',

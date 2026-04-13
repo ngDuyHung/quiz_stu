@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class QuizResult extends Model
 {
+    // Bảng quiz_results chỉ có cột created_at, không có updated_at
+    const UPDATED_AT = null;
+
     protected $fillable = [
         'quiz_id',
         'user_id',

@@ -1,201 +1,223 @@
-<!DOCTYPE html>
+@extends('client.quizzes.index')
 
-<html class="light" lang="en">
+@section('title', 'Dashboard - Quiz STU')
 
-<head>
-    <meta charset="utf-8" />
-    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>Quiz - STU</title>
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Manrope:wght@500;600;700;800&amp;display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
-    <script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    "colors": {
-                        "on-secondary": "#ffffff",
-                        "surface-container-lowest": "#ffffff",
-                        "secondary-container": "#88c3ff",
-                        "on-error": "#ffffff",
-                        "surface-tint": "#335f99",
-                        "primary-fixed": "#d5e3ff",
-                        "outline-variant": "#c3c6d1",
-                        "surface-container-low": "#f2f4f6",
-                        "on-tertiary-container": "#f7a967",
-                        "on-secondary-fixed-variant": "#004a79",
-                        "primary-fixed-dim": "#a6c8ff",
-                        "primary-container": "#1a4b84",
-                        "on-primary": "#ffffff",
-                        "error": "#ba1a1a",
-                        "primary": "#003466",
-                        "tertiary-container": "#733c00",
-                        "background": "#f7f9fb",
-                        "on-primary-fixed-variant": "#144780",
-                        "secondary": "#1a6299",
-                        "on-surface-variant": "#424750",
-                        "on-primary-fixed": "#001c3b",
-                        "surface-variant": "#e0e3e5",
-                        "on-background": "#191c1e",
-                        "error-container": "#ffdad6",
-                        "on-tertiary-fixed": "#2f1500",
-                        "on-secondary-fixed": "#001d34",
-                        "on-error-container": "#93000a",
-                        "tertiary-fixed": "#ffdcc3",
-                        "surface": "#f7f9fb",
-                        "inverse-primary": "#a6c8ff",
-                        "surface-bright": "#f7f9fb",
-                        "tertiary": "#522900",
-                        "tertiary-fixed-dim": "#ffb77d",
-                        "surface-container-highest": "#e0e3e5",
-                        "secondary-fixed": "#cfe5ff",
-                        "on-secondary-container": "#005082",
-                        "on-tertiary-fixed-variant": "#6e3900",
-                        "on-surface": "#191c1e",
-                        "inverse-on-surface": "#eff1f3",
-                        "surface-dim": "#d8dadc",
-                        "inverse-surface": "#2d3133",
-                        "outline": "#737781",
-                        "surface-container-high": "#e6e8ea",
-                        "secondary-fixed-dim": "#9acbff",
-                        "on-primary-container": "#93bcfc",
-                        "surface-container": "#eceef0",
-                        "on-tertiary": "#ffffff"
-                    },
-                    "borderRadius": {
-                        "DEFAULT": "0.25rem",
-                        "lg": "0.5rem",
-                        "xl": "0.75rem",
-                        "full": "9999px"
-                    },
-                    "fontFamily": {
-                        "headline": ["Manrope"],
-                        "body": ["Inter"],
-                        "label": ["Inter"]
-                    }
-                },
-            },
-        }
-    </script>
-    <style>
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
+@section('content')
+<div class="space-y-10 page-fade">
 
-        body {
-            font-family: 'Inter', sans-serif;
-        }
+    {{-- ─── Welcome Banner ─── --}}
+    <div class="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6">
+        <div>
+            <span class="text-[11px] font-bold tracking-[0.2em] text-secondary uppercase mb-3 block">Dashboard Overview</span>
+            <h1 class="text-4xl font-extrabold text-primary tracking-tight mb-3">
+                Chào, {{ $user->first_name }} {{ $user->last_name }}!
+            </h1>
+            <p class="text-slate-500 max-w-xl leading-relaxed">
+                @if($stats['active'] > 0)
+                    Bạn có <span class="text-primary font-bold">{{ $stats['active'] }} bài thi đang mở</span>.
+                    @if($stats['completed'] > 0)
+                        Đã hoàn thành <span class="font-bold text-green-600">{{ $stats['completed'] }}</span> lần thi với tỉ lệ trung bình <span class="font-bold text-primary">{{ number_format($stats['avg_score'], 1) }}%</span>.
+                    @endif
+                @else
+                    Hiện không có bài thi nào đang mở.
+                    @if($stats['completed'] > 0) Đã hoàn thành {{ $stats['completed'] }} lần thi. @endif
+                @endif
+            </p>
+        </div>
+        <a href="{{ route('client.exams') }}"
+           class="flex-shrink-0 flex items-center gap-2 px-5 py-2.5 rounded-xl border border-primary text-primary text-sm font-bold hover:bg-primary hover:text-white transition-all">
+            <span class="material-symbols-outlined text-base">assignment</span>
+            Tất cả bài thi
+        </a>
+    </div>
 
-        h1,
-        h2,
-        h3 {
-            font-family: 'Manrope', sans-serif;
-        }
-    </style>
-</head>
-
-<body class="bg-surface text-on-background min-h-screen">
-    <!-- SideNavBar (Execution from JSON) -->
-    <nav class="flex flex-col fixed left-0 top-0 h-full overflow-y-auto h-screen w-64 border-r-0 bg-slate-50 dark:bg-slate-900 z-50">
-        <div class="p-8 pb-10">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-white shadow-lg">
-                    <span class="material-symbols-outlined" data-icon="school">school</span>
-                </div>
-                <div>
-                    <h1 class="text-xl font-bold text-[#003466] dark:text-white leading-tight">Quiz - STU</h1>
-                    <p class="text-[10px] uppercase tracking-widest text-slate-500 font-bold">Web thi trắc nghiệm</p>
-                </div>
+    {{-- ─── Stats cards ─── --}}
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-4">
+            <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center flex-shrink-0">
+                <span class="material-symbols-outlined">play_circle</span>
+            </div>
+            <div>
+                <p class="text-sm text-slate-500 font-medium">Bài thi đang mở</p>
+                <h3 class="text-2xl font-bold text-slate-800">{{ $stats['active'] }}</h3>
             </div>
         </div>
-        <div class="flex-1 px-4 space-y-1">
-            <!-- Active: Home -->
-            <a class="flex items-center gap-4 px-4 py-3 rounded-xl text-[#003466] dark:text-[#88C3FF] font-bold border-r-4 border-[#003466] dark:border-[#88C3FF] bg-slate-200/50 dark:bg-slate-800/50 translate-x-1 transition-transform" href="#">
-                <span class="material-symbols-outlined" data-icon="home" style="font-variation-settings: 'FILL' 1;">home</span>
-                <span class="font-['Manrope'] text-sm font-medium tracking-wide">Home</span>
-            </a>
-            <a class="flex items-center gap-4 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:text-[#1A4B84] hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors duration-200"
-                href="{{ route('client.course') }}">
-                <span class="material-symbols-outlined">school</span>
-                <span class="font-['Manrope'] text-sm font-medium tracking-wide">Courses</span>
-            </a>
-            <a class="flex items-center gap-4 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:text-[#1A4B84] hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors duration-200" href="#">
-                <span class="material-symbols-outlined" data-icon="assignment_turned_in">assignment_turned_in</span>
-                <span class="font-['Manrope'] text-sm font-medium tracking-wide">Tasks</span>
-            </a>
-            <a class="flex items-center gap-4 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:text-[#1A4B84] hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors duration-200" href="#">
-                <span class="material-symbols-outlined" data-icon="account_circle">account_circle</span><span class="font-['Manrope'] text-sm font-medium tracking-wide">Profile</span>
-            </a>
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-4">
+            <div class="w-12 h-12 rounded-xl bg-green-50 text-green-600 flex items-center justify-center flex-shrink-0">
+                <span class="material-symbols-outlined">check_circle</span>
+            </div>
+            <div>
+                <p class="text-sm text-slate-500 font-medium">Lần thi hoàn thành</p>
+                <h3 class="text-2xl font-bold text-slate-800">{{ $stats['completed'] }}</h3>
+            </div>
         </div>
-        <div class="p-6 mt-auto">
-    <div class="bg-primary-container rounded-2xl p-5 text-white/90 relative overflow-hidden group">
-        <div class="logout-section relative z-10">
-            <form action="{{ route('auth.logout') }}" method="POST">
-                @csrf
-                <button type="submit" class="flex items-center w-full gap-3 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-xl border border-white/20 transition-all duration-200">
-                    <span class="material-symbols-outlined text-white">logout</span>
-                    <span class="font-['Manrope'] text-sm font-bold text-white tracking-wide">Đăng xuất</span>
-                </button>
-            </form>
-        </div>
-        <div class="absolute -right-4 -bottom-4 opacity-10 group-hover:opacity-20 transition-opacity">
-            <span class="material-symbols-outlined text-6xl">auto_stories</span>
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-4">
+            <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center flex-shrink-0">
+                <span class="material-symbols-outlined">percent</span>
+            </div>
+            <div>
+                <p class="text-sm text-slate-500 font-medium">Tỉ lệ đúng TB</p>
+                <h3 class="text-2xl font-bold text-slate-800">{{ number_format($stats['avg_score'], 1) }}%</h3>
+            </div>
         </div>
     </div>
-</div>
-    </nav>
-    <!-- TopAppBar (Execution from JSON) -->
-    <header class="fixed top-0 right-0 left-64 h-16 flex justify-between items-center px-8 z-40 bg-white/80 dark:bg-slate-950/80 backdrop-blur-xl shadow-sm border-b border-slate-200/15 dark:border-slate-800/15">
-        <div class="flex items-center flex-1 max-w-xl">
-            <div class="relative w-full">
-                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xl" data-icon="search">search</span>
-                <input class="w-full bg-surface-container-low border-none rounded-full py-2 pl-11 pr-4 text-sm focus:ring-2 focus:ring-[#1A4B84]/20 transition-all" placeholder="Search curriculum, faculty, or archives..." type="text" />
-            </div>
+
+    {{-- ─── Active Quizzes with Countdown ─── --}}
+    @if($activeQuizzes->isNotEmpty())
+    <div>
+        <div class="flex items-center justify-between mb-5">
+            <h2 class="text-2xl font-black text-primary">Bài thi đang mở</h2>
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">{{ $activeQuizzes->count() }} bài</span>
         </div>
-        <div class="flex items-center gap-6">
-            <div class="flex items-center gap-4">
-                <button class="w-10 h-10 flex items-center justify-center rounded-full text-slate-500 hover:text-[#003466] hover:bg-slate-100 transition-all">
-                    <span class="material-symbols-outlined" data-icon="notifications">notifications</span>
-                </button>
-                <button class="w-10 h-10 flex items-center justify-center rounded-full text-slate-500 hover:text-[#003466] hover:bg-slate-100 transition-all">
-                    <span class="material-symbols-outlined" data-icon="settings">settings</span>
-                </button>
-            </div>
-            <div class="h-8 w-[1px] bg-slate-200"></div>
-            <div class="flex items-center gap-3">
-                <span class="text-sm font-semibold text-primary">USER</span>
-                <img alt="User Portrait" class="w-10 h-10 rounded-full object-cover border-2 border-primary/10" data-alt="Close-up portrait of a young male student with glasses in a library setting, soft natural lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-mybWv1RiZfCiKD5lSbSxn0mJOBi4dtI4mdhexukcLMJPsMmA03bpzV6i-t9JLSJkmR2Mx5vd5EcuTeHtCdg63UEChJgJDekklgieKZfdJ2y6nkVKyl11SipOh9d6Qp7-_Q2bMyHSD9XXQmAP43OIRp2NbaTd4JHTJPIQL88kspJ1sMhOg2B8UJjnx1PZTG9gfM8zHaOcYan4FsV_YyK5h1e5nQySpFB5y7S_t5lMS3YyZdmLHhSTgX1cTmrstYDPT9DqBcifkBpA" />
-            </div>
-        </div>
-    </header>
-    <!-- Main Content Canvas -->
-    <main class="ml-64 pt-24 px-8 pb-12">
-        <div class="max-w-7xl mx-auto space-y-8">
-            <!-- Hero Announcement Section -->
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
-                <div class="lg:col-span-8">
-                    <span class="text-[11px] font-bold tracking-[0.2em] text-secondary uppercase mb-3 block">Dashboard Overview</span>
-                    <h1 class="text-5xl font-extrabold text-primary tracking-tight mb-4">Hello Alex,</h1>
-                    <p class="text-lg text-on-surface-variant max-w-2xl leading-relaxed">
-                        Your academic journey is <span class="text-primary font-bold">85% complete</span>. You are maintaining an exceptional trajectory in the Theoretical Sciences track.
-                    </p>
-                </div>
-                <div class="lg:col-span-4">
-                    <div class="bg-surface-container-low p-4 rounded-2xl flex items-center gap-4">
-                        <div class="w-12 h-12 rounded-xl bg-tertiary/10 flex items-center justify-center text-tertiary">
-                            <span class="material-symbols-outlined" data-icon="campaign">campaign</span>
-                        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            @foreach($activeQuizzes as $quiz)
+                @php
+                    $attemptCount = $quiz->attempt_count;
+                    $maxAttempts  = $quiz->max_attempts;
+                    $remaining    = $maxAttempts ? max(0, $maxAttempts - $attemptCount) : null;
+                    $exhausted    = $maxAttempts && $attemptCount >= $maxAttempts;
+                    $inProgress   = (bool) $quiz->open_result;
+                @endphp
+                <div class="bg-white border border-slate-200/60 rounded-[2rem] p-7 hover:shadow-xl hover:shadow-slate-200/50 transition-all relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-bl-full transition-all group-hover:scale-110"></div>
+
+                    {{-- Header --}}
+                    <div class="flex items-start justify-between mb-4 relative z-10">
                         <div>
-                            <p class="text-[10px] font-bold text-tertiary uppercase tracking-wider">System Announcement</p>
-                            <p class="text-sm font-semibold text-on-surface">Advanced Theoretical Physics exam schedule updated</p>
+                            @if($inProgress)
+                                <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-[10px] font-bold uppercase tracking-widest">Đang làm dở</span>
+                            @elseif($exhausted)
+                                <span class="px-3 py-1 bg-slate-100 text-slate-500 rounded-full text-[10px] font-bold uppercase tracking-widest">Đã làm hết lượt</span>
+                            @elseif($maxAttempts)
+                                <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-[10px] font-bold uppercase tracking-widest">Còn {{ $remaining }} lần</span>
+                            @else
+                                <span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-[10px] font-bold uppercase tracking-widest">Đang mở</span>
+                            @endif
                         </div>
+                        @if($quiz->end_date)
+                            <div class="text-right">
+                                <p class="text-[10px] text-slate-400 font-bold uppercase">Kết thúc sau</p>
+                                <p class="text-sm font-black text-error countdown-timer font-mono"
+                                   data-end="{{ $quiz->end_date->toIso8601String() }}">--:--:--</p>
+                            </div>
+                        @endif
+                    </div>
+
+                    {{-- Title --}}
+                    <h3 class="text-xl font-black text-primary mb-2 relative z-10 leading-snug">{{ $quiz->title }}</h3>
+
+                    {{-- Meta --}}
+                    <div class="flex flex-wrap gap-4 mb-6 relative z-10">
+                        <div class="flex items-center gap-1.5 text-slate-500 text-xs font-medium">
+                            <span class="material-symbols-outlined text-sm text-secondary">timer</span>
+                            {{ $quiz->duration_minutes }} phút
+                        </div>
+                        <div class="flex items-center gap-1.5 text-slate-500 text-xs font-medium">
+                            <span class="material-symbols-outlined text-sm text-secondary">quiz</span>
+                            {{ $quiz->total_questions }} câu
+                        </div>
+                        @if($quiz->pass_percent)
+                        <div class="flex items-center gap-1.5 text-slate-500 text-xs font-medium">
+                            <span class="material-symbols-outlined text-sm text-secondary">grade</span>
+                            Đạt {{ $quiz->pass_percent }}%
+                        </div>
+                        @endif
+                        @if($quiz->require_camera)
+                        <div class="flex items-center gap-1.5 text-slate-500 text-xs font-medium">
+                            <span class="material-symbols-outlined text-sm text-amber-500">videocam</span>
+                            Yêu cầu camera
+                        </div>
+                        @endif
+                    </div>
+
+                    {{-- Action --}}
+                    <div class="relative z-10">
+                        @if($inProgress)
+                            <a href="{{ route('client.quiz.take', [$quiz->id, $quiz->open_result->id]) }}"
+                               class="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-2xl font-bold text-sm hover:shadow-lg hover:-translate-y-0.5 transition-all">
+                                <span class="material-symbols-outlined text-base">play_arrow</span>
+                                Tiếp tục làm
+                            </a>
+                        @elseif(! $exhausted)
+                            <a href="{{ route('client.quiz.start', $quiz->id) }}"
+                               class="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-2xl font-bold text-sm hover:shadow-lg hover:shadow-primary/30 hover:-translate-y-0.5 transition-all">
+                                <span class="material-symbols-outlined text-base">arrow_forward</span>
+                                {{ $attemptCount > 0 ? 'Làm lại' : 'Làm bài ngay' }}
+                            </a>
+                        @else
+                            <span class="text-slate-400 text-sm">Không còn lượt làm.</span>
+                        @endif
                     </div>
                 </div>
+            @endforeach
+        </div>
+    </div>
+    @endif
+
+    {{-- ─── Upcoming Quizzes ─── --}}
+    @if($upcomingQuizzes->isNotEmpty())
+    <div>
+        <h2 class="text-2xl font-black text-primary mb-5">Sắp diễn ra</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            @foreach($upcomingQuizzes as $quiz)
+            <div class="bg-white border border-dashed border-slate-200 rounded-[2rem] p-6 opacity-80">
+                <div class="flex items-center gap-2 mb-3">
+                    <span class="material-symbols-outlined text-amber-500 text-base">schedule</span>
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-amber-600">Chưa mở</span>
+                </div>
+                <h4 class="font-bold text-slate-700 mb-2 leading-snug">{{ $quiz->title }}</h4>
+                <p class="text-xs text-slate-400">
+                    Mở lúc: <span class="font-semibold text-slate-600">{{ $quiz->start_date->format('H:i · d/m/Y') }}</span>
+                </p>
+                @if($quiz->end_date)
+                <p class="text-xs text-slate-400 mt-0.5">
+                    Đến: <span class="font-semibold text-slate-600">{{ $quiz->end_date->format('H:i · d/m/Y') }}</span>
+                </p>
+                @endif
+                <div class="flex items-center gap-3 mt-4 text-xs text-slate-500 font-medium">
+                    <span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">timer</span>{{ $quiz->duration_minutes }}p</span>
+                    <span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">quiz</span>{{ $quiz->total_questions }} câu</span>
+                </div>
             </div>
-            <!-- Bento Grid Content -->
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                <!-- Progress Circular Section -->
-                <div class="lg:col-span-4 bg-surface-container-lowest rounded-[2rem] p-8 shadow-sm relative overflow-hidden group">
-                    <div class="relative z-10 h-ful
+            @endforeach
+        </div>
+    </div>
+    @endif
+
+    {{-- Empty state when no quizzes at all --}}
+    @if($activeQuizzes->isEmpty() && $upcomingQuizzes->isEmpty())
+    <div class="bg-white rounded-3xl border border-slate-200 p-16 text-center">
+        <span class="material-symbols-outlined text-6xl text-slate-300 block mb-4">assignment</span>
+        <h3 class="text-xl font-bold text-slate-600 mb-2">Chưa có bài thi nào</h3>
+        <p class="text-slate-400 text-sm">Bạn chưa được thêm vào nhóm thi nào hoặc chưa có bài thi nào được mở.</p>
+    </div>
+    @endif
+
+</div>
+@endsection
+
+@push('scripts')
+<script>
+// Countdown timers
+function tickCountdowns() {
+    document.querySelectorAll('.countdown-timer').forEach(el => {
+        const end = new Date(el.dataset.end).getTime();
+        const diff = end - Date.now();
+        if (diff <= 0) {
+            el.textContent = 'Đã hết hạn';
+            el.classList.remove('text-error');
+            el.classList.add('text-slate-400');
+            return;
+        }
+        const h = Math.floor(diff / 3600000);
+        const m = Math.floor((diff % 3600000) / 60000);
+        const s = Math.floor((diff % 60000) / 1000);
+        el.textContent = (h > 0 ? String(h).padStart(2,'0') + ':' : '') +
+            String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+    });
+}
+tickCountdowns();
+setInterval(tickCountdowns, 1000);
+</script>
+@endpush
