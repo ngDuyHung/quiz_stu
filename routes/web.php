@@ -34,7 +34,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout')->
 Route::middleware(['auth', 'admin.only'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
-    // Quản lý Users
+    // Quản lý Users (Giữ nguyên phần Import của Duy)
     Route::prefix('users')->name('users.')->group(function() {
         Route::get('/download-template', [UsersController::class, 'downloadTemplate'])->name('import-template');
         Route::post('/import', [UsersController::class, 'import'])->name('import');
@@ -69,16 +69,19 @@ Route::middleware(['auth', 'admin.only'])->prefix('admin')->name('admin.')->grou
     Route::post('users/{user}/reset-password', [\App\Http\Controllers\Admin\UsersController::class, 'resetPassword'])->name('users.reset-password');
 
     // Faculty management routes
-
     Route::resource('faculties', \App\Http\Controllers\Admin\FacultyController::class);
 
     // User Group management routes
     Route::resource('user-groups', UserGroupController::class)->except(['create', 'show']);
 
     // Student management routes - custom routes first to take precedence
-    Route::get('students/classes-by-faculty', [\App\Http\Controllers\Admin\StudentListController::class, 'getClassesByFaculty'])->name('students.classes-by-faculty');
-    Route::post('students/{student}/toggle-status', [\App\Http\Controllers\Admin\StudentListController::class, 'toggleStatus'])->name('students.toggle-status');
-    Route::post('students/{student}/reset-password', [\App\Http\Controllers\Admin\StudentListController::class, 'resetPassword'])->name('students.reset-password');
+    Route::prefix('students')->name('students.')->group(function() {
+        Route::get('/download-template', [\App\Http\Controllers\Admin\StudentListController::class, 'downloadTemplate'])->name('import-template');
+        Route::post('/import', [\App\Http\Controllers\Admin\StudentListController::class, 'import'])->name('import');
+        Route::get('/classes-by-faculty', [\App\Http\Controllers\Admin\StudentListController::class, 'getClassesByFaculty'])->name('classes-by-faculty');
+        Route::post('/{student}/toggle-status', [\App\Http\Controllers\Admin\StudentListController::class, 'toggleStatus'])->name('toggle-status');
+        Route::post('/{student}/reset-password', [\App\Http\Controllers\Admin\StudentListController::class, 'resetPassword'])->name('reset-password');
+    });
     
     Route::resource('students', \App\Http\Controllers\Admin\StudentListController::class);
 });

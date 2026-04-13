@@ -11,9 +11,57 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
+use App\Imports\StudentsImport;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class StudentListController extends Controller
 {
+    /**
+     * Import sinh viên từ CSV/Excel
+     */
+    public function import(Request $request) 
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,csv,xls|max:10240',
+        ]);
+
+        try {
+            $import = new StudentsImport;
+            Excel::import($import, $request->file('file'));
+            
+            $failures = $import->failures();
+            $successCount = $import->getRowCount();
+            
+            if ($failures->isNotEmpty()) {
+                return back()->with('import_report', [
+                    'success' => $successCount,
+                    'failed' => $failures->count(),
+                    'errors' => $failures
+                ])->with('success', "Import hoàn tất với một số lỗi.");
+            }
+
+            return back()->with('success', "Import danh sách sinh viên thành công ({$successCount} dòng)!");
+
+        } catch (Throwable $e) {
+            Log::error("Import Error: " . $e->getMessage());
+            return back()->with('danger', 'Lỗi hệ thống khi import: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Tải file mẫu CSV
+     */
+    public function downloadTemplate()
+    {
+        $filePath = public_path('templates/sample_students.csv');
+        if (!file_exists($filePath)) {
+            return back()->with('danger', 'Không tìm thấy file mẫu!');
+        }
+        return response()->download($filePath);
+    }
+
     /**
      * Danh sách sinh viên kèm Tìm kiếm & Filter
      */
