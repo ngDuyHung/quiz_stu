@@ -41,16 +41,16 @@ class SchoolYearController extends Controller
         return redirect()->back()->with('success', 'Thêm năm học mới thành công!');
     }
 
-    // Hàm tùy chỉnh để kích hoạt học kỳ (Duy cần thêm Route cho cái này ở Bước 2)
-    public function activate($id)
+    // Hàm tùy chỉnh để kích hoạt học kỳ
+    public function activate($year)
     {
-        DB::transaction(function () use ($id) {
+        DB::transaction(function () use ($year) {
             // Tắt tất cả các kỳ khác
             SchoolYear::where('is_active', 1)->update(['is_active' => 0]);
             
             // Kích hoạt kỳ hiện tại
-            $year = SchoolYear::findOrFail($id);
-            $year->update(['is_active' => 1]);
+            $schoolYear = SchoolYear::findOrFail($year);
+            $schoolYear->update(['is_active' => 1]);
         });
 
         return redirect()->back()->with('success', 'Đã thay đổi học kỳ hoạt động!');

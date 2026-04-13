@@ -25,20 +25,3 @@
         </form>
     </div>
 </div>
-
-@if(session()->has('import_errors'))
-    <div class="alert alert-danger mt-3">
-      <h6>Kết quả Import:</h6>
-        <p>Thành công: {{ session('success_count', 0) }} dòng.</p>
-
-        <p>Thất bại: {{ session('failed_count', session('import_errors')->count()) }} dòng lỗi.</p>
-        <ul style="max-height: 200px; overflow-y: auto;">
-            @foreach(session('import_errors') as $failure)
-                <li>
-                    Dòng {{ $failure->row() }}: {{ implode(', ', $failure->errors()) }} 
-                    <br><small class="text-muted">Dữ liệu: {{ json_encode($failure->values(), JSON_UNESCAPED_UNICODE) }}</small>
-                </li>
-            @endforeach
-        </ul>
-    </div>
-@endif

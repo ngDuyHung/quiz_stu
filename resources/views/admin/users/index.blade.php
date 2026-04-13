@@ -121,7 +121,71 @@
                 {{ $users->withQueryString()->links() }}
             </div>
         @endif
-    </div> 
+    </div>
+
+    {{-- Báo cáo Import (Hiển thị ở dưới bảng) --}}
+    @if(session('import_report'))
+        <div class="card shadow-sm border-0 mt-4 border-start border-4 border-warning" id="import-report-section">
+            <div class="card-header bg-warning text-dark fw-bold">
+                <i class="fas fa-exclamation-triangle me-2"></i> BÁO CÁO KẾT QUẢ IMPORT CHI TIẾT
+            </div>
+            <div class="card-body bg-light">
+                <div class="row g-3 mb-3 text-center">
+                    <div class="col-md-6">
+                        <div class="p-3 bg-white rounded shadow-sm border border-success">
+                            <h4 class="text-success mb-0">{{ session('import_report.success') }}</h4>
+                            <span class="text-muted small fw-bold text-uppercase">Dòng thành công</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="p-3 bg-white rounded shadow-sm border border-danger">
+                            <h4 class="text-danger mb-0">{{ session('import_report.failed') }}</h4>
+                            <span class="text-muted small fw-bold text-uppercase">Dòng gặp lỗi</span>
+                        </div>
+                    </div>
+                </div>
+
+                @if(session('import_report.errors')->isNotEmpty())
+                    <div class="table-responsive bg-white rounded border shadow-sm mt-3">
+                        <table class="table table-sm table-striped table-hover mb-0">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th class="text-center" width="80">Dòng #</th>
+                                    <th width="150">Cột/Trường lỗi</th>
+                                    <th>Nội dung lỗi chi tiết từ hệ thống</th>
+                                    <th>Dữ liệu đầu vào</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach(session('import_report.errors') as $failure)
+                                    <tr>
+                                        <td class="text-center fw-bold text-secondary">{{ $failure->row() }}</td>
+                                        <td><span class="badge bg-danger text-uppercase">{{ $failure->attribute() }}</span></td>
+                                        <td class="text-danger small">{{ implode(' | ', $failure->errors()) }}</td>
+                                        <td class="text-muted" style="font-size: 0.75rem;">
+                                            @php 
+                                                $rowData = array_filter($failure->values(), fn($value) => !is_null($value) && $value !== '');
+                                            @endphp
+                                            <code>{{ json_encode($rowData, JSON_UNESCAPED_UNICODE) }}</code>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="alert alert-secondary mt-3 mb-0 py-2 small">
+                        <i class="fas fa-info-circle me-1"></i> <strong>Lưu ý:</strong> Những dòng lỗi trên đã bị hệ thống tự động bỏ qua. Vui lòng kiểm tra lại file CSV và import lại các dòng này.
+                    </div>
+                @endif
+            </div>
+        </div>
+        <script>
+            // Tự động cuộn xuống phần báo cáo khi trang load lại
+            window.onload = function() {
+                document.getElementById('import-report-section').scrollIntoView({ behavior: 'smooth' });
+            };
+        </script>
+    @endif
 </div>
 
 <script>

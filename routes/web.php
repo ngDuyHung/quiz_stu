@@ -49,6 +49,7 @@ Route::middleware(['auth', 'admin.only'])->prefix('admin')->name('admin.')->grou
     Route::resource('classes', \App\Http\Controllers\SchoolClassController::class);
     Route::resource('user-groups', UserGroupController::class);
     Route::resource('faculties', \App\Http\Controllers\Admin\FacultyController::class);
+    Route::post('/years/{year}/activate', [\App\Http\Controllers\SchoolYearController::class, 'activate'])->name('years.activate');
     Route::resource('years', \App\Http\Controllers\SchoolYearController::class);
 
     Route::get('/question-levels', function() { return "Chức năng đang phát triển"; })->name('question-levels.index');

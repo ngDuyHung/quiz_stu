@@ -134,21 +134,21 @@ class UsersController extends Controller
             
             $failures = $import->failures();
             $successCount = $import->getRowCount();
-            $failedCount = $failures->count(); // Đếm tổng số lỗi (không gộp hàng)
             
             if ($failures->isNotEmpty()) {
-                return back()->with('import_errors', $failures)
-                             ->with('success_count', $successCount)
-                             ->with('failed_count', $failedCount)
-                             ->with('success', "Import hoàn tất. Thành công: {$successCount}, Thất bại: {$failedCount} lỗi.");
+                // Thu thập các lỗi duy nhất để báo cáo gọn gàng hơn
+                return back()->with('import_report', [
+                    'success' => $successCount,
+                    'failed' => $failures->count(),
+                    'errors' => $failures
+                ])->with('success', "Import hoàn tất với một số lỗi.");
             }
 
-            return back()->with('success', "Import danh sách sinh viên thành công ({$successCount} dòng)!")
-                         ->with('success_count', $successCount);
+            return back()->with('success', "Import danh sách sinh viên thành công ({$successCount} dòng)!");
 
         } catch (\Throwable $e) {
             Log::error("Import Error: " . $e->getMessage());
-            return back()->with('danger', 'Lỗi hệ thống: ' . $e->getMessage());
+            return back()->with('danger', 'Lỗi hệ thống khi import: ' . $e->getMessage());
         }
     }
 
