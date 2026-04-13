@@ -5,13 +5,12 @@ use App\Http\Controllers\Chude2Controller;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Client\DashboardController as ClientDashboardController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\QuestionController;
-use App\Http\Controllers\Admin\UsersController;
-use App\Http\Controllers\Client\CourseController;
-use App\Http\Controllers\Admin\UserGroupController;
+use App\Http\Controllers\Admin\StudentListController;
+use App\Http\Controllers\Admin\QuestionsandAnswersController;
 use App\Http\Controllers\Admin\QuestionCategoryController;
 use App\Http\Controllers\Admin\QuestionLevelController;
 use App\Http\Controllers\Admin\QuizController;
+use App\Http\Controllers\Client\CourseController;
 use App\Http\Controllers\Client\StudentQuizController;
 use App\Http\Controllers\Client\ProfileController;
 
@@ -30,85 +29,50 @@ Route::middleware('guest')->group(function () {
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout')->middleware('auth');
 
-// Admin Routes
+// 3. Admin Routes (Cleaned & Optimized)
 Route::middleware(['auth', 'admin.only'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
-    // Quản lý Users (Giữ nguyên phần Import của Duy)
-    Route::prefix('users')->name('users.')->group(function() {
-        Route::get('/download-template', [UsersController::class, 'downloadTemplate'])->name('import-template');
-        Route::post('/import', [UsersController::class, 'import'])->name('import');
-        Route::post('/{user}/toggle-status', [UsersController::class, 'toggleStatus'])->name('toggle-status');
-        Route::post('/{user}/reset-password', [UsersController::class, 'resetPassword'])->name('reset-password');
-    });
-    Route::resource('users', UsersController::class);
-
-    Route::resource('quizzes', QuizController::class);
-
-    Route::resource('questions', QuestionController::class); 
-
-    Route::resource('question-categories', QuestionCategoryController::class);
-
-    // Question Level management routes
-    Route::resource('question-levels', QuestionLevelController::class);
-
-    // Questions and Answers management routes
-    Route::resource('questions', \App\Http\Controllers\Admin\QuestionsandAnswersController::class);
-    Route::get('questions/{question}/options-count', [\App\Http\Controllers\Admin\QuestionsandAnswersController::class, 'getOptionsCount'])->name('questions.options-count');
-    Route::get('questions/{question}/stats', [\App\Http\Controllers\Admin\QuestionsandAnswersController::class, 'getStats'])->name('questions.stats');
-
-    Route::resource('classes', \App\Http\Controllers\SchoolClassController::class);
-    Route::resource('user-groups', UserGroupController::class);
-    Route::resource('faculties', \App\Http\Controllers\Admin\FacultyController::class);
-    Route::post('/years/{year}/activate', [\App\Http\Controllers\SchoolYearController::class, 'activate'])->name('years.activate');
-    Route::resource('years', \App\Http\Controllers\SchoolYearController::class);
-
-    // User management routes
-    Route::resource('users', \App\Http\Controllers\Admin\UsersController::class);
-    Route::post('users/{user}/toggle-status', [\App\Http\Controllers\Admin\UsersController::class, 'toggleStatus'])->name('users.toggle-status');
-    Route::post('users/{user}/reset-password', [\App\Http\Controllers\Admin\UsersController::class, 'resetPassword'])->name('users.reset-password');
-
-    // Faculty management routes
-    Route::resource('faculties', \App\Http\Controllers\Admin\FacultyController::class);
-
-    // User Group management routes
-    Route::resource('user-groups', UserGroupController::class)->except(['create', 'show']);
-
-    // Student management routes - custom routes first to take precedence
+    // Quản lý Sinh viên (Tái tích hợp Import)
     Route::prefix('students')->name('students.')->group(function() {
-        Route::get('/download-template', [\App\Http\Controllers\Admin\StudentListController::class, 'downloadTemplate'])->name('import-template');
-        Route::post('/import', [\App\Http\Controllers\Admin\StudentListController::class, 'import'])->name('import');
-        Route::get('/classes-by-faculty', [\App\Http\Controllers\Admin\StudentListController::class, 'getClassesByFaculty'])->name('classes-by-faculty');
-        Route::post('/{student}/toggle-status', [\App\Http\Controllers\Admin\StudentListController::class, 'toggleStatus'])->name('toggle-status');
-        Route::post('/{student}/reset-password', [\App\Http\Controllers\Admin\StudentListController::class, 'resetPassword'])->name('reset-password');
+        Route::get('/download-template', [StudentListController::class, 'downloadTemplate'])->name('import-template');
+        Route::post('/import', [StudentListController::class, 'import'])->name('import');
+        Route::get('/classes-by-faculty', [StudentListController::class, 'getClassesByFaculty'])->name('classes-by-faculty');
+        Route::post('/{student}/toggle-status', [StudentListController::class, 'toggleStatus'])->name('toggle-status');
+        Route::post('/{student}/reset-password', [StudentListController::class, 'resetPassword'])->name('reset-password');
     });
+    Route::resource('students', StudentListController::class);
+
+    // Quản lý Câu hỏi & Đáp án (Dùng bản mới của team)
+    Route::resource('questions', QuestionsandAnswersController::class);
+    Route::get('questions/{question}/options-count', [QuestionsandAnswersController::class, 'getOptionsCount'])->name('questions.options-count');
+    Route::get('questions/{question}/stats', [QuestionsandAnswersController::class, 'getStats'])->name('questions.stats');
+
+    // Quản lý đề thi & cơ cấu
+    Route::resource('quizzes', QuizController::class);
+    Route::resource('question-categories', QuestionCategoryController::class);
+    Route::resource('question-levels', QuestionLevelController::class);
+    Route::resource('faculties', \App\Http\Controllers\Admin\FacultyController::class);
+    Route::resource('classes', \App\Http\Controllers\SchoolClassController::class);
+    Route::resource('user-groups', \App\Http\Controllers\Admin\UserGroupController::class)->except(['create', 'show']);
     
-    Route::resource('students', \App\Http\Controllers\Admin\StudentListController::class);
+    // Năm học
+    Route::resource('years', \App\Http\Controllers\SchoolYearController::class);
+    Route::post('/years/{year}/activate', [\App\Http\Controllers\SchoolYearController::class, 'activate'])->name('years.activate');
 });
 
 // 4. Client Routes
 Route::middleware(['auth', 'client.only'])->prefix('client')->name('client.')->group(function () {
     Route::get('/dashboard', [ClientDashboardController::class, 'index'])->name('dashboard');
     Route::get('/courses', [CourseController::class, 'index'])->name('courses');
-    Route::get('/results', function () {
-        return view('client.result-detail');
-    })->name('results');
-    Route::get('/ranking', function () {
-        return view('client.ranking');
-    })->name('ranking');
-    Route::get('/answer&question', function () {
-        return view('client.answer&question');
-    })->name('answer&question');
-    Route::get('/result-detail', function () {
-        return view('client.result-detail');
-    })->name('result-detail');
+    Route::get('/results', [StudentQuizController::class, 'history'])->name('results');
+    Route::get('/ranking', function () { return view('client.ranking'); })->name('ranking');
+    Route::get('/answer&question', function () { return view('client.answer&question'); })->name('answer&question');
+    Route::get('/result-detail', function () { return view('client.result-detail'); })->name('result-detail');
 
-    // Kỳ thi – danh sách
     Route::get('/exams', [StudentQuizController::class, 'index'])->name('exams');
-
-    // Lịch sử thi
     Route::get('/history', [StudentQuizController::class, 'history'])->name('history');
-
+    
     // Hồ sơ cá nhân
     Route::get('/profile',            [ProfileController::class, 'show'])->name('profile');
     Route::patch('/profile',          [ProfileController::class, 'update'])->name('profile.update');
