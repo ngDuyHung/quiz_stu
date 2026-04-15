@@ -13,6 +13,7 @@ use Maatwebsite\Excel\Concerns\SkipsOnFailure;
 use Maatwebsite\Excel\Concerns\SkipsFailures;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Concerns\Importable;
+use Maatwebsite\Excel\Imports\HeadingRowFormatter;
 
 class StudentsImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnFailure
 {
@@ -20,26 +21,22 @@ class StudentsImport implements ToModel, WithHeadingRow, WithValidation, SkipsOn
 
     private $successCount = 0;
 
+    public function __construct()
+    {
+        HeadingRowFormatter::default('none');
+    }
+
     public function model(array $row)
     {
-        // 1. Tìm Faculty và Class (Phải tìm lại vì model() chạy độc lập với validator)
+        // PHẢI tìm lại để lấy ID, nhưng lúc này Validation đã đảm bảo nó tồn tại
         $faculty = Faculty::where('name', $row['id_khoa'])->orWhere('id', $row['id_khoa'])->first();
         $class = SchoolClass::where('name', $row['id_lop'])->orWhere('id', $row['id_lop'])->first();
 
-        // Nếu dính lỗi validation (Khoa/Lớp không tồn tại), model() vẫn sẽ chạy, 
-        // ta PHẢI return null và KHÔNG tăng successCount.
-        if (!$faculty || !$class) {
-            return null;
-        }
-
-        // 2. Xử lý tên
         $nameParts = explode(' ', trim($row['ho_ten']));
         $lastName = array_pop($nameParts);
         $firstName = implode(' ', $nameParts) ?: 'Sinh viên';
-
         $group = UserGroup::where('name', 'LIKE', '%Sinh viên%')->first();
 
-        // 3. CHỈ TĂNG KHI CHẮC CHẮN INSERT THÀNH CÔNG
         $this->successCount++;
 
         return new User([
@@ -56,10 +53,7 @@ class StudentsImport implements ToModel, WithHeadingRow, WithValidation, SkipsOn
         ]);
     }
 
-    public function getRowCount(): int
-    {
-        return $this->successCount;
-    }
+    public function getRowCount(): int { return $this->successCount; }
 
     public function rules(): array
     {
@@ -67,40 +61,36 @@ class StudentsImport implements ToModel, WithHeadingRow, WithValidation, SkipsOn
             'ma_sv'   => 'required|unique:users,student_code',
             'email'   => 'required|email|unique:users,email',
             'ho_ten'  => 'required',
-            'id_khoa' => 'required',
-            'id_lop'  => 'required',
+            'id_khoa' => [
+                'required',
+                function ($attribute, $value, $fail) {
+                    $exists = Faculty::where('name', $value)->orWhere('id', $value)->exists();
+                    if (!$exists) {
+                        $fail("Khoa [{$value}] không tồn tại trên hệ thống.");
+                    }
+                },
+            ],
+            'id_lop' => [
+                'required',
+                function ($attribute, $value, $fail) {
+                    $exists = SchoolClass::where('name', $value)->orWhere('id', $value)->exists();
+                    if (!$exists) {
+                        $fail("Lớp [{$value}] không tồn tại trên hệ thống.");
+                    }
+                },
+            ],
         ];
-    }
-
-    public function withValidator($validator)
-    {
-        $validator->after(function ($validator) {
-            foreach ($validator->getData() as $key => $data) {
-                // Kiểm tra Khoa
-                $facultyExists = Faculty::where('name', $data['id_khoa'])
-                                        ->orWhere('id', $data['id_khoa'])
-                                        ->exists();
-                if (!$facultyExists) {
-                    $validator->errors()->add($key . '.id_khoa', "Khoa [{$data['id_khoa']}] không tồn tại.");
-                }
-
-                // Kiểm tra Lớp
-                $classExists = SchoolClass::where('name', $data['id_lop'])
-                                          ->orWhere('id', $data['id_lop'])
-                                          ->exists();
-                if (!$classExists) {
-                    $validator->errors()->add($key . '.id_lop', "Lớp [{$data['id_lop']}] không tồn tại.");
-                }
-            }
-        });
     }
 
     public function customValidationMessages()
     {
         return [
-            'ma_sv.unique' => 'Mã sinh viên :input đã tồn tại.',
-            'email.unique' => 'Email :input đã tồn tại.',
+            'ma_sv.unique' => 'Mã sinh viên [:input] đã tồn tại.',
+            'email.unique' => 'Email [:input] đã tồn tại.',
+            'ma_sv.required' => 'Mã sinh viên là bắt buộc.',
+            'ho_ten.required' => 'Họ tên là bắt buộc.',
+            'id_khoa.required' => 'Khoa là bắt buộc.',
+            'id_lop.required' => 'Lớp là bắt buộc.',
         ];
     }
 }
-
