@@ -9,7 +9,7 @@
     $dashOffset    = $circumference * (1 - $pct / 100);
 @endphp
 
-<div class="max-w-5xl mx-auto px-4 py-10 page-fade">
+<div class="max-w-5xl mx-auto px-3 sm:px-4 py-6 sm:py-10 page-fade">
 
     {{-- Flash messages --}}
     @if(session('success'))
@@ -26,54 +26,54 @@
     @endif
 
     {{-- ─── Hero banner ─── --}}
-    <div class="bg-primary rounded-[2.5rem] p-8 mb-10 text-white shadow-xl relative overflow-hidden">
-        <div class="relative z-10 flex flex-col md:flex-row justify-between items-center gap-8">
-            <div class="max-w-md">
+    <div class="bg-primary rounded-2xl sm:rounded-[2.5rem] p-4 sm:p-8 mb-6 sm:mb-10 text-white shadow-xl relative overflow-hidden">
+        <div class="relative z-10 flex flex-col md:flex-row justify-between items-center gap-4 sm:gap-8">
+            <div class="max-w-md w-full">
                 {{-- Status badge --}}
                 @if($result->status === 'expired')
-                    <span class="px-3 py-1 bg-orange-500 rounded-full text-[10px] font-bold uppercase tracking-widest">Hết giờ – nộp tự động</span>
+                    <span class="px-3 py-1 bg-orange-500 rounded-full text-[9px] sm:text-[10px] font-bold uppercase tracking-widest">Hết giờ – nộp tự động</span>
                 @elseif($passed)
-                    <span class="px-3 py-1 bg-green-500 rounded-full text-[10px] font-bold uppercase tracking-widest">Đạt yêu cầu</span>
+                    <span class="px-3 py-1 bg-green-500 rounded-full text-[9px] sm:text-[10px] font-bold uppercase tracking-widest">Đạt yêu cầu</span>
                 @else
-                    <span class="px-3 py-1 bg-red-500 rounded-full text-[10px] font-bold uppercase tracking-widest">Chưa đạt</span>
+                    <span class="px-3 py-1 bg-red-500 rounded-full text-[9px] sm:text-[10px] font-bold uppercase tracking-widest">Chưa đạt</span>
                 @endif
-                <h2 class="text-3xl font-extrabold mt-4 mb-2">
+                <h2 class="text-2xl sm:text-3xl font-extrabold mt-3 sm:mt-4 mb-2">
                     @if($passed) Hoàn thành xuất sắc! @else Cần cố gắng thêm @endif
                 </h2>
-                <p class="text-blue-100/80 leading-relaxed text-sm">
-                    Bài thi: <b>{{ $quiz->title }}</b>
+                <p class="text-blue-100/80 leading-relaxed text-xs sm:text-sm">
+                    Bài thi: <b class="block sm:inline">{{ $quiz->title }}</b>
                     @if($quiz->pass_percent)
-                        · Điểm qua: <b>{{ $quiz->pass_percent }}%</b>
+                        <span class="hidden sm:inline"> · </span><br class="sm:hidden" />Điểm qua: <b>{{ $quiz->pass_percent }}%</b>
                     @endif
                 </p>
 
-                <div class="flex flex-wrap gap-6 mt-8">
+                <div class="flex flex-wrap gap-3 sm:gap-6 mt-6 sm:mt-8">
                     <div>
-                        <p class="text-[10px] uppercase opacity-60 font-bold mb-1">Thời gian làm bài</p>
-                        <p class="text-xl font-bold">
+                        <p class="text-[8px] sm:text-[10px] uppercase opacity-60 font-bold mb-1">Thời gian làm bài</p>
+                        <p class="text-lg sm:text-xl font-bold">
                             {{ $timeTaken }}
-                            <span class="text-xs font-normal opacity-70">/ {{ $quiz->duration_minutes }}p</span>
+                            <span class="text-[10px] sm:text-xs font-normal opacity-70">/ {{ $quiz->duration_minutes }}p</span>
                         </p>
                     </div>
-                    <div class="w-px h-10 bg-white/20"></div>
+                    <div class="w-px h-8 sm:h-10 bg-white/20"></div>
                     <div>
-                        <p class="text-[10px] uppercase opacity-60 font-bold mb-1">Số câu đúng</p>
-                        <p class="text-xl font-bold">
+                        <p class="text-[8px] sm:text-[10px] uppercase opacity-60 font-bold mb-1">Số câu đúng</p>
+                        <p class="text-lg sm:text-xl font-bold">
                             {{ $resultAnswers->filter(fn($ra) => $ra->selected_option_id && $ra->selectedOption?->is_correct)->count() }}
-                            <span class="text-xs font-normal opacity-70">/ {{ $resultAnswers->count() }}</span>
+                            <span class="text-[10px] sm:text-xs font-normal opacity-70">/ {{ $resultAnswers->count() }}</span>
                         </p>
                     </div>
-                    <div class="w-px h-10 bg-white/20"></div>
+                    <div class="w-px h-8 sm:h-10 bg-white/20"></div>
                     <div>
-                        <p class="text-[10px] uppercase opacity-60 font-bold mb-1">Điểm số</p>
-                        <p class="text-xl font-bold">{{ number_format($result->score, 2) }}</p>
+                        <p class="text-[8px] sm:text-[10px] uppercase opacity-60 font-bold mb-1">Điểm số</p>
+                        <p class="text-lg sm:text-xl font-bold">{{ number_format($result->score, 2) }}</p>
                     </div>
                 </div>
             </div>
 
             {{-- SVG score circle --}}
-            <div class="relative flex items-center justify-center flex-shrink-0">
-                <svg class="w-40 h-40 -rotate-90" viewBox="0 0 160 160">
+            <div class="relative flex items-center justify-center flex-shrink-0 mt-4 md:mt-0">
+                <svg class="w-32 h-32 sm:w-40 sm:h-40 -rotate-90" viewBox="0 0 160 160">
                     <circle cx="80" cy="80" r="70" fill="transparent"
                         stroke="rgba(255,255,255,0.15)" stroke-width="12"/>
                     <circle cx="80" cy="80" r="70" fill="transparent"
@@ -84,21 +84,21 @@
                         style="transition: stroke-dashoffset 1s ease"/>
                 </svg>
                 <div class="absolute text-center">
-                    <span class="text-4xl font-black italic">{{ number_format($pct, 0) }}<span class="text-lg">%</span></span>
-                    <p class="text-[10px] font-bold opacity-60 uppercase">Tỉ lệ</p>
+                    <span class="text-3xl sm:text-4xl font-black italic">{{ number_format($pct, 0) }}<span class="text-sm sm:text-lg">%</span></span>
+                    <p class="text-[8px] sm:text-[10px] font-bold opacity-60 uppercase">Tỉ lệ</p>
                 </div>
             </div>
         </div>
         <span class="material-symbols-outlined absolute -right-4 -bottom-4 opacity-10 text-[12rem]">{{ $passed ? 'emoji_events' : 'school' }}</span>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-8">
 
         {{-- ─── Left col: question review / no-answer summary ─── --}}
-        <div class="lg:col-span-2 space-y-6">
+        <div class="lg:col-span-2 space-y-4 sm:space-y-6">
 
             @if($quiz->show_answer)
-                <h3 class="text-xl font-bold text-primary flex items-center gap-2">
+                <h3 class="text-lg sm:text-xl font-bold text-primary flex items-center gap-2">
                     <span class="material-symbols-outlined">rule</span>
                     Xem lại câu hỏi ({{ $resultAnswers->count() }} câu)
                 </h3>
@@ -108,7 +108,7 @@
                         $isCorrect  = $ra->selected_option_id && $ra->selectedOption?->is_correct;
                         $isSkipped  = ! $ra->selected_option_id;
                     @endphp
-                    <div class="bg-white rounded-3xl border {{ $isCorrect ? 'border-green-200' : ($isSkipped ? 'border-slate-200' : 'border-red-200') }} p-6 hover:shadow-md transition-shadow">
+                    <div class="bg-white rounded-2xl sm:rounded-3xl border {{ $isCorrect ? 'border-green-200' : ($isSkipped ? 'border-slate-200' : 'border-red-200') }} p-4 sm:p-6 hover:shadow-md transition-shadow">
                         <div class="flex justify-between items-start mb-3">
                             <span class="w-8 h-8 rounded-lg {{ $isCorrect ? 'bg-green-50 text-green-600' : ($isSkipped ? 'bg-slate-100 text-slate-500' : 'bg-red-50 text-red-600') }} flex items-center justify-center font-bold text-sm">
                                 {{ str_pad($i + 1, 2, '0', STR_PAD_LEFT) }}
@@ -122,7 +122,7 @@
                             @endif
                         </div>
 
-                        <p class="font-semibold text-slate-800 mb-4 text-sm leading-relaxed">{!! $ra->question->content !!}</p>
+                        <p class="font-semibold text-slate-800 mb-4 text-xs sm:text-sm leading-relaxed">{!! $ra->question->content !!}</p>
 
                         <div class="space-y-2">
                             @foreach($ra->question->options as $opt)
@@ -144,7 +144,7 @@
                                         $label = null;
                                     }
                                 @endphp
-                                <div class="p-3 rounded-xl border {{ $cls }} text-sm flex justify-between items-center gap-2">
+                                <div class="p-3 rounded-xl border {{ $cls }} text-xs sm:text-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
                                     <span>{!! $opt->content !!}</span>
                                     @if($label)
                                         <span class="text-[10px] whitespace-nowrap font-bold uppercase tracking-wider opacity-80">{{ $label }}</span>
@@ -156,7 +156,7 @@
                 @endforeach
 
             @else
-                <div class="bg-white rounded-3xl border border-slate-200 p-10 text-center">
+                <div class="bg-white rounded-2xl sm:rounded-3xl border border-slate-200 p-6 sm:p-10 text-center">
                     <span class="material-symbols-outlined text-5xl text-slate-300 mb-4 block">visibility_off</span>
                     <h4 class="font-bold text-slate-700 text-lg mb-2">Đáp án không được hiển thị</h4>
                     <p class="text-slate-500 text-sm">Giảng viên đã tắt chức năng xem lại đáp án cho bài thi này.</p>
@@ -166,12 +166,12 @@
         </div>
 
         {{-- ─── Right col: stats + feedback ─── --}}
-        <div class="space-y-6">
+        <div class="space-y-4 sm:space-y-6">
 
             {{-- Score summary card --}}
-            <div class="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm">
-                <h4 class="font-bold text-primary mb-4 text-sm uppercase tracking-wider">Tóm tắt kết quả</h4>
-                <div class="space-y-3 text-sm">
+            <div class="bg-white rounded-2xl sm:rounded-3xl border border-slate-200 p-4 sm:p-6 shadow-sm">
+                <h4 class="font-bold text-primary mb-4 text-xs sm:text-sm uppercase tracking-wider">Tóm tắt kết quả</h4>
+                <div class="space-y-3 text-xs sm:text-sm">
                     <div class="flex justify-between items-center">
                         <span class="text-slate-500">Trạng thái</span>
                         @if($passed)
@@ -207,8 +207,8 @@
 
             {{-- Category mastery (only when show_answer = true) --}}
             @if($quiz->show_answer && count($categoryStats) > 0)
-            <div class="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm">
-                <h4 class="font-bold text-primary mb-4 text-sm uppercase tracking-wider">Mức độ thành thạo</h4>
+            <div class="bg-white rounded-2xl sm:rounded-3xl border border-slate-200 p-4 sm:p-6 shadow-sm">
+                <h4 class="font-bold text-primary mb-4 text-xs sm:text-sm uppercase tracking-wider">Mức độ thành thạo</h4>
                 <div class="space-y-4">
                     @foreach($categoryStats as $catName => $stat)
                         @php
@@ -216,9 +216,9 @@
                             $barColor = $catPct >= 70 ? 'bg-green-500' : ($catPct >= 40 ? 'bg-yellow-400' : 'bg-red-400');
                         @endphp
                         <div class="space-y-1.5">
-                            <div class="flex justify-between text-xs font-bold uppercase tracking-wider">
+                            <div class="flex justify-between text-[10px] sm:text-xs font-bold uppercase tracking-wider">
                                 <span class="text-slate-500 truncate max-w-[70%]">{{ $catName }}</span>
-                                <span class="text-primary">{{ $catPct }}%</span>
+                                <span class="text-primary flex-shrink-0">{{ $catPct }}%</span>
                             </div>
                             <div class="h-1.5 bg-slate-100 rounded-full overflow-hidden">
                                 <div class="h-full {{ $barColor }} rounded-full" style="width: {{ $catPct }}%"></div>
@@ -231,15 +231,15 @@
 
             {{-- Feedback form (only for completed, not expired) --}}
             @if($result->status === 'completed')
-            <div id="feedback" class="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm">
-                <h4 class="font-bold text-primary mb-1 text-sm uppercase tracking-wider">Phản hồi bài thi</h4>
+            <div id="feedback" class="bg-white rounded-2xl sm:rounded-3xl border border-slate-200 p-4 sm:p-6 shadow-sm">
+                <h4 class="font-bold text-primary mb-1 text-xs sm:text-sm uppercase tracking-wider">Phản hồi bài thi</h4>
                 @if($hasFeedback)
-                    <div class="flex items-center gap-2 mt-3 text-green-600 text-sm">
+                    <div class="flex items-center gap-2 mt-3 text-green-600 text-xs sm:text-sm">
                         <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1">check_circle</span>
                         <span>Bạn đã gửi phản hồi. Cảm ơn!</span>
                     </div>
                 @else
-                    <p class="text-slate-500 text-xs mb-4">Đánh giá chất lượng đề thi để giúp cải thiện hệ thống.</p>
+                    <p class="text-slate-500 text-[10px] sm:text-xs mb-4">Đánh giá chất lượng đề thi để giúp cải thiện hệ thống.</p>
                     <form method="POST" action="{{ route('client.quiz.feedback', $result->id) }}" id="feedbackForm">
                         @csrf
                         <div class="space-y-4">
@@ -253,7 +253,7 @@
                             @endphp
                             @foreach($feedbackFields as $fieldName => $fieldLabel)
                             <div>
-                                <p class="text-xs font-semibold text-slate-600 mb-1.5">{{ $fieldLabel }}</p>
+                                <p class="text-[10px] sm:text-xs font-semibold text-slate-600 mb-1.5">{{ $fieldLabel }}</p>
                                 <div class="flex gap-1">
                                     @for($s = 1; $s <= 5; $s++)
                                     <button type="button"
@@ -271,14 +271,14 @@
                             @endforeach
 
                             <div>
-                                <p class="text-xs font-semibold text-slate-600 mb-1.5">Góp ý thêm (tùy chọn)</p>
+                                <p class="text-[10px] sm:text-xs font-semibold text-slate-600 mb-1.5">Góp ý thêm (tùy chọn)</p>
                                 <textarea name="suggestion" rows="2"
-                                    class="w-full text-sm border border-slate-200 rounded-xl px-3 py-2 resize-none focus:outline-none focus:border-primary"
+                                    class="w-full text-xs sm:text-sm border border-slate-200 rounded-xl px-3 py-2 resize-none focus:outline-none focus:border-primary"
                                     placeholder="Nhập ý kiến của bạn...">{{ old('suggestion') }}</textarea>
                             </div>
 
                             <button type="submit" id="feedbackSubmitBtn"
-                                class="w-full py-2.5 bg-primary text-white text-xs font-bold rounded-xl hover:-translate-y-0.5 transition-all shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+                                class="w-full py-2 sm:py-2.5 bg-primary text-white text-xs font-bold rounded-xl hover:-translate-y-0.5 transition-all shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
                                 disabled>
                                 Gửi phản hồi
                             </button>
@@ -292,15 +292,15 @@
     </div>
 
     {{-- ─── Footer actions ─── --}}
-    <div class="mt-10 pt-8 border-t border-slate-200 flex flex-wrap justify-end gap-4">
+    <div class="mt-8 sm:mt-10 pt-6 sm:pt-8 border-t border-slate-200 flex flex-col sm:flex-row flex-wrap justify-center sm:justify-end gap-3 sm:gap-4">
         @if($canRetry)
             <a href="{{ route('client.quiz.start', $quiz->id) }}"
-               class="px-6 py-3 rounded-xl font-bold text-primary border border-primary hover:bg-primary hover:text-white transition-all text-xs uppercase tracking-widest">
+               class="px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl font-bold text-primary border border-primary hover:bg-primary hover:text-white transition-all text-xs uppercase tracking-widest text-center">
                 <span class="material-symbols-outlined align-middle text-base mr-1">replay</span>Làm lại
             </a>
         @endif
         <a href="{{ route('client.exams') }}"
-           class="px-8 py-3 rounded-xl font-bold bg-primary text-white shadow-lg hover:-translate-y-1 transition-all text-xs uppercase tracking-widest">
+           class="px-6 sm:px-8 py-2.5 sm:py-3 rounded-xl font-bold bg-primary text-white shadow-lg hover:-translate-y-1 transition-all text-xs uppercase tracking-widest text-center">
             <span class="material-symbols-outlined align-middle text-base mr-1">home</span>Về trang bài thi
         </a>
     </div>

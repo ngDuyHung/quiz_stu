@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\QuizController;
 use App\Http\Controllers\Client\CourseController;
 use App\Http\Controllers\Client\StudentQuizController;
 use App\Http\Controllers\Client\ProfileController;
+use App\Http\Controllers\Client\RankingController;
 
 // 1. Redirect home to login
 Route::get('/', function () {
@@ -66,7 +67,7 @@ Route::middleware(['auth', 'client.only'])->prefix('client')->name('client.')->g
     Route::get('/dashboard', [ClientDashboardController::class, 'index'])->name('dashboard');
     Route::get('/courses', [CourseController::class, 'index'])->name('courses');
     Route::get('/results', [StudentQuizController::class, 'history'])->name('results');
-    Route::get('/ranking', function () { return view('client.ranking'); })->name('ranking');
+    Route::get('/ranking', [RankingController::class, 'index'])->name('ranking');
     Route::get('/answer&question', function () { return view('client.answer&question'); })->name('answer&question');
     Route::get('/result-detail', function () { return view('client.result-detail'); })->name('result-detail');
 
