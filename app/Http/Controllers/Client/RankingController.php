@@ -13,7 +13,6 @@ class RankingController extends Controller
     public function index()
     {
         $user = Auth::user();
-
         // Get all users with their average quiz scores
         $rankings = User::select('users.*', DB::raw('AVG(quiz_results.percentage) as avg_score'))
             ->leftJoin('quiz_results', 'users.id', '=', 'quiz_results.user_id')
