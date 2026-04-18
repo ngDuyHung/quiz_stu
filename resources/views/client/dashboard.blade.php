@@ -3,16 +3,16 @@
 @section('title', 'Dashboard - Quiz STU')
 
 @section('content')
-<div class="space-y-10 page-fade">
+<div class="space-y-8 sm:space-y-10 page-fade px-3 sm:px-0">
 
     {{-- ─── Welcome Banner ─── --}}
-    <div class="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6">
+    <div class="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-4 sm:gap-6">
         <div>
-            <span class="text-[11px] font-bold tracking-[0.2em] text-secondary uppercase mb-3 block">Dashboard Overview</span>
-            <h1 class="text-4xl font-extrabold text-primary tracking-tight mb-3">
+            <span class="text-[10px] sm:text-[11px] font-bold tracking-[0.2em] text-secondary uppercase mb-2 sm:mb-3 block">Dashboard Overview</span>
+            <h1 class="text-2xl sm:text-4xl font-extrabold text-primary tracking-tight mb-2 sm:mb-3">
                 Chào, {{ $user->first_name }} {{ $user->last_name }}!
             </h1>
-            <p class="text-slate-500 max-w-xl leading-relaxed">
+            <p class="text-xs sm:text-base text-slate-500 max-w-xl leading-relaxed">
                 @if($stats['active'] > 0)
                     Bạn có <span class="text-primary font-bold">{{ $stats['active'] }} bài thi đang mở</span>.
                     @if($stats['completed'] > 0)
@@ -25,21 +25,21 @@
             </p>
         </div>
         <a href="{{ route('client.exams') }}"
-           class="flex-shrink-0 flex items-center gap-2 px-5 py-2.5 rounded-xl border border-primary text-primary text-sm font-bold hover:bg-primary hover:text-white transition-all">
+           class="flex-shrink-0 flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl border border-primary text-primary text-xs sm:text-sm font-bold hover:bg-primary hover:text-white transition-all">
             <span class="material-symbols-outlined text-base">assignment</span>
             Tất cả bài thi
         </a>
     </div>
 
     {{-- ─── Stats cards ─── --}}
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
         <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-4">
-            <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center flex-shrink-0">
-                <span class="material-symbols-outlined">play_circle</span>
+            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center flex-shrink-0">
+                <span class="material-symbols-outlined text-base sm:text-lg">play_circle</span>
             </div>
             <div>
-                <p class="text-sm text-slate-500 font-medium">Bài thi đang mở</p>
-                <h3 class="text-2xl font-bold text-slate-800">{{ $stats['active'] }}</h3>
+                <p class="text-xs sm:text-sm text-slate-500 font-medium">Bài thi đang mở</p>
+                <h3 class="text-xl sm:text-2xl font-bold text-slate-800">{{ $stats['active'] }}</h3>
             </div>
         </div>
         <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-4">
@@ -65,12 +65,12 @@
     {{-- ─── Active Quizzes with Countdown ─── --}}
     @if($activeQuizzes->isNotEmpty())
     <div>
-        <div class="flex items-center justify-between mb-5">
-            <h2 class="text-2xl font-black text-primary">Bài thi đang mở</h2>
-            <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">{{ $activeQuizzes->count() }} bài</span>
+        <div class="flex items-center justify-between mb-3 sm:mb-5">
+            <h2 class="text-xl sm:text-2xl font-black text-primary">Bài thi đang mở</h2>
+            <span class="text-[9px] sm:text-xs font-bold text-slate-400 uppercase tracking-widest">{{ $activeQuizzes->count() }} bài</span>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
             @foreach($activeQuizzes as $quiz)
                 @php
                     $attemptCount = $quiz->attempt_count;

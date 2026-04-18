@@ -3,11 +3,11 @@
 @section('title', 'Thông tin cá nhân - Quiz STU')
 
 @section('content')
-<div class="max-w-4xl mx-auto space-y-8 page-fade">
+<div class="max-w-4xl mx-auto space-y-6 sm:space-y-8 page-fade px-3 sm:px-0">
 
     <div>
-        <h2 class="text-4xl font-bold text-primary mb-2">Thông tin cá nhân</h2>
-        <p class="text-slate-500">Xem và cập nhật hồ sơ của bạn.</p>
+        <h2 class="text-2xl sm:text-4xl font-bold text-primary mb-2">Thông tin cá nhân</h2>
+        <p class="text-sm sm:text-base text-slate-500">Xem và cập nhật hồ sơ của bạn.</p>
     </div>
 
     {{-- Flash messages --}}
@@ -23,29 +23,29 @@
     @endif
 
     {{-- ─── Profile card ─── --}}
-    <div class="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm">
+    <div class="bg-white rounded-2xl sm:rounded-3xl border border-slate-200 overflow-hidden shadow-sm">
         {{-- Top banner --}}
-        <div class="h-20 bg-gradient-to-r from-primary to-secondary relative">
+        <div class="h-16 sm:h-20 bg-gradient-to-r from-primary to-secondary relative">
             <span class="material-symbols-outlined absolute right-6 bottom-0 translate-y-1/2 opacity-20 text-[5rem] text-white">account_circle</span>
         </div>
 
-        <div class="px-8 pb-8">
+        <div class="px-4 sm:px-8 pb-6 sm:pb-8">
             {{-- Avatar + read-only info --}}
-            <div class="flex flex-col sm:flex-row items-start gap-6 -mt-10 mb-8">
+            <div class="flex flex-col sm:flex-row items-start gap-4 sm:gap-6 -mt-8 sm:-mt-10 mb-6 sm:mb-8">
                 <div class="relative flex-shrink-0">
                     @if($user->photo && file_exists(public_path('storage/' . $user->photo)))
                         <img src="{{ asset('storage/' . $user->photo) }}"
                              alt="Avatar"
-                             class="w-20 h-20 rounded-2xl border-4 border-white shadow-md object-cover">
+                             class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl border-4 border-white shadow-md object-cover">
                     @else
-                        <div class="w-20 h-20 rounded-2xl border-4 border-white shadow-md bg-primary/10 flex items-center justify-center">
-                            <span class="material-symbols-outlined text-4xl text-primary/40">person</span>
+                        <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl border-4 border-white shadow-md bg-primary/10 flex items-center justify-center">
+                            <span class="material-symbols-outlined text-2xl sm:text-4xl text-primary/40">person</span>
                         </div>
                     @endif
                 </div>
-                <div class="mt-10 sm:mt-12">
-                    <h3 class="text-2xl font-extrabold text-primary">{{ $user->last_name }} {{ $user->first_name }}</h3>
-                    <p class="text-slate-500 text-sm mt-0.5">{{ $user->email }}</p>
+                <div class="mt-8 sm:mt-10 sm:mt-12">
+                    <h3 class="text-xl sm:text-2xl font-extrabold text-primary">{{ $user->last_name }} {{ $user->first_name }}</h3>
+                    <p class="text-xs sm:text-sm text-slate-500 mt-0.5">{{ $user->email }}</p>
                     @if($user->student_code)
                         <span class="inline-block mt-1 px-2 py-0.5 bg-primary/10 text-primary rounded-full text-xs font-bold font-mono">MSSV: {{ $user->student_code }}</span>
                     @endif
@@ -53,7 +53,7 @@
             </div>
 
             {{-- Read-only info grid --}}
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8 p-5 bg-slate-50 rounded-2xl">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-6 sm:mb-8 p-4 sm:p-5 bg-slate-50 rounded-2xl">
                 @php
                     $infoFields = [
                         ['label' => 'Khoa', 'value' => $user->faculty->name ?? '—', 'icon' => 'school'],
@@ -64,13 +64,13 @@
                     ];
                 @endphp
                 @foreach($infoFields as $field)
-                <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                        <span class="material-symbols-outlined text-primary text-base">{{ $field['icon'] }}</span>
+                <div class="flex items-center gap-2 sm:gap-3">
+                    <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                        <span class="material-symbols-outlined text-primary text-sm">{{ $field['icon'] }}</span>
                     </div>
                     <div>
-                        <p class="text-[10px] uppercase tracking-wider font-bold text-slate-400">{{ $field['label'] }}</p>
-                        <p class="text-sm font-semibold text-slate-700">{{ $field['value'] }}</p>
+                        <p class="text-[9px] sm:text-[10px] uppercase tracking-wider font-bold text-slate-400">{{ $field['label'] }}</p>
+                        <p class="text-xs sm:text-sm font-semibold text-slate-700">{{ $field['value'] }}</p>
                     </div>
                 </div>
                 @endforeach
@@ -80,33 +80,33 @@
             <form method="POST" action="{{ route('client.profile.update') }}" enctype="multipart/form-data">
                 @csrf
                 @method('PATCH')
-                <h4 class="font-bold text-primary mb-4 flex items-center gap-2 text-sm uppercase tracking-wider">
+                <h4 class="font-bold text-primary mb-4 flex items-center gap-2 text-xs sm:text-sm uppercase tracking-wider">
                     <span class="material-symbols-outlined text-base">edit</span>Cập nhật thông tin
                 </h4>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-5">
 
                     {{-- Phone --}}
                     <div>
-                        <label class="block text-xs font-bold text-slate-600 mb-1.5 uppercase tracking-wider">Số điện thoại</label>
+                        <label class="block text-[9px] sm:text-xs font-bold text-slate-600 mb-1.5 uppercase tracking-wider">Số điện thoại</label>
                         <input type="tel" name="phone"
                                value="{{ old('phone', $user->phone) }}"
                                placeholder="0901 234 567"
-                               class="w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition-colors {{ $errors->has('phone') ? 'border-red-400' : 'border-slate-200' }}">
+                               class="w-full border rounded-xl px-4 py-2.5 text-xs sm:text-sm focus:outline-none focus:border-primary transition-colors {{ $errors->has('phone') ? 'border-red-400' : 'border-slate-200' }}">
                         @error('phone') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                     </div>
 
                     {{-- Birthdate --}}
                     <div>
-                        <label class="block text-xs font-bold text-slate-600 mb-1.5 uppercase tracking-wider">Ngày sinh</label>
+                        <label class="block text-[9px] sm:text-xs font-bold text-slate-600 mb-1.5 uppercase tracking-wider">Ngày sinh</label>
                         <input type="date" name="birthdate"
                                value="{{ old('birthdate', $user->birthdate?->format('Y-m-d')) }}"
-                               class="w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition-colors {{ $errors->has('birthdate') ? 'border-red-400' : 'border-slate-200' }}">
+                               class="w-full border rounded-xl px-4 py-2.5 text-xs sm:text-sm focus:outline-none focus:border-primary transition-colors {{ $errors->has('birthdate') ? 'border-red-400' : 'border-slate-200' }}">
                         @error('birthdate') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                     </div>
 
                     {{-- Photo --}}
                     <div class="sm:col-span-2">
-                        <label class="block text-xs font-bold text-slate-600 mb-1.5 uppercase tracking-wider">Ảnh đại diện</label>
+                        <label class="block text-[9px] sm:text-xs font-bold text-slate-600 mb-1.5 uppercase tracking-wider">Ảnh đại diện</label>
                         <div class="flex items-center gap-4">
                             <label class="cursor-pointer flex items-center gap-3 px-4 py-2.5 border border-dashed border-slate-300 rounded-xl hover:border-primary transition-colors group">
                                 <span class="material-symbols-outlined text-slate-400 group-hover:text-primary transition-colors">upload</span>
@@ -119,9 +119,9 @@
                     </div>
                 </div>
 
-                <div class="mt-6 flex justify-end">
+                <div class="mt-4 sm:mt-6 flex justify-end">
                     <button type="submit"
-                            class="px-8 py-3 bg-primary text-white rounded-xl font-bold text-sm hover:-translate-y-0.5 transition-all shadow-md hover:shadow-primary/30">
+                            class="px-6 sm:px-8 py-2.5 sm:py-3 bg-primary text-white rounded-xl font-bold text-xs sm:text-sm hover:-translate-y-0.5 transition-all shadow-md hover:shadow-primary/30">
                         Lưu thay đổi
                     </button>
                 </div>
@@ -130,8 +130,8 @@
     </div>
 
     {{-- ─── Change Password ─── --}}
-    <div id="password-section" class="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm">
-        <h4 class="font-bold text-primary mb-6 flex items-center gap-2 text-sm uppercase tracking-wider">
+    <div id="password-section" class="bg-white rounded-2xl sm:rounded-3xl border border-slate-200 p-4 sm:p-8 shadow-sm">
+        <h4 class="font-bold text-primary mb-4 sm:mb-6 flex items-center gap-2 text-xs sm:text-sm uppercase tracking-wider">
             <span class="material-symbols-outlined text-base">lock</span>Đổi mật khẩu
         </h4>
 
@@ -148,21 +148,21 @@
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-slate-600 mb-1.5 uppercase tracking-wider">Mật khẩu mới</label>
+                    <label class="block text-[9px] sm:text-xs font-bold text-slate-600 mb-1.5 uppercase tracking-wider">Mật khẩu mới</label>
                     <input type="password" name="new_password" autocomplete="new-password"
-                           class="w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition-colors {{ $errors->has('new_password') ? 'border-red-400' : 'border-slate-200' }}">
+                           class="w-full border rounded-xl px-4 py-2.5 text-xs sm:text-sm focus:outline-none focus:border-primary transition-colors {{ $errors->has('new_password') ? 'border-red-400' : 'border-slate-200' }}">
                     @error('new_password') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-slate-600 mb-1.5 uppercase tracking-wider">Xác nhận mật khẩu mới</label>
+                    <label class="block text-[9px] sm:text-xs font-bold text-slate-600 mb-1.5 uppercase tracking-wider">Xác nhận mật khẩu mới</label>
                     <input type="password" name="new_password_confirmation" autocomplete="new-password"
-                           class="w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition-colors">
+                           class="w-full border rounded-xl px-4 py-2.5 text-xs sm:text-sm focus:outline-none focus:border-primary transition-colors">
                 </div>
 
-                <div class="pt-2">
+                <div class="pt-1 sm:pt-2">
                     <button type="submit"
-                            class="px-8 py-3 bg-primary text-white rounded-xl font-bold text-sm hover:-translate-y-0.5 transition-all shadow-md hover:shadow-primary/30">
+                            class="px-6 sm:px-8 py-2.5 sm:py-3 bg-primary text-white rounded-xl font-bold text-xs sm:text-sm hover:-translate-y-0.5 transition-all shadow-md hover:shadow-primary/30">
                         Đổi mật khẩu
                     </button>
                 </div>

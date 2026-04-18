@@ -3,10 +3,10 @@
 @section('title', 'Danh sách bài thi - Quiz STU')
 
 @section('content')
-    <div class="space-y-8 page-fade">
-        <div class="mb-10">
-            <h2 class="text-4xl font-bold text-primary mb-2">Danh sách Bài Thi</h2>
-            <p class="text-slate-500">Tất cả các bài thi đang mở và các kỳ thi đã qua</p>
+    <div class="space-y-6 sm:space-y-8 page-fade px-3 sm:px-0">
+        <div class="mb-6 sm:mb-10">
+            <h2 class="text-2xl sm:text-4xl font-bold text-primary mb-2">Danh sách Bài Thi</h2>
+            <p class="text-xs sm:text-base text-slate-500">Tất cả các bài thi đang mở và các kỳ thi đã qua</p>
         </div>
 
         {{-- Flash messages --}}
@@ -22,14 +22,14 @@
         @endforeach
 
         {{-- Stats --}}
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-4">
-                <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
-                    <span class="material-symbols-outlined">play_circle</span>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-10">
+            <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-3 sm:gap-4">
+                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-base sm:text-lg">play_circle</span>
                 </div>
                 <div>
-                    <p class="text-sm text-slate-500 font-medium">Đang mở</p>
-                    <h3 class="text-2xl font-bold text-slate-800">{{ $stats['active'] }}</h3>
+                    <p class="text-xs sm:text-sm text-slate-500 font-medium">Đang mở</p>
+                    <h3 class="text-xl sm:text-2xl font-bold text-slate-800">{{ $stats['active'] }}</h3>
                 </div>
             </div>
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-4">
