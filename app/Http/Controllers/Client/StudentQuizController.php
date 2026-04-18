@@ -156,14 +156,15 @@ class StudentQuizController extends Controller
             if ($cl->level_id) {
                 $query->where('level_id', $cl->level_id);
             }
-            $selectedQuestions = $selectedQuestions->merge(
-                $query->inRandomOrder()->limit($cl->question_count)->get()
-            );
+            
+            // Lấy tối đa số lượng có sẵn nếu ngân hàng đề ít hơn yêu cầu
+            $questions = $query->inRandomOrder()->limit($cl->question_count)->get();
+            $selectedQuestions = $selectedQuestions->merge($questions);
         }
 
         if ($selectedQuestions->isEmpty()) {
             return redirect()->route('client.exams')
-                ->with('error', 'Không tìm thấy câu hỏi phù hợp cho bài thi này.');
+                ->with('error', 'Không tìm thấy câu hỏi phù hợp trong ngân hàng đề. Vui lòng liên hệ giảng viên.');
         }
 
         // 7. Xáo trộn thứ tự câu hỏi nếu cần
@@ -245,10 +246,12 @@ class StudentQuizController extends Controller
         $questionsData = $resultAnswers->map(fn ($ra) => [
             'ra_id'              => $ra->id,
             'question_id'        => $ra->question_id,
+            'type'               => $ra->question->type, // Thêm type
             'content'            => $ra->question->content,
             'options'            => $ra->question->options->map(fn ($opt) => [
-                'id'      => $opt->id,
-                'content' => $opt->content,
+                'id'         => $opt->id,
+                'content'    => $opt->content,
+                'match_text' => $opt->match_text, // Thêm match_text cho ghép cặp
             ])->values(),
             'selected_option_id' => $ra->selected_option_id,
         ])->values();

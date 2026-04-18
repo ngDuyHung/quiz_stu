@@ -152,6 +152,9 @@ class StudentListController extends Controller
             'class_id' => 'nullable',
             'group_id' => 'nullable',
             'phone' => 'nullable|regex:/^[0-9]{10,11}$/',
+            'birthdate' => 'nullable|date|before_or_equal:-15 years|after_or_equal:-90 years',
+            'academic_year' => 'nullable|string|max:100',
+            'degree_type' => 'nullable|string|max:100',
             'password' => 'nullable',
             'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
         ]);
@@ -161,7 +164,8 @@ class StudentListController extends Controller
         }
 
         // Mặc định password là student_code
-        $data['password'] = Hash::make($data['student_code']);
+        // Model User đã có casts ['password' => 'hashed'], gán plaintext Laravel tự băm.
+        $data['password'] = $data['student_code'];
         $data['role'] = 0; // Role sinh viên
         $data['status'] = 1; // Active by default
 
@@ -186,6 +190,10 @@ class StudentListController extends Controller
             'faculty_id' => 'nullable',
             'class_id' => 'nullable',
             'group_id' => 'nullable',
+            'birthdate' => 'nullable|date|before_or_equal:-15 years|after_or_equal:-90 years',
+            'academic_year' => 'nullable|string|max:100',
+            'degree_type' => 'nullable|string|max:100',
+            'status' => 'required|in:0,1',
         ]);
 
         if ($request->hasFile('photo')) {
@@ -214,13 +222,13 @@ class StudentListController extends Controller
     /**
      * Reset mật khẩu về mặc định
      */
-    public function resetPassword($id)
+    public function resetPassword(User $student)
     {
-        $student = User::findOrFail($id);
-        $student->password = Hash::make($student->student_code);
+        // Model User đã có casts 'password' => 'hashed', gán plaintext Laravel tự băm.
+        $student->password = $student->student_code; 
         $student->save();
 
-        if (request()->expectsJson()) {
+        if (request()->wantsJson()) {
             return response()->json([
                 'success' => true,
                 'message' => 'Đã reset mật khẩu về mã sinh viên!'

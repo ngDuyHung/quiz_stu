@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class QuizCategoryLevel extends Model
 {
+    public $timestamps = false;
+
     protected $fillable = [
         'quiz_id',
         'category_id',

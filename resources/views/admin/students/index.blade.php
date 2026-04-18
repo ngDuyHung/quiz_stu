@@ -266,7 +266,8 @@ document.querySelectorAll('.toggle-status').forEach(btn => {
                 method: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
                 }
             })
             .then(res => res.json())
@@ -330,7 +331,7 @@ document.querySelectorAll('.btn-reset-password').forEach(btn => {
         
         Swal.fire({
             title: 'Reset mật khẩu?',
-            text: 'Sinh viên: ' + name + '\nMật khẩu sẽ được đặt thành: ' + studentCode + ' hoặc 12345678',
+            text: 'Sinh viên: ' + name + '\nMật khẩu sẽ được đặt lại về MSSV: ' + studentCode,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Reset',
@@ -342,7 +343,8 @@ document.querySelectorAll('.btn-reset-password').forEach(btn => {
                 method: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
                 }
             })
             .then(res => res.json())

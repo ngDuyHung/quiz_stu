@@ -101,15 +101,16 @@ class QuestionsandAnswersController extends Controller
 
                 $isCorrect = isset($option['is_correct']) ? (bool)$option['is_correct'] : false;
 
-                // Validation: single type only 1 correct answer
-                if ($validated['type'] === 'single' && $isCorrect) {
+                if ($isCorrect) {
                     $correctCount++;
-                    if ($correctCount > 1) {
-                        DB::rollBack();
-                        return redirect()->back()
-                            ->withInput()
-                            ->with('error', 'Loại "Một đáp án" chỉ được có 1 đáp án đúng!');
-                    }
+                }
+
+                // Validation: single type only 1 correct answer
+                if ($validated['type'] === 'single' && $correctCount > 1) {
+                    DB::rollBack();
+                    return redirect()->back()
+                        ->withInput()
+                        ->with('error', 'Loại "Một đáp án" chỉ được có 1 đáp án đúng!');
                 }
 
                 QuestionOption::create([
@@ -220,15 +221,16 @@ class QuestionsandAnswersController extends Controller
 
                 $isCorrect = isset($option['is_correct']) ? (bool)$option['is_correct'] : false;
 
-                // Validation: single type only 1 correct answer
-                if ($validated['type'] === 'single' && $isCorrect) {
+                if ($isCorrect) {
                     $correctCount++;
-                    if ($correctCount > 1) {
-                        DB::rollBack();
-                        return redirect()->back()
-                            ->withInput()
-                            ->with('error', 'Loại "Một đáp án" chỉ được có 1 đáp án đúng!');
-                    }
+                }
+
+                // Validation: single type only 1 correct answer
+                if ($validated['type'] === 'single' && $correctCount > 1) {
+                    DB::rollBack();
+                    return redirect()->back()
+                        ->withInput()
+                        ->with('error', 'Loại "Một đáp án" chỉ được có 1 đáp án đúng!');
                 }
 
                 if (isset($option['id']) && $option['id']) {

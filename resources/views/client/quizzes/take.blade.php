@@ -310,22 +310,79 @@ function renderQuestion() {
     const total            = QUIZ.questions.length;
     const isLast           = currentIdx === total - 1;
 
-    const optionsHtml = q.options.map((opt, i) => {
-        const letter    = String.fromCharCode(65 + i);
-        const isSelected = opt.id === selectedOptionId;
-        const selectedCls = isSelected ? 'option-selected' : '';
+    let optionsHtml = '';
 
-        return `
-        <label class="option-label ${selectedCls} group flex items-center p-5 rounded-2xl border-2 border-slate-100 cursor-pointer select-none">
-            <input type="radio" name="q_${q.question_id}" value="${opt.id}"
-                   class="hidden" ${isSelected ? 'checked' : ''}
-                   onchange="selectOption(${q.question_id}, ${opt.id})" />
-            <div class="option-badge w-10 h-10 rounded-xl flex-shrink-0 flex items-center justify-center font-extrabold text-sm bg-slate-100 text-slate-500 group-hover:bg-primary/10 group-hover:text-primary mr-4 transition-all">
-                ${letter}
+    if (q.type === 'match') {
+        // Loại Ghép cặp: Hiển thị Vế trái và Vế phải
+        optionsHtml = `
+            <div class="space-y-4">
+                <p class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-4">Ghép cặp các vế tương ứng:</p>
+                <div class="grid grid-cols-1 gap-3">
+                    ${q.options.map((opt, i) => {
+                        const isSelected = opt.id === selectedOptionId;
+                        const selectedCls = isSelected ? 'option-selected' : '';
+                        return `
+                            <label class="option-label ${selectedCls} group flex items-center p-4 rounded-2xl border-2 border-slate-100 cursor-pointer select-none">
+                                <input type="radio" name="q_${q.question_id}" value="${opt.id}"
+                                       class="hidden" ${isSelected ? 'checked' : ''}
+                                       onchange="selectOption(${q.question_id}, ${opt.id})" />
+                                <div class="flex-1">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center">
+                                            <div class="option-badge w-8 h-8 rounded-lg flex-shrink-0 flex items-center justify-center font-bold text-xs bg-slate-100 text-slate-500 group-hover:bg-primary/10 group-hover:text-primary mr-3 transition-all">
+                                                ${i + 1}
+                                            </div>
+                                            <span class="text-base font-medium text-slate-700">${opt.content}</span>
+                                        </div>
+                                        <div class="flex items-center gap-3">
+                                            <span class="material-symbols-outlined text-slate-300">link</span>
+                                            <span class="px-4 py-2 rounded-xl bg-slate-50 text-primary font-bold border border-slate-200 text-sm">
+                                                ${opt.match_text}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </label>
+                        `;
+                    }).join('')}
+                </div>
             </div>
-            <span class="text-base font-medium leading-snug ${isSelected ? 'text-primary font-bold' : 'text-slate-700'}">${escapeHtml(opt.content)}</span>
-        </label>`;
-    }).join('');
+        `;
+    } else if (q.type === 'multiple') {
+        // Loại Nhiều đáp án (Checkbox) - Tạm thời xử lý giống single nhưng đổi UI nếu cần
+        optionsHtml = q.options.map((opt, i) => {
+            const letter    = String.fromCharCode(65 + i);
+            const isSelected = opt.id === selectedOptionId;
+            const selectedCls = isSelected ? 'option-selected' : '';
+            return `
+            <label class="option-label ${selectedCls} group flex items-center p-5 rounded-2xl border-2 border-slate-100 cursor-pointer select-none">
+                <input type="checkbox" name="q_${q.question_id}" value="${opt.id}"
+                       class="hidden" ${isSelected ? 'checked' : ''}
+                       onchange="selectOption(${q.question_id}, ${opt.id})" />
+                <div class="option-badge w-10 h-10 rounded-xl flex-shrink-0 flex items-center justify-center font-extrabold text-sm bg-slate-100 text-slate-500 group-hover:bg-primary/10 group-hover:text-primary mr-4 transition-all">
+                    ${letter}
+                </div>
+                <span class="text-base font-medium leading-snug ${isSelected ? 'text-primary font-bold' : 'text-slate-700'}">${opt.content}</span>
+            </label>`;
+        }).join('');
+    } else {
+        // Mặc định: Trắc nghiệm 1 đáp án (Single)
+        optionsHtml = q.options.map((opt, i) => {
+            const letter    = String.fromCharCode(65 + i);
+            const isSelected = opt.id === selectedOptionId;
+            const selectedCls = isSelected ? 'option-selected' : '';
+            return `
+            <label class="option-label ${selectedCls} group flex items-center p-5 rounded-2xl border-2 border-slate-100 cursor-pointer select-none">
+                <input type="radio" name="q_${q.question_id}" value="${opt.id}"
+                       class="hidden" ${isSelected ? 'checked' : ''}
+                       onchange="selectOption(${q.question_id}, ${opt.id})" />
+                <div class="option-badge w-10 h-10 rounded-xl flex-shrink-0 flex items-center justify-center font-extrabold text-sm bg-slate-100 text-slate-500 group-hover:bg-primary/10 group-hover:text-primary mr-4 transition-all">
+                    ${letter}
+                </div>
+                <span class="text-base font-medium leading-snug ${isSelected ? 'text-primary font-bold' : 'text-slate-700'}">${opt.content}</span>
+            </label>`;
+        }).join('');
+    }
 
     container.innerHTML = `
     <div class="bg-white rounded-[2.5rem] shadow-sm border border-slate-200/60 overflow-hidden page-fade">
@@ -340,6 +397,9 @@ function renderQuestion() {
                 <div class="flex items-center gap-3">
                     <span class="px-4 py-1.5 rounded-xl bg-primary/10 text-primary text-xs font-extrabold uppercase tracking-wider">
                         Câu ${currentIdx + 1} / ${total}
+                    </span>
+                    <span class="px-3 py-1 rounded-lg bg-slate-100 text-slate-500 text-[10px] font-bold uppercase tracking-tight">
+                        ${q.type === 'match' ? 'Ghép cặp' : (q.type === 'multiple' ? 'Nhiều đáp án' : 'Một đáp án')}
                     </span>
                     ${selectedOptionId ? '<span class="flex items-center gap-1 text-xs font-bold text-green-600"><span class="material-symbols-outlined text-sm" style="font-size:14px;font-variation-settings:\'FILL\' 1">check_circle</span> Đã trả lời</span>' : ''}
                 </div>

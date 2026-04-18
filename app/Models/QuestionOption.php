@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class QuestionOption extends Model
 {
+    public $timestamps = false;
+
     protected $fillable = [
         'question_id',
         'content',

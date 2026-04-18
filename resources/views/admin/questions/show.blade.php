@@ -185,9 +185,9 @@
                     {{-- Timeline --}}
                     <div class="mt-4 pt-3 border-top">
                         <small class="text-muted">
-                            <i class="fas fa-clock me-1"></i>Tạo: {{ $question->created_at->format('d/m/Y H:i') }}
-                            @if($question->updated_at != $question->created_at)
-                                | Cập nhật: {{ $question->updated_at->format('d/m/Y H:i') }}
+                            <i class="fas fa-clock me-1"></i>Tạo: {{ $question->created_at?->format('d/m/Y H:i') }}
+                            @if($question->updated_at && $question->updated_at != $question->created_at)
+                                | Cập nhật: {{ $question->updated_at?->format('d/m/Y H:i') }}
                             @endif
                         </small>
                     </div>

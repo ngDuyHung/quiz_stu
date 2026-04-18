@@ -32,9 +32,18 @@ class AuthController extends Controller
             'password' => 'required'
         ]);
 
-        if (Auth::attempt($credentials)) {
+        // Thêm điều kiện status = 1 để chỉ cho phép tài khoản đang hoạt động đăng nhập
+        if (Auth::attempt(['email' => $credentials['email'], 'password' => $credentials['password'], 'status' => 1])) {
             $request->session()->regenerate();
             return $this->redirectBasedOnRole();
+        }
+
+        // Kiểm tra xem email có tồn tại nhưng bị khóa không để đưa ra thông báo chính xác
+        $user = User::where('email', $credentials['email'])->first();
+        if ($user && $user->status == 0) {
+            return back()->withErrors([
+                'email' => 'Tài khoản của bạn đã bị khóa. Vui lòng liên hệ quản trị viên.'
+            ])->onlyInput('email');
         }
 
         return back()->withErrors([
