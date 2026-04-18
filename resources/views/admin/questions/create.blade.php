@@ -3,7 +3,7 @@
 @section('title', 'Tạo câu hỏi mới')
 
 @section('content')
-<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js"></script>
+<script src="{{ asset('js/tinymce/tinymce.min.js') }}"></script>
 
 <div class="container-fluid mt-4">
     <div class="row">
@@ -90,7 +90,7 @@
                         <div class="mb-3">
                             <label class="form-label">Nội dung câu hỏi <span class="text-danger">*</span></label>
                             <textarea name="content" id="questionContent" class="form-control @error('content') is-invalid @enderror" 
-                                      rows="5" required>{{ old('content') }}</textarea>
+                                      rows="5">{!! old('content') !!}</textarea>
                             @error('content')
                                 <div class="invalid-feedback d-block">{{ $message }}</div>
                             @enderror
@@ -181,14 +181,19 @@
         selector: '#questionContent',
         plugins: 'lists link image code',
         toolbar: 'formatselect | bold italic underline | bullist numlist | link image code',
-        menubar: false
+        menubar: false,
+        relative_urls: false,
+        remove_script_host: false,
+        convert_urls: true
     });
 
     const questionType = document.getElementById('questionType');
     const optionsContainer = document.getElementById('optionsContainer');
     const addOptionBtn = document.getElementById('addOption');
-    const typeHelpText = document.getElementById('typeHelpText');
+    const typeHelpText = document.getElementById('typeHelp'); // Corrected from typeHelpText
+    const typeHelpSpan = document.getElementById('typeHelpText');
     let optionCount = 0;
+    const oldOptions = @json(old('options', []));
 
     const typeHelpTexts = {
         single: '✓ Chọn 1 đáp án đúng | ○ Học sinh chọn 1 trong các lựa chọn',
@@ -198,7 +203,7 @@
 
     function updateTypeHelp() {
         const type = questionType.value;
-        typeHelpText.textContent = typeHelpTexts[type] || '';
+        typeHelpSpan.textContent = typeHelpTexts[type] || '';
     }
 
     function createOptionElement(optionIndex = null) {
@@ -292,6 +297,11 @@
 
     // Form validation
     document.getElementById('questionForm').addEventListener('submit', function(e) {
+        // Sync TinyMCE content to textarea
+        if (typeof tinymce !== 'undefined') {
+            tinymce.triggerSave();
+        }
+
         const type = questionType.value;
         const options = Array.from(document.querySelectorAll('[name^="options["][name$="][content]"]'));
         const correctOptions = Array.from(document.querySelectorAll('[name^="options["][name$="][is_correct]"]:checked'));

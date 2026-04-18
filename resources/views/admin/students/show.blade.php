@@ -139,9 +139,9 @@ function toggleStatus() {
             method: 'POST',
             headers: {
                 'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                'Content-Type': 'application/json'
-            }
-        })
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }        })
         .then(res => res.json())
         .then(data => {
             Swal.fire({
@@ -159,7 +159,7 @@ function toggleStatus() {
 function resetPassword() {
     Swal.fire({
         title: 'Reset mật khẩu?',
-        text: 'Mật khẩu sẽ được đặt lại về: {{ $student->student_code }} hoặc 12345678',
+        text: 'Mật khẩu sẽ được đặt lại về mã sinh viên: {{ $student->student_code }}',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Reset',
@@ -171,9 +171,9 @@ function resetPassword() {
             method: 'POST',
             headers: {
                 'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                'Content-Type': 'application/json'
-            }
-        })
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }        })
         .then(res => res.json())
         .then(data => {
             Swal.fire({
