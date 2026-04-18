@@ -21,115 +21,43 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100">
-                    <tr class="hover:bg-primary/5 transition-colors">
+                    @forelse($rankings as $ranking)
+                    <tr class="hover:bg-primary/5 transition-colors {{ $ranking->is_current_user ? 'bg-primary/5' : '' }}">
                         <td class="px-8 py-6">
                             <div class="flex items-center justify-center">
-                                <span class="w-8 h-8 rounded-full bg-yellow-100 text-yellow-600 font-bold flex items-center justify-center text-sm">🥇</span>
+                                @if($ranking->rank === 1)
+                                    <span class="w-8 h-8 rounded-full bg-yellow-100 text-yellow-600 font-bold flex items-center justify-center text-sm">🥇</span>
+                                @elseif($ranking->rank === 2)
+                                    <span class="w-8 h-8 rounded-full bg-gray-100 text-gray-600 font-bold flex items-center justify-center text-sm">🥈</span>
+                                @elseif($ranking->rank === 3)
+                                    <span class="w-8 h-8 rounded-full bg-orange-100 text-orange-600 font-bold flex items-center justify-center text-sm">🥉</span>
+                                @else
+                                    <span class="w-8 h-8 rounded-full {{ $ranking->is_current_user ? 'bg-primary text-white' : 'bg-slate-100 text-slate-600' }} font-bold flex items-center justify-center text-sm">{{ $ranking->rank }}</span>
+                                @endif
                             </div>
                         </td>
                         <td class="px-8 py-6">
                             <div class="flex items-center gap-3">
-                                <img src="https://i.pravatar.cc/150?u=user1" class="w-10 h-10 rounded-full object-cover border-2 border-primary/10" />
+                                <img src="{{ $ranking->avatar }}" class="w-10 h-10 rounded-full object-cover border-2 {{ $ranking->is_current_user ? 'border-primary' : 'border-primary/10' }}" />
                                 <div>
-                                    <p class="font-bold text-slate-800">Nguyễn Văn A</p>
-                                    <p class="text-xs text-slate-400">Kỹ Sư Phần Mềm</p>
+                                    <p class="font-bold {{ $ranking->is_current_user ? 'text-primary' : 'text-slate-800' }}">{{ $ranking->name }}</p>
+                                    <p class="text-xs text-slate-400">{{ $ranking->major }}</p>
                                 </div>
                             </div>
                         </td>
-                        <td class="px-8 py-6 text-sm font-mono text-slate-600">20240001</td>
-                        <td class="px-8 py-6 text-sm text-slate-600">CNTT-01</td>
+                        <td class="px-8 py-6 text-sm font-mono text-slate-600">{{ $ranking->student_id }}</td>
+                        <td class="px-8 py-6 text-sm text-slate-600">{{ $ranking->class }}</td>
                         <td class="px-8 py-6 text-right">
-                            <span class="px-3 py-1 rounded-full bg-green-100 text-green-700 font-bold text-sm">9.2</span>
+                            <span class="px-3 py-1 rounded-full {{ $ranking->is_current_user ? 'bg-primary text-white' : 'bg-green-100 text-green-700' }} font-bold text-sm">{{ $ranking->avg_score }}</span>
                         </td>
                     </tr>
-
-                    <tr class="hover:bg-primary/5 transition-colors">
-                        <td class="px-8 py-6">
-                            <div class="flex items-center justify-center">
-                                <span class="w-8 h-8 rounded-full bg-gray-100 text-gray-600 font-bold flex items-center justify-center text-sm">🥈</span>
-                            </div>
-                        </td>
-                        <td class="px-8 py-6">
-                            <div class="flex items-center gap-3">
-                                <img src="https://i.pravatar.cc/150?u=user2" class="w-10 h-10 rounded-full object-cover border-2 border-primary/10" />
-                                <div>
-                                    <p class="font-bold text-slate-800">Trần Thị B</p>
-                                    <p class="text-xs text-slate-400">Web Developer</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-8 py-6 text-sm font-mono text-slate-600">20240002</td>
-                        <td class="px-8 py-6 text-sm text-slate-600">CNTT-01</td>
-                        <td class="px-8 py-6 text-right">
-                            <span class="px-3 py-1 rounded-full bg-blue-100 text-blue-700 font-bold text-sm">8.9</span>
+                    @empty
+                    <tr>
+                        <td colspan="5" class="px-8 py-8 text-center text-slate-500">
+                            Chưa có dữ liệu xếp hạng.
                         </td>
                     </tr>
-
-                    <tr class="hover:bg-primary/5 transition-colors">
-                        <td class="px-8 py-6">
-                            <div class="flex items-center justify-center">
-                                <span class="w-8 h-8 rounded-full bg-orange-100 text-orange-600 font-bold flex items-center justify-center text-sm">🥉</span>
-                            </div>
-                        </td>
-                        <td class="px-8 py-6">
-                            <div class="flex items-center gap-3">
-                                <img src="https://i.pravatar.cc/150?u=user3" class="w-10 h-10 rounded-full object-cover border-2 border-primary/10" />
-                                <div>
-                                    <p class="font-bold text-slate-800">Lê Văn C</p>
-                                    <p class="text-xs text-slate-400">Data Scientist</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-8 py-6 text-sm font-mono text-slate-600">20240003</td>
-                        <td class="px-8 py-6 text-sm text-slate-600">CNTT-02</td>
-                        <td class="px-8 py-6 text-right">
-                            <span class="px-3 py-1 rounded-full bg-purple-100 text-purple-700 font-bold text-sm">8.7</span>
-                        </td>
-                    </tr>
-
-                    <tr class="hover:bg-primary/5 transition-colors bg-primary/5">
-                        <td class="px-8 py-6">
-                            <div class="flex items-center justify-center">
-                                <span class="w-8 h-8 rounded-full bg-primary text-white font-bold flex items-center justify-center text-sm">4</span>
-                            </div>
-                        </td>
-                        <td class="px-8 py-6">
-                            <div class="flex items-center gap-3">
-                                <img src="https://i.pravatar.cc/150?u=alex" class="w-10 h-10 rounded-full object-cover border-2 border-primary" />
-                                <div>
-                                    <p class="font-bold text-primary">ALEX NGUYEN (Bạn)</p>
-                                    <p class="text-xs text-slate-400">Full Stack Dev</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-8 py-6 text-sm font-mono text-slate-600">20240001</td>
-                        <td class="px-8 py-6 text-sm text-slate-600">CNTT-01</td>
-                        <td class="px-8 py-6 text-right">
-                            <span class="px-3 py-1 rounded-full bg-primary text-white font-bold text-sm">8.8</span>
-                        </td>
-                    </tr>
-
-                    <tr class="hover:bg-primary/5 transition-colors">
-                        <td class="px-8 py-6">
-                            <div class="flex items-center justify-center">
-                                <span class="w-8 h-8 rounded-full bg-slate-100 text-slate-600 font-bold flex items-center justify-center text-sm">5</span>
-                            </div>
-                        </td>
-                        <td class="px-8 py-6">
-                            <div class="flex items-center gap-3">
-                                <img src="https://i.pravatar.cc/150?u=user5" class="w-10 h-10 rounded-full object-cover border-2 border-primary/10" />
-                                <div>
-                                    <p class="font-bold text-slate-800">Phạm Hoàng D</p>
-                                    <p class="text-xs text-slate-400">Mobile Dev</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-8 py-6 text-sm font-mono text-slate-600">20240005</td>
-                        <td class="px-8 py-6 text-sm text-slate-600">CNTT-02</td>
-                        <td class="px-8 py-6 text-right">
-                            <span class="px-3 py-1 rounded-full bg-slate-100 text-slate-700 font-bold text-sm">8.5</span>
-                        </td>
-                    </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
@@ -140,8 +68,8 @@
                     <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Điểm TB Cao Nhất</p>
                     <span class="material-symbols-outlined text-primary text-2xl">trending_up</span>
                 </div>
-                <p class="text-3xl font-bold text-primary">9.2</p>
-                <p class="text-xs text-slate-500 mt-2">Nguyễn Văn A</p>
+                <p class="text-3xl font-bold text-primary">{{ $stats['highest_score'] }}</p>
+                <p class="text-xs text-slate-500 mt-2">{{ $stats['highest_name'] }}</p>
             </div>
 
             <div class="bg-white border border-slate-200 p-8 rounded-[2rem] shadow-sm">
@@ -149,7 +77,7 @@
                     <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Điểm TB Trung Bình</p>
                     <span class="material-symbols-outlined text-secondary text-2xl">bar_chart</span>
                 </div>
-                <p class="text-3xl font-bold text-secondary">8.7</p>
+                <p class="text-3xl font-bold text-secondary">{{ $stats['average_score'] }}</p>
                 <p class="text-xs text-slate-500 mt-2">Toàn khối CNTT</p>
             </div>
 
@@ -158,8 +86,8 @@
                     <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Vị Trí Của Bạn</p>
                     <span class="material-symbols-outlined text-primary text-2xl">emoji_events</span>
                 </div>
-                <p class="text-3xl font-bold text-primary">4/150</p>
-                <p class="text-xs text-slate-500 mt-2">Top 3% sinh viên</p>
+                <p class="text-3xl font-bold text-primary">{{ $stats['current_user_rank'] ?? 'N/A' }}/{{ $stats['total_students'] }}</p>
+                <p class="text-xs text-slate-500 mt-2">Điểm: {{ $stats['current_user_score'] }}</p>
             </div>
         </div>
     </div>

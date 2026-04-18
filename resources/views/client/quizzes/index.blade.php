@@ -99,7 +99,7 @@
     @include('client.partials.sidebar')
     @include('client.partials.header')
 
-    <main class="ml-64 pt-24 px-8 pb-12">
+    <main class="ml-0 md:ml-64 pt-14 md:pt-24 px-3 md:px-8 pb-12">
         @yield('content')
     </main>
 
@@ -114,7 +114,7 @@
             }
         });
     </script>
-    @stack('scripts')
+    @include('client.partials.mobile-menu-script')
 </body>
 
 </html>
