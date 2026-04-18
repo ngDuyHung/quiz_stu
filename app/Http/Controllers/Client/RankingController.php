@@ -15,21 +15,42 @@ class RankingController extends Controller
         $user = Auth::user();
 
         // Get all users with their average quiz scores
-        $rankings = User::select('users.*', DB::raw('AVG(quiz_results.percentage) as avg_score'))
+        $rankings = User::select(
+            'users.id',
+            'users.first_name',
+            'users.last_name',
+            'users.student_code',
+            'users.class_id',
+            'users.photo',
+            DB::raw('AVG(quiz_results.percentage) as avg_score')
+        )
             ->leftJoin('quiz_results', 'users.id', '=', 'quiz_results.user_id')
-            ->where('users.role', 'student') // Assuming students have role 'student'
-            ->groupBy('users.id')
+            ->where('users.role', 'student')
+            ->groupBy(
+                'users.id',
+                'users.first_name',
+                'users.last_name',
+                'users.student_code',
+                'users.class_id',
+                'users.photo'
+            )
             ->orderByDesc('avg_score')
             ->get()
             ->map(function ($user, $index) {
                 return (object)[
                     'rank' => $index + 1,
-                    'name' => $user->name,
-                    'student_id' => $user->student_id ?? sprintf('STU%04d', $user->id),
-                    'class' => $user->school_class ?? 'CNTT-01',
-                    'major' => $user->major ?? 'Kỹ Sư Phần Mềm',
+
+                    // 🔥 ghép tên lại
+                    'name' => $user->first_name . ' ' . $user->last_name,
+
+                    'student_id' => $user->student_code,
+                    'class' => $user->class_id,
+                    'major' => 'CNTT', // nếu chưa có bảng major
                     'avg_score' => round($user->avg_score ?? 0, 1),
-                    'avatar' => $user->avatar ?? 'https://i.pravatar.cc/150?u=' . $user->id,
+
+                    // 🔥 sửa avatar -> photo
+                    'avatar' => $user->photo ?? 'https://i.pravatar.cc/150?u=' . $user->id,
+
                     'is_current_user' => $user->id === Auth::id(),
                 ];
             });
