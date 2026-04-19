@@ -283,7 +283,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    <script>
+    <!-- <script>
         document.addEventListener('DOMContentLoaded', function() {
             const registerForm = document.querySelector('form');
             const firstNameInput = document.getElementById('first_name');
@@ -521,6 +521,6 @@
                 });
             });
         });
-    </script>
+    </script> -->
 </body>
 </html>
