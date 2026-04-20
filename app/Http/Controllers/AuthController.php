@@ -32,15 +32,15 @@ class AuthController extends Controller
             'password' => 'required'
         ]);
 
-        // Thêm điều kiện status = 1 để chỉ cho phép tài khoản đang hoạt động đăng nhập
-        if (Auth::attempt(['email' => $credentials['email'], 'password' => $credentials['password'], 'status' => 1])) {
+        // Thêm điều kiện status = 'active' để chỉ cho phép tài khoản đang hoạt động đăng nhập
+        if (Auth::attempt(['email' => $credentials['email'], 'password' => $credentials['password'], 'status' => 'active'])) {
             $request->session()->regenerate();
             return $this->redirectBasedOnRole();
         }
 
         // Kiểm tra xem email có tồn tại nhưng bị khóa không để đưa ra thông báo chính xác
         $user = User::where('email', $credentials['email'])->first();
-        if ($user && $user->status == 0) {
+        if ($user && $user->status === 'inactive') {
             return back()->withErrors([
                 'email' => 'Tài khoản của bạn đã bị khóa. Vui lòng liên hệ quản trị viên.'
             ])->onlyInput('email');
@@ -60,12 +60,14 @@ class AuthController extends Controller
             'last_name' => 'required|string',
         ]);
 
+        // Bỏ Hash::make vì Model User đã có cast 'password' => 'hashed'
         $user = User::create([
             'email' => $validated['email'],
-            'password' => Hash::make($validated['password']),
+            'password' => $validated['password'], 
             'first_name' => $validated['first_name'],
             'last_name' => $validated['last_name'],
             'role' => 0, // Default role = 0 (client)
+            'status' => 'active',
         ]);
 
         Auth::login($user);

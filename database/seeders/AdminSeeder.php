@@ -18,7 +18,7 @@ class AdminSeeder extends Seeder
             ['email' => 'admin@quizapp.com'],
             [
                 'student_code' => 'ADMIN001',
-                'password' => Hash::make('admin123'),
+                'password' => 'admin123',
                 'first_name' => 'Admin',
                 'last_name' => 'User',
                 'role' => 1, // Admin
@@ -31,7 +31,7 @@ class AdminSeeder extends Seeder
             ['email' => 'student@quizapp.com'],
             [
                 'student_code' => 'STU001',
-                'password' => Hash::make('student123'),
+                'password' => 'student123',
                 'first_name' => 'Student',
                 'last_name' => 'User',
                 'role' => 0, // Client/Student

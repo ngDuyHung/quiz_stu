@@ -75,7 +75,9 @@ class StudentController extends Controller
             $validated['photo'] = $request->file('photo')->store('students', 'public');
         }
 
-        $validated['password'] = Hash::make($validated['student_code'] ?: '12345678');
+        // Bỏ Hash::make vì Model User đã có cast 'password' => 'hashed'
+        $validated['password'] = $validated['student_code'] ?: '12345678';
+        $validated['status'] = 'active';
         User::create($validated);
 
         return redirect()->route('admin.students.index')->with('success', 'Thêm sinh viên thành công');
@@ -161,13 +163,13 @@ class StudentController extends Controller
                     \App\Models\User::create([
                         'student_code' => $data['student_code'],
                         'email'        => $data['email'],
-                        'password'     => Hash::make($data['student_code'] ?: '12345678'),
+                        'password'     => $data['student_code'] ?: '12345678',
                         'first_name'   => $data['first_name'],
                         'last_name'    => $data['last_name'],
                         'faculty_id'   => $data['faculty_id'],
                         'class_id'     => $data['class_id'],
                         'role'         => 0,
-                        'status'       => $data['status'] ?? 1,
+                        'status'       => 'active',
                     ]);
                     $results['success']++;
                 } catch (\Exception $e) {

@@ -61,8 +61,8 @@
                     <label class="form-label small text-muted">Trạng thái</label>
                     <select name="status" class="form-select form-select-sm">
                         <option value="">-- Tất cả --</option>
-                        <option value="1" {{ request('status') === '1' ? 'selected' : '' }}>Hoạt động</option>
-                        <option value="0" {{ request('status') === '0' ? 'selected' : '' }}>Bị khoá</option>
+                        <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Hoạt động</option>
+                        <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>Bị khoá</option>
                     </select>
                 </div>
                 <div class="col-md-1">
@@ -128,12 +128,12 @@
                             </td>
                             <td>{{ $student->userGroup->name ?? 'N/A' }}</td>
                             <td class="text-center">
-                                <button class="btn btn-sm toggle-status {{ $student->status ? 'btn-success' : 'btn-secondary' }}"
+                                <button class="btn btn-sm toggle-status {{ $student->status === 'active' ? 'btn-success' : 'btn-secondary' }}"
                                         data-id="{{ $student->id }}"
                                         data-status="{{ $student->status }}"
                                         type="button">
-                                    <i class="fas {{ $student->status ? 'fa-check' : 'fa-ban' }} me-1"></i>
-                                    {{ $student->status ? 'Hoạt động' : 'Bị khoá' }}
+                                    <i class="fas {{ $student->status === 'active' ? 'fa-check' : 'fa-ban' }} me-1"></i>
+                                    {{ $student->status === 'active' ? 'Hoạt động' : 'Bị khoá' }}
                                 </button>
                             </td>
                             <td class="text-center">
@@ -272,10 +272,10 @@ document.querySelectorAll('.toggle-status').forEach(btn => {
             })
             .then(res => res.json())
             .then(data => {
-                const newStatus = data.status ? '1' : '0';
-                this.dataset.status = newStatus;
-                this.className = 'btn btn-sm toggle-status ' + (data.status ? 'btn-success' : 'btn-secondary');
-                this.innerHTML = '<i class="fas ' + (data.status ? 'fa-check' : 'fa-ban') + ' me-1"></i>' + (data.status ? 'Hoạt động' : 'Bị khoá');
+                const isActive = data.status === 'active';
+                this.dataset.status = data.status;
+                this.className = 'btn btn-sm toggle-status ' + (isActive ? 'btn-success' : 'btn-secondary');
+                this.innerHTML = '<i class="fas ' + (isActive ? 'fa-check' : 'fa-ban') + ' me-1"></i>' + (isActive ? 'Hoạt động' : 'Bị khoá');
                 Swal.fire({ 
                     icon: 'success', 
                     title: 'Đã cập nhật', 

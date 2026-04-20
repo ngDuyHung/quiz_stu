@@ -56,7 +56,8 @@ class ProfileController extends Controller
                 ->withFragment('password-section');
         }
 
-        $user->update(['password' => Hash::make($request->new_password)]);
+        // Bỏ Hash::make vì Model User đã có cast 'password' => 'hashed'
+        $user->update(['password' => $request->new_password]);
 
         return back()->with('success_password', 'Đổi mật khẩu thành công!');
     }

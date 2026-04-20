@@ -82,7 +82,7 @@ class StudentsImport implements ToModel, WithHeadingRow, WithValidation, SkipsOn
             'class_id'      => $class->id,
             'group_id'      => $group ? $group->id : null,
             'role'          => 0, 
-            'status'        => 1, 
+            'status'        => 'active', 
         ]);
     }
 

@@ -254,7 +254,8 @@ class StudentImportService
      */
     private function createStudent($data)
     {
-        $data['password'] = Hash::make($data['student_code']);
+        // Bỏ Hash::make vì Model User đã có cast 'password' => 'hashed'
+        $data['password'] = $data['student_code'];
         $data['role'] = 0; // Student role
         $data['status'] = 'active'; // Active by default (use string for status column)
 
