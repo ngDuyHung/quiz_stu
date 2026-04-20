@@ -27,7 +27,7 @@ class UserController extends Controller
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'password' => $request->password,
         ]);
 
         return response()->json([
@@ -67,7 +67,7 @@ class UserController extends Controller
         $user->name = $request->name ?? $user->name;
         $user->email = $request->email ?? $user->email;
         if ($request->password) {
-            $user->password = Hash::make($request->password);
+            $user->password = $request->password;
         }
         $user->save();
 

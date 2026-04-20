@@ -191,8 +191,8 @@
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Trạng thái <span class="text-danger">*</span></label>
                                 <select name="status" class="form-select @error('status') is-invalid @enderror" required>
-                                    <option value="1" {{ old('status', $student->status) == 1 ? 'selected' : '' }}>Hoạt động</option>
-                                    <option value="0" {{ old('status', $student->status) == 0 ? 'selected' : '' }}>Bị khoá</option>
+                                    <option value="active" {{ old('status', $student->status) === 'active' ? 'selected' : '' }}>Hoạt động</option>
+                                    <option value="inactive" {{ old('status', $student->status) === 'inactive' ? 'selected' : '' }}>Bị khoá</option>
                                 </select>
                                 @error('status')
                                     <div class="invalid-feedback d-block">{{ $message }}</div>

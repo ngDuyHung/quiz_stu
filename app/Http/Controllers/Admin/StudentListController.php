@@ -167,7 +167,7 @@ class StudentListController extends Controller
         // Model User đã có casts ['password' => 'hashed'], gán plaintext Laravel tự băm.
         $data['password'] = $data['student_code'];
         $data['role'] = 0; // Role sinh viên
-        $data['status'] = 1; // Active by default
+        $data['status'] = 'active'; // Sử dụng string 'active' để khớp với migration
 
         User::create($data);
 
@@ -193,7 +193,7 @@ class StudentListController extends Controller
             'birthdate' => 'nullable|date|before_or_equal:-15 years|after_or_equal:-90 years',
             'academic_year' => 'nullable|string|max:100',
             'degree_type' => 'nullable|string|max:100',
-            'status' => 'required|in:0,1',
+            'status' => 'required|in:active,inactive',
         ]);
 
         if ($request->hasFile('photo')) {
@@ -213,7 +213,7 @@ class StudentListController extends Controller
     public function toggleStatus($student, Request $request)
     {
         $studentRecord = User::findOrFail($student);
-        $studentRecord->status = !$studentRecord->status;
+        $studentRecord->status = ($studentRecord->status === 'active') ? 'inactive' : 'active';
         $studentRecord->save();
 
         return response()->json(['success' => true, 'status' => $studentRecord->status]);
