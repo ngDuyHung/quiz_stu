@@ -27,6 +27,7 @@ return new class extends Migration
             $table->boolean('is_demo')->default(false);
             $table->timestamps();
         });
+        
     }
 
     /**
