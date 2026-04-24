@@ -60,17 +60,15 @@ class QuizTestSeeder extends Seeder
         //  4. USERS – admin + 5 sinh viên
         // ═══════════════════════════════════
         // Admin
-        DB::table('users')->updateOrInsert(
-            ['email' => 'admin@stu.edu.vn'],
+       DB::table('users')->updateOrInsert(
+            ['student_code' => 'ADMIN001'], // Điều kiện tìm kiếm
             [
-                'student_code' => 'ADMIN001',
-                'password'     => Hash::make('admin123'),
-                'first_name'   => 'Admin',
-                'last_name'    => 'Hệ thống',
-                'role'         => 1,
-                'status'       => 'active',
-                'created_at'   => now(),
-                'updated_at'   => now(),
+                'email' => 'admin@stu.edu.vn',
+                'first_name' => 'Admin',
+                'last_name' => 'Hệ thống',
+                'role' => 1,
+                'status' => 'active',
+                'password' => Hash::make('password'), // Hoặc pass gì đó Duy đặt
             ]
         );
 
