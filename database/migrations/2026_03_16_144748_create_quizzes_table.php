@@ -26,6 +26,7 @@ return new class extends Migration
             $table->boolean('require_login')->default(true);
             $table->boolean('is_demo')->default(false);
             $table->timestamps();
+            
         });
     }
 
