@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Quiz extends Model
 {
+    public $timestamps = false;
     protected $fillable = [
         'name',
         'description',
